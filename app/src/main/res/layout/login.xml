@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="40dp"
+    android:padding="40dp"
+    android:background="#eee"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="400dp"
+        android:layout_height="430dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/layout_reg_bound"
+        android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="تسجيل الدخول"
+        android:textSize="30sp"
+        android:gravity="center"
+        android:textColor="@color/colorPrimary"
+        />
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+
+        android:layout_marginTop="22dp">
+        <EditText
+            android:id="@+id/email_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="البريد الالكتروني"
+            android:inputType="textEmailAddress"
+
+
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_margin="10dp"
+        android:layout_height="wrap_content"
+        >
+        <EditText
+            android:id="@+id/password_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:hint="كلمة المرور"
+
+            />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
+    <Button
+        android:id="@+id/loginbutton_login"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/shape"
+        android:layout_marginTop="35dp"
+        android:text="تسجيل الدخول"
+        />
+    <Button
+        android:id="@+id/regBtnGoogle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/shape"
+        android:layout_marginTop="23dp"
+        android:text="sign up with google"
+        />
+
+
+
+
+    <TextView
+        android:id="@+id/forgetText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="نسيت كلمة المرور"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/colorAccent"/>
+
+    <TextView
+        android:id="@+id/createAccountText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="230dp"
+        android:layout_marginTop="-19dp"
+        android:text="انشاء حساب جديد"
+        android:textColor="@color/colorAccent"/>
+</LinearLayout>
+
+
+</LinearLayout>
