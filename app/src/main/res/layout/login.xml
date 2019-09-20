@@ -62,16 +62,14 @@
         android:layout_marginTop="35dp"
         android:text="تسجيل الدخول"
         />
-    <Button
+
+
+    <com.google.android.gms.common.SignInButton
         android:id="@+id/regBtnGoogle"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@drawable/shape"
         android:layout_marginTop="23dp"
-        android:text="sign up with google"
         />
-
-
 
 
     <TextView
@@ -93,6 +91,12 @@
         android:text="انشاء حساب جديد"
         android:textColor="@color/colorAccent"
         android:layout_marginLeft="230dp" />
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"/>
 
 
 </LinearLayout>

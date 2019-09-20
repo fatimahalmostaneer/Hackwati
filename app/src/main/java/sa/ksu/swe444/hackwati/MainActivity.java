@@ -37,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
 
 
     }//end onCreate()
+
+
     private void init(){
         logOut = findViewById(R.id.log_out);
         mAuth = FirebaseAuth.getInstance();
