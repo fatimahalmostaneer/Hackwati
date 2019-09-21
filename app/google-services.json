@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "445008314902-3slfduube8uvpn902c12g3dl1gnfm707.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "sa.ksu.swe444.hackwati",
+            "certificate_hash": "ceb86b89a37f44407372a48f511b8da01afae379"
+          }
+        },
+        {
           "client_id": "445008314902-to3btaeq287ubiv4ipqqvpco7qo6kcmr.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
