@@ -117,7 +117,9 @@ private final String TAG = "Login";
                 googleSignIn();
                 break;
             case R.id.createAccount:
-                register();
+               // register();
+                Intent intent = new Intent(Login.this, SignUp.class);
+                startActivity(intent);
                 break;
             case R.id.forgetText:
                 forgetPassword();

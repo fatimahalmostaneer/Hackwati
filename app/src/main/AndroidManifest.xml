@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning">
+        tools:ignore="GoogleAppIndexingWarning"
+        android:name="sa.ksu.swe444.hackwati.font.CustomFontApp">
         <activity android:name=".SignUp"></activity>
         <activity android:name=".MainActivity"
             android:label="@string/app_name"/>
