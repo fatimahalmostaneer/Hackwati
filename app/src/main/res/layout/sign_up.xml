@@ -1,169 +1,160 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/main_content"
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/white"
-    android:fitsSystemWindows="true">
+    android:layout_marginTop="40dp"
+    android:background="#eee"
+    android:orientation="vertical"
+    android:padding="40dp">
 
-    <com.google.android.material.appbar.AppBarLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="501dp"
+        android:layout_marginTop="40dp">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar"
+        <RelativeLayout
+            android:id="@+id/relTab"
+            android:layout_width="146dp"
+            android:layout_height="54dp"
+            android:background="@drawable/icon_shape"
+            android:backgroundTint="#F7F7F7">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="التسجيل"
+                android:textColor="@color/colorPrimary"
+                android:textSize="20sp" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/bigBox"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-
-            app:titleTextColor="#fff"
-
-            />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="-122dp"
-        android:scrollIndicators="right"
-        android:background="#eee"
-        android:scrollbarStyle="insideOverlay"
-        android:scrollbars="vertical">
-
-        <LinearLayout
-            android:layout_width="351dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="-22dp"
-            android:background="#FFFFFF"
-            android:orientation="vertical">
-
-
-
-<TextView
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:text="Sign Up"
-    android:textSize="40dp"/>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <AutoCompleteTextView
-                    android:id="@+id/nameSignUpHint"
-                    android:layout_width="296dp"
-                    android:layout_height="47dp"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="22dp"
-                    android:layout_marginEnd="30dp"
-                    android:hint="الاسم"
-
-                    android:textSize="18dp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-
-                <AutoCompleteTextView
-                    android:id="@+id/emailSignUpHint"
-                    android:layout_width="292dp"
-                    android:layout_height="wrap_content"
-
-                    android:layout_gravity="center"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="22dp"
-                    android:layout_marginEnd="30dp"
-                    android:hint="البريد الإلكتروني"
-                    android:inputType="textEmailAddress"
-                    android:textSize="18dp" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:errorEnabled="true"
-                app:passwordToggleEnabled="true">
-
-                <AutoCompleteTextView
-                    android:id="@+id/passwordSignUpHint"
-                    android:layout_width="292dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="22dp"
-                    android:layout_marginEnd="30dp"
-                    android:hint="كلمة المرور"
-                    android:inputType="textPassword"
-                    android:textSize="18dp"
-                    app:passwordToggleEnabled="true" />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:errorEnabled="true"
-                app:passwordToggleEnabled="true">
-
-                <AutoCompleteTextView
-                    android:id="@+id/confirmPasswordSignUpHint"
-                    android:layout_width="292dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginStart="30dp"
-                    android:layout_marginTop="22dp"
-                    android:layout_marginEnd="30dp"
-                    android:ems="10"
-                    android:hint="اعادة كتابة كلمة المرور"
-                    android:inputType="textPassword"
-                    android:textSize="18dp"
-                    app:passwordToggleEnabled="true"
-
-                    />
-
-            </com.google.android.material.textfield.TextInputLayout>
-
+            android:layout_height="446dp"
+            android:layout_below="@id/relTab"
+            android:background="@drawable/box_shape">
 
 
             <Button
-                android:id="@+id/regBtn"
-                android:layout_width="354dp"
+                android:id="@+id/loginbutton_login"
+                android:layout_width="270dp"
+
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="30dp"
+                android:layout_below="@+id/repass"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/shape"
-                android:text="تسجيل"
-                android:textColor="#000000"
-                android:textSize="20dp" />
+                android:backgroundTint="#F7F7F7"
+                android:text="التسجيل" />
 
-            <Button
+
+            <TextView
+                android:id="@+id/forgetText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/regBtnGoogle"
+                android:layout_centerInParent="true"
+                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:text="نسيت كلمة المرور"
+                android:textColor="@color/colorAccent" />
+
+
+            <com.google.android.gms.common.SignInButton
                 android:id="@+id/regBtnGoogle"
-                android:layout_width="354dp"
+                android:layout_width="270dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/shape"
-                android:text="sign up with google"
-                android:textColor="#000000"
-                android:textSize="20dp" />
+                android:layout_below="@id/loginbutton_login"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="18dp" />
 
 
-        </LinearLayout>
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/username"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="10dp">
 
-    </ScrollView>
+                <EditText
+                    android:id="@+id/username_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="اسم المستخدم"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/username"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/email_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="البريد الإلكتروني"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/pass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/email"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/pass_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="كلمة المرور"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/repass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/pass"
+                android:padding="10dp">
+
+                <EditText
+                    android:id="@+id/repass_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="إعادة كلمة المرور"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/createAccount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bigBox"
+            android:layout_marginTop="30dp"
+            android:text="هل تمتلك حسابًا؟"
+            android:layout_centerInParent="true"
+            android:textColor="@color/colorAccent"
+            android:textSize="18dp"/>
+    </RelativeLayout>
+
+
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_gravity="center"/>
+
+
+</LinearLayout>
