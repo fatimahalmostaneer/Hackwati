@@ -1,13 +1,17 @@
 package sa.ksu.swe444.hackwati;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -23,7 +27,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     private EditText register_password;
     private EditText register_re_password;
     private Button register_btn;
-
+private TextView haveAccount ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,6 +35,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
         init();
         register_btn.setOnClickListener(this);
+        haveAccount.setOnClickListener(this);
 
     }
 
@@ -40,6 +45,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         register_password = findViewById(R.id.pass_register);
         register_re_password = findViewById(R.id.repass_register);
         register_btn = findViewById(R.id.register_btn);
+        haveAccount = findViewById(R.id.haveAccount);
 
 
     }
@@ -77,8 +83,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                            Toast.makeText(SignUp.this, "check your email ",
-                                                    Toast.LENGTH_SHORT).show();
+                                         /*   Toast.makeText(SignUp.this, "check your email ",
+                                                    Toast.LENGTH_SHORT).show();*/
+                                         showDialogWithOkButton("تحقق من بريدك الإلكتروني لإكمال عملية التسجيل");
                                         } else {
                                             Toast.makeText(SignUp.this, "check your NOT email ",
                                                     Toast.LENGTH_SHORT).show();
@@ -89,8 +96,9 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(SignUp.this, "Authentication failed register.",
-                                        Toast.LENGTH_SHORT).show();
+                              /*  Toast.makeText(SignUp.this, "Authentication failed register.",
+                                        Toast.LENGTH_SHORT).show();*/
+                              showDialogWithOkButton("الرجاء ادخال بريد إلكتروني صالح");
                                 //updateUI(null);
                             }
 
@@ -100,7 +108,8 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     }//end of register
 
     private void showErrorMsg() {
-        Toast.makeText(SignUp.this, "password didn't match", Toast.LENGTH_LONG).show();
+       // Toast.makeText(SignUp.this, "password didn't match", Toast.LENGTH_LONG).show();
+        showDialogWithOkButton("كلمتا المرور غير متطابقتين");
     }
 
     @Override
@@ -108,6 +117,22 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         switch (view.getId()){
             case R.id.register_btn:
                 register();
+                break;
+            case R.id.haveAccount:
+                startActivity(new Intent(SignUp.this, Login.class));
         }
+    }
+
+    private void showDialogWithOkButton(String msg){
+        AlertDialog.Builder builder = new AlertDialog.Builder(SignUp.this);
+        builder.setMessage(msg)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
     }
 }

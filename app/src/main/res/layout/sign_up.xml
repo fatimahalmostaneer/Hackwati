@@ -123,7 +123,7 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/createAccount"
+            android:id="@+id/haveAccount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/bigBox"
