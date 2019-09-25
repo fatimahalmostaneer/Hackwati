@@ -61,7 +61,7 @@
                 android:layout_marginStart="10dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
-                android:text="نسيت كلمة المرور"
+                android:text="نسيت كلمة المرور؟"
                 android:textColor="@color/colorAccent" />
 
 
