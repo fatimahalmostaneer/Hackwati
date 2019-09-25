@@ -1,11 +1,13 @@
 package sa.ksu.swe444.hackwati;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +23,6 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -40,6 +41,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private TextView forgetPassword;
     private ProgressBar progressBar;
     private GoogleSignInOptions gso;
+    private EditText forget_email;
 
 
     private FirebaseAuth mAuth;
@@ -117,23 +119,53 @@ private final String TAG = "Login";
                 googleSignIn();
                 break;
             case R.id.createAccount:
-               // register();
                 Intent intent = new Intent(Login.this, SignUp.class);
                 startActivity(intent);
                 break;
             case R.id.forgetText:
-                forgetPassword();
+                showDialoge();
                 break;
         }//end of switch
 
 
     }//end of onClick
 
-    private void forgetPassword() {
-        entered_email = login_email.getText().toString();
-        mAuth.sendPasswordResetEmail(entered_email).addOnCompleteListener(new OnCompleteListener<Void>() {
+    private void showDialoge(){
+        final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
+        LayoutInflater inflater = this.getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.reset_password, null);
+
+        forget_email = dialogView.findViewById(R.id.edt_comment);
+        Button button1 =  dialogView.findViewById(R.id.buttonSubmit);
+        Button button2 =  dialogView.findViewById(R.id.buttonCancel);
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialogBuilder.dismiss();
+            }
+        });
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                forgetPassword(forget_email.getText().toString());
+                Log.d(TAG, "signInWithEmail:"+forgetPassword.getText().toString());
+
+                dialogBuilder.dismiss();
+            }
+        });
+
+        dialogBuilder.setView(dialogView);
+        dialogBuilder.show();
+
+    }
+
+    private void forgetPassword(String email) {
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+
             @Override
             public void onComplete(@NonNull Task<Void> task) {
+
                 if(task.isSuccessful()){
                     Toast.makeText(Login.this, "password is sent",
                             Toast.LENGTH_SHORT).show();
@@ -145,53 +177,11 @@ private final String TAG = "Login";
         });
     }
 
-    private void register() {
-        //input
 
-        entered_email = login_email.getText().toString();
-        entered_password = login_password.getText().toString();
-
-        mAuth.createUserWithEmailAndPassword(entered_email, entered_password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
-                            Toast.makeText(Login.this, "createUserWithEmail:success",
-                                    Toast.LENGTH_SHORT).show();
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            //send email by email to verify user account
-                            user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if(task.isSuccessful()){
-                                        Toast.makeText(Login.this, "check your email ",
-                                                Toast.LENGTH_SHORT).show();
-                                    }else {
-                                        Toast.makeText(Login.this, "check your NOT email ",
-                                                Toast.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
-                            //updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(Login.this, "Authentication failed register.",
-                                    Toast.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
-
-                        // ...
-                    }
-                });
-    }//end of register
 
 
     private void googleSignIn() {
         progressBar.setVisibility(View.VISIBLE);
-
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
       }// end of googleSignIn
@@ -201,9 +191,6 @@ private final String TAG = "Login";
         entered_email = login_email.getText().toString();
         entered_password = login_password.getText().toString();
 
-        Log.i("TAG", "email: "+entered_email);
-
-        Log.i("TAG","password: "+entered_password);
 
         mAuth.signInWithEmailAndPassword(entered_email, entered_password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
