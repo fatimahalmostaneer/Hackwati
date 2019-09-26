@@ -15,6 +15,10 @@ import com.mikhaellopez.circularimageview.CircularImageView;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -38,42 +42,27 @@ public class MainActivity extends AppCompatActivity {
     private static CircularImageView channelimage;
     private RelativeLayout relativeLayout;
     private Toolbar toolbar;
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
 
-
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
-
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            switch (item.getItemId()) {
-                case R.id.navigation_home:
-                    Intent intent3 = new Intent(MainActivity.this, MainActivity.class); // from where? and to the distanation
-                    startActivity(intent3); // to start another activity
-                    return true;
-                case R.id.navigation_dashboard:
-                    Intent intent2 = new Intent(MainActivity.this, MainActivity.class); // from where? and to the distanation
-                    startActivity(intent2); // to start another activity
-                    return true;
-                case R.id.navigation_notifications:
-                    Intent intent = new Intent(MainActivity.this, MainActivity.class); // from where? and to the distanation
-                    startActivity(intent); // to start another activity
-                    return true;
-            }
-            return false;
-        }
-    };
 
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.mobile_navigation);
-        navView.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        BottomNavigationView navView = findViewById(R.id.nav_view);
 
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setElevation(0);
+
+        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
+                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+                .build();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+        NavigationUI.setupWithNavController(navView, navController);
+
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         itemList = new ArrayList<>();
@@ -90,20 +79,20 @@ public class MainActivity extends AppCompatActivity {
 
         relativeLayout.bringToFront();
 
-        channelimage.setOnClickListener(new View.OnClickListener() {
+  /*      channelimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MainActivity.class); // from where? and to the distanation
                 startActivity(intent); // to start another activity
             }
         });
-
+*/
     }
 
     private void initCollapsingToolbar() {
         final CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(" ");
+       // collapsingToolbar.setTitle(" ");
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         appBarLayout.setExpanded(true);
 
@@ -181,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
         Item a7 = new Item("جود ودراجتها الجديدة", covers[0], pictures[2], "2 ألف ", "دار سلوى للنشر", views);
         itemList.add(a7);
 
-        Item a8 = new Item("انبتهي يا جود", covers[0], pictures[0], "40 ألف ", "دار الوطن", views);
+        Item a8 = new Item("انتبهي يا جود", covers[0], pictures[0], "40 ألف ", "دار الوطن", views);
         itemList.add(a8);
 
 

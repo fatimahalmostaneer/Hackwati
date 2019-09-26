@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -205,8 +206,7 @@ private final String TAG = "Login";
                             if(mAuth.getCurrentUser().isEmailVerified()){
                                 startActivity(new Intent(Login.this, MainActivity.class));
                             }else {
-                                Toast.makeText(Login.this, "email not verified",
-                                        Toast.LENGTH_SHORT).show();
+                                showDialogWithOkButton("تحقق من الرابط المرسل على بريدك لإكمال عملية تسجيل الدخول ");
                             }
 
                             //updateUI(user);
@@ -278,8 +278,9 @@ private final String TAG = "Login";
                             if(mAuth.getCurrentUser().isEmailVerified()){
                                 startActivity(new Intent(Login.this, MainActivity.class));
                             }else {
-                                Toast.makeText(Login.this, "email not verified",
-                                        Toast.LENGTH_SHORT).show();
+                               /* Toast.makeText(Login.this, "email not verified",
+                                        Toast.LENGTH_SHORT).show();*/
+                              showDialogWithOkButton("بريد إلكتروني غير صالح");
                             }
                         } else {
                             // If sign in fails, display a message to the user.
@@ -294,5 +295,16 @@ private final String TAG = "Login";
                     }
                 });
     } // [END auth_with_google]
-
+private void showDialogWithOkButton(String msg){
+    AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+    builder.setMessage(msg)
+            .setCancelable(false)
+            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    //do things
+                }
+            });
+    AlertDialog alert = builder.create();
+    alert.show();
+}
 }// end of class
