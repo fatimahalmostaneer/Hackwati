@@ -61,9 +61,9 @@ private TextView haveAccount ;
 
 
 
-        if (!checkPassword(register_password.getText().toString(), register_re_password.getText().toString()))
+        if (!checkPassword(register_password.getText().toString(), register_re_password.getText().toString())){
             showErrorMsg();
-
+             return;}
             //input
         String entered_email = register_email.getText().toString();
         String entered_password =register_password.getText().toString();
@@ -85,7 +85,8 @@ private TextView haveAccount ;
                                         if (task.isSuccessful()) {
                                          /*   Toast.makeText(SignUp.this, "check your email ",
                                                     Toast.LENGTH_SHORT).show();*/
-                                         showDialogWithOkButton("تحقق من بريدك الإلكتروني لإكمال عملية التسجيل");
+                                            showDialogWithOkButton("الرجاء توثيق بريدك الإلكتروني");
+                                            startActivity(new Intent(SignUp.this, Login.class));
                                         } else {
                                             Toast.makeText(SignUp.this, "check your NOT email ",
                                                     Toast.LENGTH_SHORT).show();
@@ -98,7 +99,7 @@ private TextView haveAccount ;
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
                               /*  Toast.makeText(SignUp.this, "Authentication failed register.",
                                         Toast.LENGTH_SHORT).show();*/
-                              showDialogWithOkButton("الرجاء ادخال بريد إلكتروني صالح");
+                              showDialogWithOkButton("تحقق من البيانات المدخلة");
                                 //updateUI(null);
                             }
 
