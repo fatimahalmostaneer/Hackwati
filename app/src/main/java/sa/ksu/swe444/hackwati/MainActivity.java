@@ -79,14 +79,17 @@ public class MainActivity extends AppCompatActivity {
 
         relativeLayout.bringToFront();
 
-  /*      channelimage.setOnClickListener(new View.OnClickListener() {
+       channelimage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, MainActivity.class); // from where? and to the distanation
                 startActivity(intent); // to start another activity
             }
         });
-*/
+
+
+
+
     }
 
     private void initCollapsingToolbar() {
