@@ -216,6 +216,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }//end inner class GridSpacingItemDecoration
 
-
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(MainActivity.this, MainActivity.class); // from where? and to the distanation
+        startActivity(intent); // to start another activity
+    }
 }
 

@@ -28,6 +28,6 @@ public class UserProfile extends AppCompatActivity {
     }
     private void signOut(){
         FirebaseAuth.getInstance().signOut();
-        startActivity( new Intent(UserProfile.this, Login.class));
+        startActivity( new Intent(UserProfile.this, SplashActivity.class));
     }//end of signOut
 }
