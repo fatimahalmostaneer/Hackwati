@@ -34,7 +34,7 @@
             android:name=".SplashActivity"
             android:label="@string/app_name">
         </activity>
-        <activity android:name=".Record.RecordingActivity"></activity>
+        <activity android:name=".Recording.RecordingActivity"></activity>
     </application>
 
 </manifest>

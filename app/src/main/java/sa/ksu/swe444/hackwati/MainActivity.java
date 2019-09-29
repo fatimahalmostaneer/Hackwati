@@ -3,7 +3,6 @@ package sa.ksu.swe444.hackwati;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Resources;
-import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
 
@@ -55,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setElevation(0);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
+                R.id.navigation_explore, R.id.navigation_record, R.id.navigation_subscription)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);

@@ -3,23 +3,23 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home"
+    app:startDestination="@+id/navigation_explore"
    >
 
     <fragment
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_explore"
         android:name="sa.ksu.swe444.hackwati.ui.home.HomeFragment"
         android:label="اكتشف"
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_record"
         android:name="sa.ksu.swe444.hackwati.ui.dashboard.DashboardFragment"
         android:label="سجل"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_subscription"
         android:name="sa.ksu.swe444.hackwati.ui.notifications.NotificationsFragment"
         android:label="الإشتراكات"
         tools:layout="@layout/activity_main" />
