@@ -13,7 +13,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -24,7 +23,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.TypedValue;
-import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.RelativeLayout;
