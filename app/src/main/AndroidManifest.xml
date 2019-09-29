@@ -4,28 +4,34 @@
     package="sa.ksu.swe444.hackwati">
 
     <application
+        android:name=".font.CustomFontApp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="GoogleAppIndexingWarning"
-        android:name="sa.ksu.swe444.hackwati.font.CustomFontApp">
-        <activity android:name=".SignUp"></activity>
-        <activity android:name=".UserProfile"></activity>
-        <activity android:name=".Login"></activity>
-        <activity android:name=".MainActivity"
-            android:parentActivityName=".MainActivity"
-            android:label="@string/app_name"/>
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".SignUp" />
+        <activity android:name=".UserProfile" />
+        <activity android:name=".Login" />
         <activity
-            android:name=".SplashActivity"
-            android:label="@string/app_name">
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:parentActivityName=".MainActivity"
+            >
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
+        </activity>
+        <activity
+            android:name=".SplashActivity"
+            android:label="@string/app_name">
+
         </activity>
     </application>
 
