@@ -13,6 +13,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -23,9 +24,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.TypedValue;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -73,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         prepareItems();
 
         relativeLayout = findViewById(R.id.real);
-        channelimage = findViewById(R.id.channelimage);
+      /*  channelimage = findViewById(R.id.channelimage);
 
         relativeLayout.bringToFront();
 
@@ -83,10 +88,35 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, UserProfile.class); // from where? and to the distanation
                 startActivity(intent); // to start another activity
             }
-        });
+        });*/
+
+       // MENU::::::
 
 
+    }
 
+    // Initiating Menu XML file (menu.xml)
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_menus, menu);
+
+        if(menu instanceof MenuBuilder){
+            MenuBuilder m = (MenuBuilder) menu;
+            m.setOptionalIconsVisible(true);
+        }
+
+        return true;
+    }
+
+    /**
+     * Event Handling for Individual menu item selected
+     * Identify single menu item by it's id
+     * */
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+
+       return true;
 
     }
 
