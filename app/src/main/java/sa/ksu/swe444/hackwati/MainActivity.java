@@ -9,8 +9,10 @@ import android.os.Bundle;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.Toolbar;
@@ -22,6 +24,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -35,8 +38,10 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.List;
 
+import sa.ksu.swe444.hackwati.Recording.RecordingActivity;
 
-public class MainActivity extends AppCompatActivity {
+
+public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
 
     private RecyclerView recyclerView;
     private storyAdapter adapter;
@@ -45,15 +50,16 @@ public class MainActivity extends AppCompatActivity {
     private RelativeLayout relativeLayout;
     private Toolbar toolbar;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
-
+    BottomNavigationView navView;
 
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView = findViewById(R.id.nav_view);
 
+        navView.setOnNavigationItemSelectedListener(this);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setElevation(0);
@@ -89,8 +95,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });*/
 
-       // MENU::::::
+        // MENU::::::
 
+       //navView.setOnNavigationItemSelectedListener(this);
 
     }
 
@@ -99,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.activity_menus, menu);
 
-        if(menu instanceof MenuBuilder){
+        if (menu instanceof MenuBuilder) {
             MenuBuilder m = (MenuBuilder) menu;
             m.setOptionalIconsVisible(true);
         }
@@ -110,19 +117,18 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Event Handling for Individual menu item selected
      * Identify single menu item by it's id
-     * */
+     */
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
 
-       return true;
+        return true;
 
     }
 
     private void initCollapsingToolbar() {
         final CollapsingToolbarLayout collapsingToolbar =
                 (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-       // collapsingToolbar.setTitle(" ");
+        // collapsingToolbar.setTitle(" ");
         AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
         appBarLayout.setExpanded(true);
 
@@ -204,6 +210,15 @@ public class MainActivity extends AppCompatActivity {
         itemList.add(a8);
 
 
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        Log.e("CLICKED","!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        if (menuItem.getItemId() == R.id.navigation_record) {
+            startActivity(new Intent(MainActivity.this, RecordingActivity.class));
+        }
+        return true;
     }
 
     public static class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
