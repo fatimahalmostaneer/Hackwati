@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="72dp"
     android:clickable="true"
     android:padding="6dip"
+    android:focusable="true"
     android:id="@+id/LR">
 
     <ImageView
@@ -14,6 +16,7 @@
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
         android:layout_marginStart="19dp"
+        android:contentDescription="@string/app_name"
         android:layout_marginLeft="16dp"
         android:src="@drawable/ic_person_black_24dp" />
 
@@ -31,8 +34,9 @@
         android:layout_marginLeft="66dp"
         android:layout_marginEnd="169dp"
         android:layout_marginRight="60dp"
+
         android:gravity="center_vertical"
-        android:paddingEnd="20dp"
+
         android:paddingBottom="15dp"
         android:text="الاسم"
         android:textColor="#949494"
@@ -46,12 +50,10 @@
         android:layout_height="35dp"
         android:layout_alignWithParentIfMissing="true"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginStart="60dp"
-        android:layout_marginEnd="169dp"
+
 
         android:gravity="center_vertical"
-        android:paddingEnd="20dp"
+
         android:paddingBottom="15dp"
         android:text="الاسم"
         android:textColor="@color/cardview_dark_background"
