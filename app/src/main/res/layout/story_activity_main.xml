@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/htab_maincontent"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="271dp"
+        android:layout_marginTop="40dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="180dp"
+            android:layout_below="@id/duration">
+        <Button
+            android:id="@+id/getRating"
+            android:layout_width="50dp"
+            android:layout_height="29dp"
+            android:background="@drawable/shape_subscribe"
+            android:text="قيّم"
+            android:textSize="9sp"
+            android:textStyle="bold"
+            android:layout_marginTop="8dp"
+            android:layout_marginRight="150dp"
+            />
+
+            <RatingBar
+                android:id="@+id/rating"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@id/duration"
+                android:layout_marginLeft="40dp"
+                android:numStars="5"
+                android:saveEnabled="true"
+                android:scaleX=".4"
+                android:scaleY=".4" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:id="@+id/imageView"
+            android:layout_width="173dp"
+            android:layout_height="200dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/shape_subscribe"
+            android:backgroundTint="#e1e1e1"
+            android:contentDescription="اسم الكتاب"
+            android:orientation="horizontal"
+            android:src="@drawable/gray" />
+
+
+
+        <TextView
+            android:id="@+id/bookName"
+            android:layout_width="216dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="أنا أستطيع"
+            android:textSize="33sp" />
+
+
+        <TextView
+            android:id="@+id/duration"
+            android:layout_width="78dp"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/bookName"
+            android:layout_marginRight="75dp"
+            android:text="40 دقيقة"
+            android:textSize="18sp"
+
+            />
+
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginTop="210dp">
+
+
+
+        <Button
+            android:id="@+id/listenBtn"
+            android:layout_width="159dp"
+            android:layout_height="41dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginTop="50dp"
+            android:background="@drawable/shape"
+            android:text="استمع"
+            android:textStyle="bold"
+            />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <Button
+                android:id="@+id/subscribeBtn"
+                android:layout_width="159dp"
+                android:layout_height="41dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/shape"
+                android:shadowColor="@color/lightBlue"
+                android:tag="off"
+                android:text="اشتراك"
+                android:textColor="@color/darkBlue" />
+
+            <Button
+                android:id="@+id/subscribedBtn"
+                android:layout_width="159dp"
+                android:layout_height="41dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="50dp"
+                android:background="@drawable/shape_subscribe"
+                android:shadowColor="@color/lightBlue"
+                android:tag="on"
+                android:text="مشترك"
+
+                android:textColor="#fff"
+                android:visibility="invisible" />
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="290dp"
+        android:gravity="center"
+        >
+
+        <ImageButton
+            android:id="@+id/btnShare"
+            android:layout_width="93dp"
+            android:layout_height="36dp"
+            android:layout_margin="10dp"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/shape"
+            android:clickable="true"
+            android:contentDescription="شارك"
+            android:src="@drawable/ic_share_black_24dp"
+            android:tint="@color/lightBlue" />
+
+        <ImageButton
+            android:id="@+id/btnAddToList"
+            android:layout_width="93dp"
+            android:layout_height="36dp"
+            android:layout_margin="10dp"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/shape"
+            android:clickable="true"
+            android:contentDescription="اضف للقائمة"
+            android:tint="e1e1e1" />
+
+        <ImageButton
+            android:id="@+id/btnDown"
+            android:layout_width="93dp"
+            android:layout_height="36dp"
+            android:layout_margin="10dp"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/shape"
+            android:clickable="true"
+            android:contentDescription="تحميل"
+            android:tint="@color/lightBlue" />
+
+    </LinearLayout>
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
