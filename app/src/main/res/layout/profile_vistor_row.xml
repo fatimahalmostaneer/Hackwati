@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="72dp"
+    android:clickable="true"
+    android:padding="6dip"
+    android:focusable="true"
+    android:id="@+id/LR">
+
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="19dp"
+        android:contentDescription="@string/app_name"
+        android:layout_marginLeft="16dp"
+        android:src="@drawable/ic_person_black_24dp" />
+
+
+    <TextView
+        android:id="@+id/title1"
+        android:layout_width="188dp"
+        android:layout_height="35dp"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginStart="66dp"
+        android:layout_marginLeft="66dp"
+        android:layout_marginEnd="169dp"
+        android:layout_marginRight="60dp"
+
+        android:gravity="center_vertical"
+
+        android:paddingBottom="15dp"
+        android:text="الاسم"
+        android:textColor="#949494"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+
+    <TextView
+        android:id="@+id/title2"
+        android:layout_width="188dp"
+        android:layout_height="35dp"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_alignParentBottom="true"
+
+
+        android:gravity="center_vertical"
+
+        android:paddingBottom="15dp"
+        android:text="الاسم"
+        android:textColor="@color/cardview_dark_background"
+        android:textSize="17sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="59dp"
+        android:background="@android:color/darker_gray" />
+
+</RelativeLayout>
