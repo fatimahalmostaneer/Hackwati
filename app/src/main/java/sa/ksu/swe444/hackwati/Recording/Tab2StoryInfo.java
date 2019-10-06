@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -29,7 +30,7 @@ import java.io.OutputStream;
 import sa.ksu.swe444.hackwati.R;
 
 
-public class Tab2Fragment extends Fragment {
+public class Tab2StoryInfo extends Fragment {
 
     private View view;
     private String name;
@@ -40,6 +41,10 @@ public class Tab2Fragment extends Fragment {
     private static int INTENT_CAMERA = 401;
     private static int INTENT_GALLERY = 301;
     private File imgFile;
+    private Button playRecord;
+    private MediaPlayer player = null;
+    private String fileName;
+    private static final String LOG_TAG = "AudioRecordTest";
 
 
 
@@ -51,6 +56,14 @@ public class Tab2Fragment extends Fragment {
         text.setText(name);
         button = view.findViewById(R.id.submit);
         img = view.findViewById(R.id.Img);
+        playRecord = view.findViewById(R.id.play_record);
+        playRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onPlay(true);
+
+            }
+        });
 
         img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -59,10 +72,36 @@ public class Tab2Fragment extends Fragment {
 
             }
         });
-
+        fileName = getActivity().getExternalCacheDir().getAbsolutePath();
+        fileName += "/audiorecordtest.3gp";
+        player = new MediaPlayer();
 
         return view;
     }
+    private void onPlay(boolean start) {
+        if (start) {
+            startPlaying();
+        } else {
+            stopPlaying();
+        }
+    }//onPlay()
+
+    private void startPlaying() {
+        player = new MediaPlayer();
+        try {
+            player.setDataSource(fileName);
+            player.prepare();
+            player.start();
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "prepare() failed");
+        }
+    }//startPlaying()
+
+    private void stopPlaying() {
+        player.stop();
+        player.release();
+        player = null;
+    }//stopPlaying()
 
 
 

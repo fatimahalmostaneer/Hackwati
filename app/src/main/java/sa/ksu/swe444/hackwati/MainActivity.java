@@ -9,7 +9,6 @@ import android.os.Bundle;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import androidx.annotation.NonNull;
@@ -24,15 +23,12 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-
+import android.widget.Button;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -41,7 +37,7 @@ import java.util.List;
 import sa.ksu.swe444.hackwati.Recording.RecordingActivity;
 
 
-public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener {
+public class MainActivity extends AppCompatActivity   {
 
     private RecyclerView recyclerView;
     private storyAdapter adapter;
@@ -49,8 +45,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
     private static CircularImageView channelimage;
     private RelativeLayout relativeLayout;
     private Toolbar toolbar;
-    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener;
     BottomNavigationView navView;
+    public View item;
+
 
     @SuppressLint("ResourceType")
     @Override
@@ -58,10 +55,9 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         navView = findViewById(R.id.nav_view);
-
-        navView.setOnNavigationItemSelectedListener(this);
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
         getSupportActionBar().setElevation(0);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -97,9 +93,27 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
         // MENU::::::
 
-       //navView.setOnNavigationItemSelectedListener(this);
 
-    }
+        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                switch (item.getItemId()){
+
+                    case R.id.navigation_record:
+                        startActivity(new Intent(MainActivity.this, RecordingActivity.class));
+                        break;
+
+                    case R.id.navigation_subscription:
+                        startActivity(new Intent(MainActivity.this, MainActivity.class));
+                        break;
+
+                }// end of switch
+             return true;
+            }
+        });
+
+    }// end of setOnNavigationItemSelectedListener()
 
     // Initiating Menu XML file (menu.xml)
     @Override
@@ -212,14 +226,6 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
 
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        Log.e("CLICKED","!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        if (menuItem.getItemId() == R.id.navigation_record) {
-            startActivity(new Intent(MainActivity.this, RecordingActivity.class));
-        }
-        return true;
-    }
 
     public static class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
@@ -263,5 +269,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
         Intent intent = new Intent(MainActivity.this, MainActivity.class); // from where? and to the distanation
         startActivity(intent); // to start another activity
     }
+
+
 }
 

@@ -10,8 +10,7 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp"
-        android:src="@drawable/ic_book_black_24dp" />
+        android:layout_marginTop="40dp" />
 
     <RelativeLayout
         android:id="@+id/re"
@@ -43,8 +42,16 @@
             android:layout_marginTop="340dp"
             android:hint="الملخص"
             />
-    </RelativeLayout>
 
+        <Button
+            android:id="@+id/play_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="-3dp"
+            android:layout_marginLeft="-3dp"
+            android:layout_marginTop="46dp"
+            android:text="play" />
+    </RelativeLayout>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/submit"
@@ -53,9 +60,9 @@
         android:layout_below="@+id/re"
         android:layout_centerInParent="true"
         android:layout_marginStart="50dp"
-        android:background="@drawable/shape_subscribe"
         android:text="نشر"
-        android:textSize="25dp" />
+        android:textSize="25dp"
+        android:layout_marginLeft="50dp" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/draft"
@@ -64,7 +71,6 @@
         android:layout_below="@+id/submit"
         android:layout_centerInParent="true"
         android:layout_marginTop="15dp"
-        android:background="@drawable/shape_subscribe"
         android:text="حفظ لوقت لاحق" />
 
     </RelativeLayout>

@@ -4,7 +4,7 @@
     android:layout_height="180dp"
     android:background="#ffffff" >
 
-    <sa.elm.hakuati.toolbar_mainactivity.audioRecord.VisualizerView
+    <sa.ksu.swe444.hackwati.Recording.VisualizerView
         android:layout_centerInParent="true"
         android:id="@+id/visualizer"
         android:layout_width="match_parent"
