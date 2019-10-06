@@ -66,7 +66,7 @@ public class StoryActivity extends AppCompatActivity {
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
-
+/*
         back =findViewById(R.id.back1);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,7 +77,7 @@ public class StoryActivity extends AppCompatActivity {
 
             }
         });
-
+*/
 
 
 
