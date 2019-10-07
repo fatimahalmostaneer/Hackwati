@@ -21,7 +21,7 @@
         android:padding="30dp">
 
         <EditText
-            android:id="@+id/nnme"
+            android:id="@+id/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="200dp"
@@ -62,7 +62,8 @@
         android:layout_marginStart="50dp"
         android:text="نشر"
         android:textSize="25dp"
-        android:layout_marginLeft="50dp" />
+        android:layout_marginLeft="50dp"
+        android:onClick="addStoryAdd"/>
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/draft"

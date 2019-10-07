@@ -16,26 +16,38 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
+
 import sa.ksu.swe444.hackwati.R;
 
 
 public class Tab2StoryInfo extends Fragment {
 
     private View view;
-    private String name;
-    private  TextView text;
-    private Button button ;
+    private EditText storyTitle;
+    private EditText storyDiscription;
+    private Button publishStory;
     private ImageView img;
     private boolean isSelectImage;
     private static int INTENT_CAMERA = 401;
@@ -45,6 +57,12 @@ public class Tab2StoryInfo extends Fragment {
     private MediaPlayer player = null;
     private String fileName;
     private static final String LOG_TAG = "AudioRecordTest";
+    public FirebaseFirestore firebaseFirestore= FirebaseFirestore.getInstance();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef;
+
+
+
 
 
 
@@ -52,9 +70,21 @@ public class Tab2StoryInfo extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
          view = inflater.inflate(R.layout.recording_fragment_two, container, false);
-        text = view.findViewById(R.id.pp);
-        text.setText(name);
-        button = view.findViewById(R.id.submit);
+        storyDiscription = view.findViewById(R.id.pp);
+        storyTitle = view.findViewById(R.id.name);
+       // storyDiscription.setText(storyTitle.getText().toString());
+
+        storageRef = storage.getReference();
+
+        publishStory = view.findViewById(R.id.submit);
+        publishStory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                addStoryAdd();
+                uploadAudio ();
+            }
+        });
+
         img = view.findViewById(R.id.Img);
         playRecord = view.findViewById(R.id.play_record);
         playRecord.setOnClickListener(new View.OnClickListener() {
@@ -191,5 +221,43 @@ public class Tab2StoryInfo extends Fragment {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, INTENT_CAMERA);
     }// END OF cameraIntent()
+
+    public void addStoryAdd(){
+        Map<String,Object> story= new HashMap<>();
+                String title= storyTitle.getText().toString();
+                String  descripstion = storyDiscription.getText().toString();
+                //String  pic = imgFile.toURI().toURL().getFile().toString();
+               // String  uid =
+
+       firebaseFirestore.collection("stories").document().set(story)
+               .addOnSuccessListener(new OnSuccessListener<Void>() {
+                   @Override
+                   public void onSuccess(Void aVoid) {
+                       Toast.makeText(getContext(),"successful", Toast.LENGTH_LONG).show();
+                   }
+               }).addOnFailureListener(new OnFailureListener() {
+                   @Override
+           public void onFailure(@NonNull Exception e) {
+
+                       Toast.makeText(getContext(),"failed", Toast.LENGTH_LONG).show();
+
+
+                   }
+       });
+    }
+
+    private  void uploadAudio (){
+        StorageReference filepath = storageRef.child("story_audio").child("new_story.mp3");
+        Uri uri = Uri.fromFile(new File(fileName));
+        filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getContext(), "success", Toast.LENGTH_SHORT);
+
+            }
+        });
+
+
+    }
 
 }

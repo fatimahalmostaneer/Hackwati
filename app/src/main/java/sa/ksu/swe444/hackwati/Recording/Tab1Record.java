@@ -22,6 +22,7 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.tyorikan.voicerecordingvisualizer.RecordingSampler;
 
 import java.io.IOException;
