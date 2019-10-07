@@ -43,13 +43,13 @@ LinearLayout linear;
 
 
 
-        namesList();
+       /* namesList();*/
 
         return  v;
     }
 
 
-    private void namesList() {
+   /* private void namesList() {
 
         // this is data fro recycler view
         CustomPojo s1 = new CustomPojo();
@@ -90,7 +90,7 @@ LinearLayout linear;
 
 
     }
-
+*/
 
 }
 

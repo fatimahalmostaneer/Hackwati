@@ -86,9 +86,9 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.MyViewHold
         public MyViewHolder(View itemView) {
             super(itemView);
 
-            user_name=(TextView)itemView.findViewById(R.id.title1);
+           /* user_name=(TextView)itemView.findViewById(R.id.title1);
             content=(TextView)itemView.findViewById(R.id.title2);
-            icon=(ImageView)itemView.findViewById(R.id.icon);
+            icon=(ImageView)itemView.findViewById(R.id.icon);*/
 
 
             itemView.setOnClickListener(new View.OnClickListener() {

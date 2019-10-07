@@ -1,5 +1,6 @@
 package sa.ksu.swe444.hackwati.Recording;
 
+import android.annotation.SuppressLint;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -24,6 +25,7 @@ public class RecordingActivity extends AppCompatActivity implements Tab1Record.S
     private Tab1Record f1;
     private Tab2StoryInfo f2;
 
+    @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,7 +47,7 @@ public class RecordingActivity extends AppCompatActivity implements Tab1Record.S
         titles.add("انشر قصتك");
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager = (NonSwipeableViewPager) findViewById(R.id.viewPager);
         adapter = new TabAdapter(getSupportFragmentManager() , frags , titles);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
@@ -56,8 +58,8 @@ public class RecordingActivity extends AppCompatActivity implements Tab1Record.S
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 return true;
             }
-        });
 
+        });
 
     }
 

@@ -11,6 +11,7 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 
 import sa.ksu.swe444.hackwati.R;
+import sa.ksu.swe444.hackwati.storyActivity.Tab1Fragment;
 
 
 public class ProfileActivity extends AppCompatActivity {
@@ -34,8 +35,6 @@ public class ProfileActivity extends AppCompatActivity {
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("الملف الشخصي");
 
 
 
@@ -46,13 +45,13 @@ public class ProfileActivity extends AppCompatActivity {
         adapter = new TabAdapter(getSupportFragmentManager());
 
         tab1Fragment = new Tab1Fragment();
-        adapter.addFragment(tab1Fragment, "الملف الشخصي");
+        adapter.addFragment(tab1Fragment, "نبذه");
 
         tab2Fragment = new Tab2Fragment();
-        adapter.addFragment(tab2Fragment, "القصص");
+        adapter.addFragment(tab2Fragment, "القوائم");
 
         tab3Fragment = new Tab3Fragment();
-        adapter.addFragment(tab3Fragment, "قصصي");
+        adapter.addFragment(tab3Fragment, "القصص");
 
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);
