@@ -46,6 +46,8 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
     private MediaPlayer playerDog ;
     private MediaPlayer playerLion ;
     private MediaPlayer playerMonkey ;
+    private MediaPlayer playerBird ;
+
 
 
     boolean mStartPlaying;
@@ -74,6 +76,11 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
     private ImageButton dog;
     private ImageButton monkey;
     private ImageButton lion;
+    private ImageButton bird;
+    private ImageButton playRecord;
+    private ImageButton stopPlayRecord;
+    private MediaPlayer player = null;
+
 
 
 
@@ -91,6 +98,28 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
         timer = view.findViewById(R.id.timer);
         visualizerView = view.findViewById(R.id.visualizer);
         nextBtn = view.findViewById(R.id.next_btn);
+        playRecord = view.findViewById(R.id.listen_record_btn);
+        stopPlayRecord= view.findViewById(R.id.stop_listen_record_btn);
+
+        player = new MediaPlayer();
+
+        playRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isRecording)
+                player.start();
+
+            }
+        });
+
+        stopPlayRecord.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(player.isPlaying())
+                    player.stop();
+
+            }
+        });
 
         dog= view.findViewById(R.id.record_dog);
         playerDog = MediaPlayer.create(getContext() ,R.raw.bark);
@@ -108,6 +137,7 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
             @Override
             public void onClick(View view) {
                 playerMonkey.start();
+
             }
         });
         lion = view.findViewById(R.id.record_lion);
@@ -116,6 +146,15 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
             @Override
             public void onClick(View view) {
                 playerLion.start();
+            }
+        });
+
+        bird = view.findViewById(R.id.record_bird);
+        playerBird = MediaPlayer.create(getContext(),R.raw.bird);
+        bird.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                playerBird.start();
             }
         });
 
@@ -277,5 +316,31 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
         super.onAttach(context);
         listener = (SecondFragmentListener) getActivity();
     }
+
+
+    private void onPlay(boolean start) {
+        if (start) {
+            startPlaying();
+        } else {
+            stopPlaying();
+        }
+    }//onPlay()
+
+    private void startPlaying() {
+        player = new MediaPlayer();
+        try {
+            player.setDataSource(fileName);
+            player.prepare();
+            player.start();
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "prepare() failed");
+        }
+    }//startPlaying()
+
+    private void stopPlaying() {
+        player.stop();
+        player.release();
+        player = null;
+    }//stopPlaying()
 
 }// class

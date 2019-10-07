@@ -26,6 +26,7 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -53,18 +54,13 @@ public class Tab2StoryInfo extends Fragment {
     private static int INTENT_CAMERA = 401;
     private static int INTENT_GALLERY = 301;
     private File imgFile;
-    private Button playRecord;
-    private MediaPlayer player = null;
-    private String fileName;
+
     private static final String LOG_TAG = "AudioRecordTest";
     public FirebaseFirestore firebaseFirestore= FirebaseFirestore.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef;
-
-
-
-
-
+    String userUid ;
+    private String fileName;
 
 
     @Override
@@ -72,9 +68,13 @@ public class Tab2StoryInfo extends Fragment {
          view = inflater.inflate(R.layout.recording_fragment_two, container, false);
         storyDiscription = view.findViewById(R.id.pp);
         storyTitle = view.findViewById(R.id.name);
-       // storyDiscription.setText(storyTitle.getText().toString());
 
+        fileName = getActivity().getExternalCacheDir().getAbsolutePath();
+        fileName += "/audiorecordtest.3gp";
+       // storyDiscription.setText(storyTitle.getText().toString());
+        userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         storageRef = storage.getReference();
+
 
         publishStory = view.findViewById(R.id.submit);
         publishStory.setOnClickListener(new View.OnClickListener() {
@@ -86,14 +86,7 @@ public class Tab2StoryInfo extends Fragment {
         });
 
         img = view.findViewById(R.id.Img);
-        playRecord = view.findViewById(R.id.play_record);
-        playRecord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onPlay(true);
 
-            }
-        });
 
         img.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,36 +95,14 @@ public class Tab2StoryInfo extends Fragment {
 
             }
         });
-        fileName = getActivity().getExternalCacheDir().getAbsolutePath();
-        fileName += "/audiorecordtest.3gp";
-        player = new MediaPlayer();
+
+
+
 
         return view;
-    }
-    private void onPlay(boolean start) {
-        if (start) {
-            startPlaying();
-        } else {
-            stopPlaying();
-        }
-    }//onPlay()
+    }//end of onCreate()
 
-    private void startPlaying() {
-        player = new MediaPlayer();
-        try {
-            player.setDataSource(fileName);
-            player.prepare();
-            player.start();
-        } catch (IOException e) {
-            Log.e(LOG_TAG, "prepare() failed");
-        }
-    }//startPlaying()
 
-    private void stopPlaying() {
-        player.stop();
-        player.release();
-        player = null;
-    }//stopPlaying()
 
 
 
@@ -247,6 +218,8 @@ public class Tab2StoryInfo extends Fragment {
     }
 
     private  void uploadAudio (){
+        //FirebaseStorage uploadTask = FirebaseStorage.getInstance().ch;
+
         StorageReference filepath = storageRef.child("story_audio").child("new_story.mp3");
         Uri uri = Uri.fromFile(new File(fileName));
         filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {

@@ -5,18 +5,11 @@
     android:orientation="vertical">
 
 
-    <Button
-        android:id="@+id/next_btn"
-        android:layout_width="90dp"
-        android:layout_height="41dp"
-        android:layout_below="@+id/recording"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="150dp"
-        android:text="التالي"
-        android:textSize="20dp" />
 <LinearLayout
-    android:layout_width="match_parent"
+    android:layout_marginTop="30dp"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:layout_centerInParent="true"
     android:orientation="horizontal"
     android:layout_below="@+id/recording">
 
@@ -24,37 +17,39 @@
         android:id="@+id/record_lion"
         android:layout_width="90dp"
         android:layout_height="90dp"
+        android:background="@drawable/circle"
         android:layout_below="@+id/recording"
-        android:layout_marginTop="0dp"
-        android:src="@drawable/ic_lion" />
+        android:src="@drawable/ic_lion"
+        android:layout_margin="5dp"/>
 
     <ImageButton
         android:id="@+id/record_monkey"
+        android:background="@drawable/circle"
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_below="@+id/recording"
-        android:layout_marginTop="2dp"
-        android:src="@drawable/ic_monkey" />
+        android:src="@drawable/ic_monkey"
+        android:layout_margin="5dp"/>
 
 
     <ImageButton
         android:id="@+id/record_bird"
+        android:background="@drawable/circle"
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_below="@+id/recording"
-        android:layout_marginTop="1dp"
-        android:src="@drawable/ic_owl" />
+        android:src="@drawable/ic_owl"
+        android:layout_margin="5dp"/>
 
     <ImageButton
         android:id="@+id/record_dog"
+        android:background="@drawable/circle"
         android:layout_width="90dp"
         android:layout_height="90dp"
         android:layout_below="@+id/recording"
-        android:src="@drawable/ic_dog" />
-
+        android:src="@drawable/ic_dog"
+        android:layout_margin="5dp"/>
 </LinearLayout>
-
-
 
     <RelativeLayout
         android:id="@+id/recording"
@@ -68,9 +63,27 @@
             android:id="@+id/record_btn"
             android:layout_width="60dp"
             android:layout_height="60dp"
+            android:background="@drawable/circle"
             android:layout_centerInParent="true"
-            android:src="@drawable/ic_microphone"
-            android:tint="#f1f1" />
+            android:src="@drawable/ic_microphone"/>
+        <ImageButton
+        android:id="@+id/listen_record_btn"
+        android:layout_toRightOf="@id/record_btn"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="5dp"
+        android:background="@drawable/circle"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_play_button"/>
+        <ImageButton
+            android:id="@+id/stop_listen_record_btn"
+            android:layout_toLeftOf="@id/record_btn"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="5dp"
+            android:background="@drawable/circle"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_pause"/>
 
 
     </RelativeLayout>
@@ -85,13 +98,26 @@
         android:textColor="@android:color/black"
         android:textSize="15pt" />
 
-    <TextView
+    <Button
+        android:id="@+id/next_btn"
+        android:background="@drawable/box_shape"
+        android:layout_width="90dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/recording"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="160dp"
+        android:text="التالي"
+        android:textSize="20dp" />
+
+
+    <Button
         android:id="@+id/cancel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:background="@drawable/box_shape"
+        android:layout_width="90dp"
+        android:layout_height="31dp"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="95dp"
+        android:layout_marginBottom="50dp"
         android:text="إلغاء"
         android:textColor="@android:color/black"
         android:textSize="20dp" />
