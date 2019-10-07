@@ -32,6 +32,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
+
     private EditText login_password;
     private EditText login_email;
     private  String entered_password;
@@ -46,6 +47,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
 
     private FirebaseAuth mAuth;
+    private  FirebaseUser user;
+
     private GoogleSignInClient mGoogleSignInClient;
     private final int RC_SIGN_IN = 1;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -80,6 +83,9 @@ private final String TAG = "Login";
 
         progressBar.setVisibility(View.GONE);
 
+       mAuth = FirebaseAuth.getInstance();
+
+
     }// end of onCreate()
 
     private  void init(){
@@ -105,6 +111,9 @@ private final String TAG = "Login";
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
+
+
+
     }//end of init
 
     @Override
@@ -114,6 +123,8 @@ private final String TAG = "Login";
 
             case R.id.loginbutton_login:
                 signIn();
+
+
                 break;
             case R.id.regBtnGoogle:
                 Log.e("TAG", "google clicked");
@@ -203,11 +214,13 @@ private final String TAG = "Login";
                             Toast.makeText(Login.this, "Authentication succeeded",
                                     Toast.LENGTH_SHORT).show();
 
-                            if(mAuth.getCurrentUser().isEmailVerified()){
+                            //مسحت
+
                                 startActivity(new Intent(Login.this, MainActivity.class));
-                            }else {
-                                showDialogWithOkButton("تحقق من الرابط المرسل على بريدك لإكمال عملية تسجيل الدخول ");
-                            }
+
+
+
+
 
                             //updateUI(user);
                         } else {

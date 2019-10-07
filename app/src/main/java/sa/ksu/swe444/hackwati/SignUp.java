@@ -15,19 +15,30 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener {
-    private FirebaseAuth mAuth;
+    public FirebaseAuth mAuth;
     private final String TAG = "Sign up";
     private EditText register_email;
     private EditText register_password;
     private EditText register_re_password;
+    private EditText register_name;
     private Button register_btn;
-private TextView haveAccount ;
+    private String str;
+    private TextView haveAccount ;
+    public FirebaseFirestore firebaseFirestore;
+    private  FirebaseUser user;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +47,16 @@ private TextView haveAccount ;
         init();
         register_btn.setOnClickListener(this);
         haveAccount.setOnClickListener(this);
+
+        this.firebaseFirestore = FirebaseFirestore.getInstance();
+
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+          FirebaseUser user= mAuth.getCurrentUser();
 
     }
 
@@ -46,6 +67,7 @@ private TextView haveAccount ;
         register_re_password = findViewById(R.id.repass_register);
         register_btn = findViewById(R.id.register_btn);
         haveAccount = findViewById(R.id.haveAccount);
+        register_name = findViewById(R.id.username_login);
 
 
     }
@@ -58,7 +80,6 @@ private TextView haveAccount ;
     }
 
     private void register() {
-
 
 
         if (!checkPassword(register_password.getText().toString(), register_re_password.getText().toString())){
@@ -77,23 +98,32 @@ private TextView haveAccount ;
                                 Log.d(TAG, "createUserWithEmail:success");
                                 Toast.makeText(SignUp.this, "createUserWithEmail:success",
                                         Toast.LENGTH_SHORT).show();
-                                FirebaseUser user = mAuth.getCurrentUser();
+                              user = mAuth.getCurrentUser();
                                 //send email by email to verify user account
+
+/*
                                 user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                         /*   Toast.makeText(SignUp.this, "check your email ",
-                                                    Toast.LENGTH_SHORT).show();*/
+                                         *//*   Toast.makeText(SignUp.this, "check your email ",
+                                                    Toast.LENGTH_SHORT).show();*//*
                                             showDialogWithOkButton("الرجاء توثيق بريدك الإلكتروني");
-                                            startActivity(new Intent(SignUp.this, Login.class));
+
                                         } else {
                                             Toast.makeText(SignUp.this, "check your NOT email ",
                                                     Toast.LENGTH_SHORT).show();
                                         }
                                     }
-                                });
-                                //updateUI(user);
+                                });*/
+
+                                createUserCollection ();
+
+                                        Intent i = new Intent(SignUp.this, MainActivity.class);
+                                i.putExtra("object", mAuth.getInstance().getUid());
+                                startActivity(i);
+
+                                        //updateUI(user);
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
@@ -106,6 +136,8 @@ private TextView haveAccount ;
                             // ...
                         }
                     });
+
+
     }//end of register
 
     private void showErrorMsg() {
@@ -136,4 +168,38 @@ private TextView haveAccount ;
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+private void createUserCollection (){
+
+   ;
+    Map<String,Object> user = new HashMap<>();
+    user.put("username",register_name.getText().toString());
+    user.put("email",register_email.getText().toString());
+    user.put("urlImg","http://www.i2clipart.com/cliparts/6/d/3/d/clipart-cartoon-reindeer-512x512-6d3d.png");
+
+    MySharedPreference.clearData(this);
+    MySharedPreference.putString(this, Constants.Keys.ID, mAuth.getInstance().getUid());
+    MySharedPreference.putString(this, Constants.Keys.USER_NAME, register_name.getText().toString());
+  //  MySharedPreference.putString(this, Constants.Keys.USER_IMG, register_email.getText().toString());
+    MySharedPreference.putString(this, Constants.Keys.USER_EMAIL, register_email.getText().toString());
+
+
+
+    firebaseFirestore.collection("users").document(mAuth.getInstance().getUid()).set(user)
+            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void aVoid) {
+                    Toast.makeText(SignUp.this, "user added", Toast.LENGTH_SHORT).show();
+                }
+            })
+            .addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(SignUp.this, "Error_add_user", Toast.LENGTH_SHORT).show();
+                    Log.d(TAG,e.toString());
+                }
+            });
+}
+
+
 }
