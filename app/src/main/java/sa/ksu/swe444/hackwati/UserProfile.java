@@ -29,7 +29,7 @@ public class UserProfile extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
        /* toolbar.setTitle("الإعدادات");

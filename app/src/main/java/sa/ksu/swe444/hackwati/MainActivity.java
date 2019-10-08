@@ -6,9 +6,13 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 
+import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
+import com.fangxu.allangleexpandablebutton.ButtonData;
+import com.fangxu.allangleexpandablebutton.ButtonEventListener;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import androidx.annotation.NonNull;
@@ -24,7 +28,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.TypedValue;
-import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -46,7 +49,7 @@ public class MainActivity extends AppCompatActivity   {
     private List<Item> itemList;
     private static CircularImageView channelimage;
     private RelativeLayout relativeLayout;
-    private Toolbar toolbar;
+    private Toolbar toolbarMain;
     BottomNavigationView navView;
     public View item;
 
@@ -57,10 +60,9 @@ public class MainActivity extends AppCompatActivity   {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         navView = findViewById(R.id.nav_view);
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        toolbarMain = (Toolbar) findViewById(R.id.toolbarMain);
+        setSupportActionBar(toolbarMain);
 
-        getSupportActionBar().setElevation(0);
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_explore, R.id.navigation_record, R.id.navigation_subscription)
@@ -80,7 +82,7 @@ public class MainActivity extends AppCompatActivity   {
         recyclerView.setAdapter(adapter);
         prepareItems();
 
-        relativeLayout = findViewById(R.id.real);
+
       /*  channelimage = findViewById(R.id.channelimage);
 
         relativeLayout.bringToFront();
@@ -94,7 +96,7 @@ public class MainActivity extends AppCompatActivity   {
         });*/
 
         // MENU::::::
-
+        installButton110to250();
 
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -121,58 +123,50 @@ public class MainActivity extends AppCompatActivity   {
 
     }// end of setOnNavigationItemSelectedListener()
 
-    // Initiating Menu XML file (menu.xml)
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_menus, menu);
-        return true;
+
+    ////MENU\\\\
+
+
+    private void installButton110to250() {
+        final AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable_110_250);
+        final List<ButtonData> buttonDatas = new ArrayList<>();
+        int[] drawable = {R.drawable.animal_elp, R.drawable.ic_power_settings_new_black_24dp,R.drawable.animal_elp, R.drawable.ic_search_black_24dp};
+        int[] color = {R.color.colorAccent, R.color.colorAccent, R.color.colorAccent,R.color.colorAccent };
+        for (int i = 0; i < 4; i++) {
+            ButtonData buttonData;
+            if (i == 0) {
+                buttonData = ButtonData.buildIconButton(this, drawable[i], 7);
+            } else {
+                buttonData = ButtonData.buildIconButton(this, drawable[i], 0);
+            }
+            buttonData.setBackgroundColorId(this, color[i]);
+            buttonDatas.add(buttonData);
+        }
+        button.setButtonDatas(buttonDatas);
+        setListener(button);
     }
 
-    /**
-     * Event Handling for Individual menu item selected
-     * Identify single menu item by it's id
-     */
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-
-        return true;
-
-    }
-
-    private void initCollapsingToolbar() {
-        final CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        // collapsingToolbar.setTitle(" ");
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        appBarLayout.setExpanded(true);
-
-
-        // hiding & showing the title when toolbar expanded & collapsed
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false;
-            int scrollRange = -1;
-
+    private void setListener(AllAngleExpandableButton button) {
+        button.setButtonEventListener(new ButtonEventListener() {
             @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                    channelimage.setVisibility(View.GONE);
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.setTitle(getString(R.string.app_name));
-                    isShow = true;
-                    channelimage.setVisibility(View.VISIBLE);
-
-                } else if (isShow) {
-                    collapsingToolbar.setTitle(" ");
-                    isShow = false;
-
+            public void onButtonClicked(int index) {
+                switch (index){
+                    case 1:
+                        FirebaseAuth.getInstance().signOut();
+                        startActivity( new Intent(MainActivity.this, SplashActivity.class));
+                        break;
+                    case 2:
+                        startActivity(new Intent(MainActivity.this, UserProfile.class));
+                        break;
+                    case 3:
+                        break;
                 }
             }
-        });
-    }
 
+            @Override
+            public void onExpand() { }
+            @Override
+            public void onCollapse() { }  }); }
 
     private int dpToPx(int dp) {
         Resources r = getResources();
