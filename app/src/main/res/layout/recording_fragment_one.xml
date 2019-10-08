@@ -111,7 +111,7 @@
 
 
     <Button
-        android:id="@+id/cancel"
+        android:id="@+id/cancel_recording"
         android:background="@drawable/box_shape"
         android:layout_width="90dp"
         android:layout_height="31dp"

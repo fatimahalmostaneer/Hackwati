@@ -4,11 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -18,6 +17,8 @@ public class UserProfile extends AppCompatActivity {
     Button log_out;
     Button record;
     private FirebaseAuth mAuth;
+    private ImageView uploadImg;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

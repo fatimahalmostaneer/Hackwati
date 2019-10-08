@@ -2,6 +2,7 @@ package sa.ksu.swe444.hackwati.Recording;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
 import android.media.MediaRecorder;
@@ -22,7 +23,6 @@ import androidx.annotation.RequiresApi;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.firebase.firestore.FirebaseFirestore;
 import com.tyorikan.voicerecordingvisualizer.RecordingSampler;
 
 import java.io.IOException;
@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
+import sa.ksu.swe444.hackwati.MainActivity;
 import sa.ksu.swe444.hackwati.R;
 
 
@@ -42,7 +43,6 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
 
     private ImageButton recordButton;
     private MediaRecorder recorder;
-    private Button   playButton;
     private MediaPlayer playerDog ;
     private MediaPlayer playerLion ;
     private MediaPlayer playerMonkey ;
@@ -80,6 +80,7 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
     private ImageButton playRecord;
     private ImageButton stopPlayRecord;
     private MediaPlayer player = null;
+    private Button cancelRecording;
 
 
 
@@ -94,6 +95,14 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
 
         ActivityCompat.requestPermissions(getActivity(), permissions, REQUEST_RECORD_AUDIO_PERMISSION);
         recordButton = view.findViewById(R.id.record_btn);
+        cancelRecording = view.findViewById(R.id.cancel_recording);
+        cancelRecording.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(getContext(), MainActivity.class));
+            }
+        });
        // playButton = view.findViewById(R.id.play_btn);
         timer = view.findViewById(R.id.timer);
         visualizerView = view.findViewById(R.id.visualizer);

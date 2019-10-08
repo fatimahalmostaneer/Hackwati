@@ -4,8 +4,10 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -15,10 +17,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener {
     private FirebaseAuth mAuth;
@@ -26,16 +40,26 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
     private EditText register_email;
     private EditText register_password;
     private EditText register_re_password;
+    private EditText register_user_name;
+
     private Button register_btn;
+    public FirebaseFirestore firebaseFirestore= FirebaseFirestore.getInstance();
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef;
+    private DatabaseReference mDatabase;
+
+
+
 private TextView haveAccount ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.sign_up);
-
+        mDatabase = FirebaseDatabase.getInstance().getReference();
         init();
         register_btn.setOnClickListener(this);
         haveAccount.setOnClickListener(this);
+
 
     }
 
@@ -46,6 +70,7 @@ private TextView haveAccount ;
         register_re_password = findViewById(R.id.repass_register);
         register_btn = findViewById(R.id.register_btn);
         haveAccount = findViewById(R.id.haveAccount);
+        register_user_name = findViewById(R.id.username_login);
 
 
     }
@@ -93,6 +118,8 @@ private TextView haveAccount ;
                                         }
                                     }
                                 });
+                                writeNewUser();
+
                                 //updateUI(user);
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -117,6 +144,7 @@ private TextView haveAccount ;
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.register_btn:
+                writeNewUser();
                 register();
                 break;
             case R.id.haveAccount:
@@ -135,5 +163,63 @@ private TextView haveAccount ;
                 });
         AlertDialog alert = builder.create();
         alert.show();
+    }
+
+
+
+/*    public void addNewUser(){
+        Map<String,Object> user= new HashMap<>();
+        String email= register_email.getText().toString();
+        String  password = register_password.getText().toString();
+        //String  pic = imgFile.toURI().toURL().getFile().toString();
+        // String  uid =
+
+        firebaseFirestore.collection("users").document().set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getContext(),"successful", Toast.LENGTH_LONG).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(),"failed", Toast.LENGTH_LONG).show();
+
+
+            }
+        });
+    }
+
+    private  void addUser (){
+        //FirebaseStorage uploadTask = FirebaseStorage.getInstance().ch;
+
+        StorageReference filepath = storageRef.child("newUser").child(userId);
+        Uri uri = Uri.fromFile(new File(fileName));
+        filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getContext(), "success", Toast.LENGTH_SHORT);
+
+            }
+        });
+
+
+    }*/
+
+
+    private void writeNewUser() {
+        String userId =mAuth.getCurrentUser().getUid();
+        String name= register_user_name.getText().toString();
+        String email = mAuth.getCurrentUser().getEmail();
+       // User user = new User(name, email);
+
+        Map<String,Object> user= new HashMap<>();
+        user.put("userId", userId);
+        user.put("email", email);
+        user.put("username",name);
+        //user.put()
+
+
+        firebaseFirestore.collection("users").document(userId).set(user);
     }
 }

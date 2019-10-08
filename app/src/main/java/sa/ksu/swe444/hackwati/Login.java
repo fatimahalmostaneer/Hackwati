@@ -29,6 +29,8 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,6 +48,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
 
     private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
     private GoogleSignInClient mGoogleSignInClient;
     private final int RC_SIGN_IN = 1;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -72,6 +75,7 @@ private final String TAG = "Login";
             }
         };
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         loginBtn.setOnClickListener(this);
         createAccount.setOnClickListener(this);
@@ -307,4 +311,7 @@ private void showDialogWithOkButton(String msg){
     AlertDialog alert = builder.create();
     alert.show();
 }
+
+    // [START basic_write]
+
 }// end of class
