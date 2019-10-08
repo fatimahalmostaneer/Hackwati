@@ -17,11 +17,6 @@
         android:name="sa.ksu.swe444.hackwati.font.CustomFontApp">
         <activity android:name=".SignUp">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".MainActivity">
             <intent-filter>
@@ -29,7 +24,6 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".Login"></activity>
         <activity android:name=".SplashActivity"></activity>

@@ -110,13 +110,12 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
         playRecord = view.findViewById(R.id.listen_record_btn);
         stopPlayRecord= view.findViewById(R.id.stop_listen_record_btn);
 
-        player = new MediaPlayer();
-
         playRecord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isRecording)
-                player.start();
+                if(!isRecording) {
+                        startPlaying();
+                }
 
             }
         });
@@ -193,9 +192,9 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
                             recorder.stop();
                             isRecording = false;
                             recordButton.setEnabled(false);
-
                         }
-                    }}
+                    }
+                        }
             }// run
         };
 
@@ -220,8 +219,6 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
         recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         recorder.setOutputFile(fileName);
         recorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
-
-
 
         try {
             recorder.prepare();
@@ -351,5 +348,7 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
         player.release();
         player = null;
     }//stopPlaying()
+
+
 
 }// class
