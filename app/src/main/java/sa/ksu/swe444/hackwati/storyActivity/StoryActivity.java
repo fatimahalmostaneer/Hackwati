@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -15,10 +16,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
@@ -26,9 +32,10 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import sa.ksu.swe444.hackwati.MainActivity;
 import sa.ksu.swe444.hackwati.R;
+import sa.ksu.swe444.hackwati.Recording.RecordingActivity;
 
 
-public class StoryActivity extends AppCompatActivity {
+public class StoryActivity extends AppCompatActivity{
 
     private TabAdapter adapter;
     private TabLayout tabLayout;
@@ -37,10 +44,13 @@ public class StoryActivity extends AppCompatActivity {
     private  Tab2Fragment tab2Fragment;
     private TextView change;
     private  String user_id;
-    private Button listenBtn;
+    private Button listenBtn,subscribedBtn;
     private ImageView back;
     final static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = StoryActivity.class.getSimpleName();
+
+    BottomNavigationView navView;
+
 
 
     @TargetApi(Build.VERSION_CODES.O)
@@ -49,23 +59,18 @@ public class StoryActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.story_activity_main);
 
+        subscribedBtn= findViewById(R.id.subscribedBtn);
+        subscribedBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                
+
+            }
+        });
 
 
 
-        viewPager = findViewById(R.id.viewPager);
-        tabLayout = findViewById(R.id.tabLayout);
-        adapter = new TabAdapter(getSupportFragmentManager());
-
-        tab1Fragment = new Tab1Fragment();
-
-        adapter.addFragment(tab1Fragment, "الوصف");
-
-        tab2Fragment = new Tab2Fragment();
-        adapter.addFragment(tab2Fragment, "ملخص");
-
-
-        viewPager.setAdapter(adapter);
-        tabLayout.setupWithViewPager(viewPager);
 /*
         back =findViewById(R.id.back1);
         back.setOnClickListener(new View.OnClickListener() {
@@ -121,29 +126,6 @@ public class StoryActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton addToList =findViewById(R.id.btnAddToList);
-
-        addToList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String addToList = "Added to List" ;
-                Toast.makeText(StoryActivity.this, addToList, Toast.LENGTH_LONG).show();
-
-
-            }
-        });
-
-        ImageButton download =findViewById(R.id.btnDown);
-
-        download.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String download = "Downloading Please wait..." ;
-                Toast.makeText(StoryActivity.this, download, Toast.LENGTH_LONG).show();
-
-
-            }
-        });
         final Button subscribe=findViewById(R.id.subscribeBtn);
 
         final Button subscribed =findViewById(R.id.subscribedBtn);
@@ -200,9 +182,16 @@ public class StoryActivity extends AppCompatActivity {
 
         change= findViewById(R.id.bookName);
 
+
+
         getExtras();
 
     }
+    // end of setOnNavigationItemSelectedListener()
+
+
+
+
 
     private void getExtras() {
         Intent intent = getIntent();

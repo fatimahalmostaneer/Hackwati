@@ -40,6 +40,9 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.opencensus.tags.Tag;
+import sa.ksu.swe444.hackwati.Constants;
+import sa.ksu.swe444.hackwati.MySharedPreference;
 import sa.ksu.swe444.hackwati.R;
 
 
@@ -226,6 +229,8 @@ public class Tab2StoryInfo extends Fragment {
 
         StorageReference filepath = storageRef.child("story_audio").child("new_story.mp3");
         Uri uri = Uri.fromFile(new File(fileName));
+        MySharedPreference.putString(getContext(), Constants.Keys.STORY_AUDIO, filepath+"");
+        Log.d(LOG_TAG,filepath+" audio");
         filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -241,6 +246,8 @@ public class Tab2StoryInfo extends Fragment {
         //FirebaseStorage uploadTask = FirebaseStorage.getInstance().ch;
 
         StorageReference filepath = storageRef.child("story_cover").child("img.png");
+        MySharedPreference.putString(getContext(), Constants.Keys.STORY_COVER,filepath+"");
+        Log.d(LOG_TAG,filepath+" cover");
 //        Uri uri = Uri.fromFile(new File(imgPath));
         filepath.putFile(contentURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override

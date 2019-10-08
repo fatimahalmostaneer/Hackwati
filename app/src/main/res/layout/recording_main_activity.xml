@@ -16,11 +16,11 @@
         app:tabMode="fixed">
     </com.google.android.material.tabs.TabLayout>
 
-    <sa.ksu.swe444.hackwati.Recording.NonSwipeableViewPager
+    <sa.ksu.swe444.hackwati.Recording.RecordViewPager
         android:id="@+id/viewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    </sa.ksu.swe444.hackwati.Recording.NonSwipeableViewPager>
+    </sa.ksu.swe444.hackwati.Recording.RecordViewPager>
 
 </LinearLayout>

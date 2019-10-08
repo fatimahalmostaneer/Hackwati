@@ -47,7 +47,7 @@ public class RecordingActivity extends AppCompatActivity implements Tab1Record.S
         titles.add("انشر قصتك");
 
         tabLayout = (TabLayout) findViewById(R.id.tabLayout);
-        viewPager = (NonSwipeableViewPager) findViewById(R.id.viewPager);
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
         adapter = new TabAdapter(getSupportFragmentManager() , frags , titles);
         viewPager.setAdapter(adapter);
         tabLayout.setupWithViewPager(viewPager);

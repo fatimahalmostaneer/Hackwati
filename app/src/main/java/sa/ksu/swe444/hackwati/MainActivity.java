@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.TypedValue;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sa.ksu.swe444.hackwati.Recording.RecordingActivity;
+import sa.ksu.swe444.hackwati.storyActivity.StoryActivity;
 
 
 public class MainActivity extends AppCompatActivity   {
@@ -108,6 +110,10 @@ public class MainActivity extends AppCompatActivity   {
                         startActivity(new Intent(MainActivity.this, MainActivity.class));
                         break;
 
+                    case R.id.navigation_explore:
+                        startActivity(new Intent(MainActivity.this, StoryActivity.class));
+                        break;
+
                 }// end of switch
              return true;
             }
@@ -118,13 +124,8 @@ public class MainActivity extends AppCompatActivity   {
     // Initiating Menu XML file (menu.xml)
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.activity_menus, menu);
-
-        if (menu instanceof MenuBuilder) {
-            MenuBuilder m = (MenuBuilder) menu;
-            m.setOptionalIconsVisible(true);
-        }
-
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_menus, menu);
         return true;
     }
 

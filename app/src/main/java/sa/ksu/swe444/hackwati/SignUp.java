@@ -15,6 +15,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,22 +31,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener {
-    private FirebaseAuth mAuth;
+    public FirebaseAuth mAuth;
     private final String TAG = "Sign up";
     private EditText register_email;
     private EditText register_password;
     private EditText register_re_password;
+    private EditText register_name;
     private EditText register_user_name;
 
     private Button register_btn;
-    public FirebaseFirestore firebaseFirestore= FirebaseFirestore.getInstance();
+    private String str;
+    private TextView haveAccount ;
+    private  FirebaseUser user;
+    public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef;
     private DatabaseReference mDatabase;
 
-
-
-private TextView haveAccount ;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,7 +67,7 @@ private TextView haveAccount ;
         register_re_password = findViewById(R.id.repass_register);
         register_btn = findViewById(R.id.register_btn);
         haveAccount = findViewById(R.id.haveAccount);
-        register_user_name = findViewById(R.id.username_login);
+        register_name = findViewById(R.id.username_login);
 
 
     }
@@ -98,22 +101,22 @@ private TextView haveAccount ;
                                         Toast.LENGTH_SHORT).show();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 //send email by email to verify user account
-                                user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                /*user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                         /*   Toast.makeText(SignUp.this, "check your email ",
-                                                    Toast.LENGTH_SHORT).show();*/
+                                         *//*   Toast.makeText(SignUp.this, "check your email ",
+                                                    Toast.LENGTH_SHORT).show();*//*
                                             showDialogWithOkButton("الرجاء توثيق بريدك الإلكتروني");
-                                            startActivity(new Intent(SignUp.this, Login.class));
+
                                         } else {
                                             Toast.makeText(SignUp.this, "check your NOT email ",
                                                     Toast.LENGTH_SHORT).show();
                                         }
                                     }
-                                });
-                                writeNewUser();
-
+                                });*/
+                                createUserCollection();
+                            startActivity(new Intent(SignUp.this, Login.class));
                                 //updateUI(user);
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -138,7 +141,6 @@ private TextView haveAccount ;
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.register_btn:
-                writeNewUser();
                 register();
                 break;
             case R.id.haveAccount:
@@ -160,31 +162,67 @@ private TextView haveAccount ;
     }
 
 
+    private void createUserCollection (){
 
-/*    public void addNewUser(){
-        Map<String,Object> user= new HashMap<>();
-        String email= register_email.getText().toString();
-        String  password = register_password.getText().toString();
-        //String  pic = imgFile.toURI().toURL().getFile().toString();
-        // String  uid =
+        ;
+        Map<String,Object> user = new HashMap<>();
+        user.put("username",register_name.getText().toString());
+        user.put("email",register_email.getText().toString());
 
-        firebaseFirestore.collection("users").document().set(user)
+        MySharedPreference.clearData(this);
+        MySharedPreference.putString(this, Constants.Keys.ID, mAuth.getInstance().getUid());
+
+
+
+
+        firebaseFirestore.collection("users").document(mAuth.getInstance().getUid()).set(user)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getContext(),"successful", Toast.LENGTH_LONG).show();
+                        Toast.makeText(SignUp.this, "user added", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(SignUp.this, "Error_add_user", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,e.toString());
+                    }
+                });
+    }
+  /*  public void addNewUser(){/// اللي بتعدل بجلدها
+        Map<String,Object> user= new HashMap<>();
+
+        String email= register_email.getText().toString();
+        String  password = register_password.getText().toString();
+        String  name = register_user_name.getText().toString();
+
+        user.put("email",email);
+        user.put("username", name);
+
+        MySharedPreference.putString(SignUp.this, Constants.Keys.ID,mAuth.getInstance().getUid());
+        Log.d(TAG,mAuth.getInstance().getUid()+" fofo");
+
+
+
+
+        firebaseFirestore.collection("users").document(mAuth.getInstance().getUid()).set(user)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(SignUp.this,"successful", Toast.LENGTH_LONG).show();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(),"failed", Toast.LENGTH_LONG).show();
+                Toast.makeText(SignUp.this,"failed", Toast.LENGTH_LONG).show();
 
 
             }
         });
-    }
+    }*/
 
-    private  void addUser (){
+  /*  private  void addUser (){
         //FirebaseStorage uploadTask = FirebaseStorage.getInstance().ch;
 
         StorageReference filepath = storageRef.child("newUser").child(userId);
@@ -201,19 +239,5 @@ private TextView haveAccount ;
     }*/
 
 
-    private void writeNewUser() {
-        String userId =mAuth.getCurrentUser().getUid();
-        String name= register_user_name.getText().toString();
-        String email = mAuth.getCurrentUser().getEmail();
-       // User user = new User(name, email);
 
-        Map<String,Object> user= new HashMap<>();
-        user.put("userId", userId);
-        user.put("email", email);
-        user.put("username",name);
-        //user.put()
-
-
-        firebaseFirestore.collection("users").document(userId).set(user);
-    }
 }
