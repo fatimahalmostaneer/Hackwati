@@ -29,9 +29,10 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class Login extends AppCompatActivity implements View.OnClickListener {
-
 
     private EditText login_password;
     private EditText login_email;
@@ -47,8 +48,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
 
     private FirebaseAuth mAuth;
-    private  FirebaseUser user;
-
+    private DatabaseReference mDatabase;
     private GoogleSignInClient mGoogleSignInClient;
     private final int RC_SIGN_IN = 1;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -75,6 +75,7 @@ private final String TAG = "Login";
             }
         };
 
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         loginBtn.setOnClickListener(this);
         createAccount.setOnClickListener(this);
@@ -82,9 +83,6 @@ private final String TAG = "Login";
         forgetPassword.setOnClickListener(this);
 
         progressBar.setVisibility(View.GONE);
-
-       mAuth = FirebaseAuth.getInstance();
-
 
     }// end of onCreate()
 
@@ -111,9 +109,6 @@ private final String TAG = "Login";
         // Initialize Firebase Auth
         mAuth = FirebaseAuth.getInstance();
 
-
-
-
     }//end of init
 
     @Override
@@ -123,8 +118,6 @@ private final String TAG = "Login";
 
             case R.id.loginbutton_login:
                 signIn();
-
-
                 break;
             case R.id.regBtnGoogle:
                 Log.e("TAG", "google clicked");
@@ -214,13 +207,11 @@ private final String TAG = "Login";
                             Toast.makeText(Login.this, "Authentication succeeded",
                                     Toast.LENGTH_SHORT).show();
 
-                            //مسحت
-
+                            if(mAuth.getCurrentUser().isEmailVerified()){
                                 startActivity(new Intent(Login.this, MainActivity.class));
-
-
-
-
+                            }else {
+                                showDialogWithOkButton("تحقق من الرابط المرسل على بريدك لإكمال عملية تسجيل الدخول ");
+                            }
 
                             //updateUI(user);
                         } else {
@@ -320,4 +311,7 @@ private void showDialogWithOkButton(String msg){
     AlertDialog alert = builder.create();
     alert.show();
 }
+
+    // [START basic_write]
+
 }// end of class
