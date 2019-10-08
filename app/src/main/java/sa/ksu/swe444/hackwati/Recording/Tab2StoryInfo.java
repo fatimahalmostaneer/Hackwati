@@ -61,6 +61,8 @@ public class Tab2StoryInfo extends Fragment {
     StorageReference storageRef;
     String userUid ;
     private String fileName;
+    private String imgPath;
+    Uri contentURI;
 
 
     @Override
@@ -82,6 +84,7 @@ public class Tab2StoryInfo extends Fragment {
             public void onClick(View view) {
                 addStoryAdd();
                 uploadAudio ();
+
             }
         });
 
@@ -115,7 +118,7 @@ public class Tab2StoryInfo extends Fragment {
         }//end if statement
         if (requestCode == INTENT_GALLERY) {
             if (data != null) {
-                Uri contentURI = data.getData();
+                contentURI = data.getData();
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
                     // String path = saveImage(bitmap);
@@ -123,6 +126,7 @@ public class Tab2StoryInfo extends Fragment {
                     img.setImageBitmap(bitmap);
                     isSelectImage = true;
                     persistImage(bitmap);
+                    uploadImage (contentURI);
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -148,6 +152,7 @@ public class Tab2StoryInfo extends Fragment {
         try {
             os = new FileOutputStream(imgFile);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, os);
+            imgPath = imgFile.getPath();
             os.flush();
             os.close();
         } catch (Exception e) {
@@ -231,5 +236,24 @@ public class Tab2StoryInfo extends Fragment {
 
 
     }
+
+    private  void uploadImage (Uri c){
+        //FirebaseStorage uploadTask = FirebaseStorage.getInstance().ch;
+
+        StorageReference filepath = storageRef.child("story_cover").child("img.png");
+//        Uri uri = Uri.fromFile(new File(imgPath));
+        filepath.putFile(contentURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getContext(), "success Image", Toast.LENGTH_SHORT);
+
+            }
+        });
+
+
+    }
+
+
+
 
 }
