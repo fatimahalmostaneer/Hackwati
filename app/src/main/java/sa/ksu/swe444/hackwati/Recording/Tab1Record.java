@@ -103,7 +103,8 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
                 startActivity(new Intent(getContext(), MainActivity.class));
             }
         });
-       // playButton = view.findViewById(R.id.play_btn);
+
+        initRecorder();
         timer = view.findViewById(R.id.timer);
         visualizerView = view.findViewById(R.id.visualizer);
         nextBtn = view.findViewById(R.id.next_btn);
@@ -114,9 +115,8 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
             @Override
             public void onClick(View view) {
                 if(!isRecording) {
-                        startPlaying();
+                    startPlaying();
                 }
-
             }
         });
 
@@ -135,8 +135,6 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
             @Override
             public void onClick(View view) {
                 playerDog.start();
-
-
             }
         });
         monkey = view.findViewById(R.id.record_monkey);
@@ -168,12 +166,11 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
 
 
 
-        recorder = new MediaRecorder();
         recordButton.setOnClickListener(this);
         //playButton.setOnClickListener(this);
 
         //playButton.setText("start playing");
-        initRecorder();
+
 
         startRecording = true;
         mStartPlaying = false;
@@ -181,7 +178,7 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
          updater = new Runnable() {
              public void run() {
                     handler.postDelayed(this, 1);
-                    if(recorder!=null){  /**/
+                    if(isRecording){  /**/
                     int maxAmplitude = recorder.getMaxAmplitude();
                     if (maxAmplitude != 0) {
                         visualizerView.addAmplitude(maxAmplitude);
@@ -209,11 +206,13 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
              }
          });
 
+
         return view;
     }//onCreateView()
 
 
     private void initRecorder(){
+        recorder = new MediaRecorder();
 
         recorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         recorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
