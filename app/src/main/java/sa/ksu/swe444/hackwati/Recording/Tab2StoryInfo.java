@@ -45,6 +45,8 @@ import sa.ksu.swe444.hackwati.Constants;
 import sa.ksu.swe444.hackwati.MySharedPreference;
 import sa.ksu.swe444.hackwati.R;
 
+import static androidx.constraintlayout.widget.Constraints.TAG;
+
 
 public class Tab2StoryInfo extends Fragment {
 
@@ -67,6 +69,9 @@ public class Tab2StoryInfo extends Fragment {
     private String imgPath;
     Uri contentURI;
 
+    //upload story
+    String  id = "7o2gIudtyqhIqej2n7TsvHrcATV2";
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,8 +90,12 @@ public class Tab2StoryInfo extends Fragment {
         publishStory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                addStoryAdd();
-                uploadAudio ();
+
+
+                addStoryToCollection();
+
+
+
 
             }
         });
@@ -130,6 +139,8 @@ public class Tab2StoryInfo extends Fragment {
                     isSelectImage = true;
                     persistImage(bitmap);
                     uploadImage (contentURI);
+                    uploadAudio ();
+
 
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -260,6 +271,44 @@ public class Tab2StoryInfo extends Fragment {
 
     }
 
+    private void addStoryToCollection(){
+
+        ;
+        Map<String,Object> stroy = new HashMap<>();
+
+        String description = storyDiscription.getText().toString();
+        String rate = "5";
+        String title = storyTitle.getText().toString();
+        String userId = id;
+        String pic = MySharedPreference.getString(getContext(),Constants.Keys.STORY_COVER,"");
+        String sound = MySharedPreference.getString(getContext(),Constants.Keys.STORY_AUDIO,"");
+
+        stroy.put("description",description);
+        stroy.put("rate",rate);
+        stroy.put("title",title);
+        stroy.put("userId",userId);
+        stroy.put("pic",pic);
+        stroy.put("sound",sound);
+
+
+        Log.d(LOG_TAG,description+title+pic+sound);
+
+
+        firebaseFirestore.collection("stories").document().set(stroy)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getContext(), "story added", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getContext(), "Error_add_story", Toast.LENGTH_SHORT).show();
+                        Log.d(TAG,e.toString());
+                    }
+                });
+    }
 
 
 

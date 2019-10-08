@@ -138,24 +138,14 @@ public class StoryActivity extends AppCompatActivity{
 
             public void onClick(View view) {
 
-
-
                 subscribe.setVisibility(View.INVISIBLE);
 
                 subscribed.setVisibility(View.VISIBLE);
 
 
-
-
-
-
-
             }
 
         });
-
-
-
         subscribed.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -167,14 +157,6 @@ public class StoryActivity extends AppCompatActivity{
                 subscribe.setVisibility(View.VISIBLE);
 
                 subscribed.setVisibility(View.INVISIBLE);
-
-
-
-
-
-
-
-
 
             }
 
