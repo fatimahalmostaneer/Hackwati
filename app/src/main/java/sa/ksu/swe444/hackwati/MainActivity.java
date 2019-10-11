@@ -33,6 +33,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -146,7 +147,7 @@ public class MainActivity extends AppCompatActivity   {
         setListener(button);
     }
 
-    private void setListener(AllAngleExpandableButton button) {
+    private void setListener(final AllAngleExpandableButton button) {
         button.setButtonEventListener(new ButtonEventListener() {
             @Override
             public void onButtonClicked(int index) {
@@ -164,7 +165,16 @@ public class MainActivity extends AppCompatActivity   {
             }
 
             @Override
-            public void onExpand() { }
+            public void onExpand() {
+                Toast.makeText(MainActivity.this, "jjjj", Toast.LENGTH_SHORT).show();
+            /*    int[] drawable = {R.drawable.animal_r};
+
+                final List<ButtonData> buttonDatas = new ArrayList<>();
+                ButtonData buttonData;
+                buttonData = ButtonData.buildIconButton(MainActivity.this, drawable[0], 7);
+                buttonDatas.add(buttonData);*/
+
+    }
             @Override
             public void onCollapse() { }  }); }
 
