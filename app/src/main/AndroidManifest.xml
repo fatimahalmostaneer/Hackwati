@@ -25,19 +25,16 @@
 
         </activity>
 
-        <activity android:name=".MainActivity"
+        <activity android:name=".InnerStoryActivity"
 
             android:screenOrientation="portrait" >
 
 
         </activity>
 
-        <activity android:name=".Login" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".MainActivity" >
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <activity android:name=".SplashActivity" />
@@ -57,8 +54,12 @@
         <activity android:name=".Recording.RecordingActivity" >
 
         </activity>
-        <activity android:name=".InnerStoryActivity">
+        <activity android:name=".Login">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
