@@ -29,6 +29,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
@@ -40,8 +41,10 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.grpc.Metadata;
 import io.opencensus.tags.Tag;
 import sa.ksu.swe444.hackwati.Constants;
+import sa.ksu.swe444.hackwati.MainActivity;
 import sa.ksu.swe444.hackwati.MySharedPreference;
 import sa.ksu.swe444.hackwati.R;
 
@@ -93,6 +96,8 @@ public class Tab2StoryInfo extends Fragment {
 
 
                 addStoryToCollection();
+                uploadAudio ();
+
 
 
 
@@ -139,7 +144,6 @@ public class Tab2StoryInfo extends Fragment {
                     isSelectImage = true;
                     persistImage(bitmap);
                     uploadImage (contentURI);
-                    uploadAudio ();
 
 
                 } catch (IOException e) {
@@ -238,11 +242,15 @@ public class Tab2StoryInfo extends Fragment {
     private  void uploadAudio (){
         //FirebaseStorage uploadTask = FirebaseStorage.getInstance().ch;
 
-        StorageReference filepath = storageRef.child("story_audio").child("new_story.mp3");
+        StorageMetadata metadata = new StorageMetadata.Builder()
+                .setContentType("audio/3gp")
+                .build();
+
+        StorageReference filepath = storageRef.child("story_audio").child("new_record.3gp");
         Uri uri = Uri.fromFile(new File(fileName));
         MySharedPreference.putString(getContext(), Constants.Keys.STORY_AUDIO, filepath+"");
         Log.d(LOG_TAG,filepath+" audio");
-        filepath.putFile(uri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+        filepath.putFile(uri, metadata).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 Toast.makeText(getContext(), "success", Toast.LENGTH_SHORT);
@@ -251,9 +259,10 @@ public class Tab2StoryInfo extends Fragment {
         });
 
 
-    }
+    }// uploadAudio
 
     private  void uploadImage (Uri c){
+
         //FirebaseStorage uploadTask = FirebaseStorage.getInstance().ch;
 
         StorageReference filepath = storageRef.child("story_cover").child("img.png");
@@ -299,6 +308,7 @@ public class Tab2StoryInfo extends Fragment {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(getContext(), "story added", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getContext(), MainActivity.class));
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
