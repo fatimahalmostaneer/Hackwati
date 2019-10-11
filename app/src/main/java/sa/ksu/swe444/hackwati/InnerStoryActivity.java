@@ -47,6 +47,7 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
         forward.setOnClickListener(this);
         speed.setOnClickListener(this);
         nightMood.setOnClickListener(this);
+        //get Audio from fire base
         mediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.child_story);
         seekBar.setMax(mediaPlayer.getDuration());
 
