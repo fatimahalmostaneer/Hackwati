@@ -27,6 +27,8 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
@@ -62,29 +64,34 @@ public class Tab2StoryInfo extends Fragment {
     private static int INTENT_CAMERA = 401;
     private static int INTENT_GALLERY = 301;
     private File imgFile;
+    private FirebaseDatabase database = FirebaseDatabase.getInstance();
+    DatabaseReference ref;
+
 
     private static final String LOG_TAG = "AudioRecordTest";
-    public FirebaseFirestore firebaseFirestore= FirebaseFirestore.getInstance();
+    public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef;
-    String userUid ;
+    String userUid;
     private String fileName;
     private String imgPath;
+    public FirebaseAuth mAuth;
     Uri contentURI;
 
     //upload story
-    String  id = "7o2gIudtyqhIqej2n7TsvHrcATV2";
+    String id = "7o2gIudtyqhIqej2n7TsvHrcATV2";
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-         view = inflater.inflate(R.layout.recording_fragment_two, container, false);
+        view = inflater.inflate(R.layout.recording_fragment_two, container, false);
         storyDiscription = view.findViewById(R.id.pp);
         storyTitle = view.findViewById(R.id.name);
+        mAuth = FirebaseAuth.getInstance();
 
         fileName = getActivity().getExternalCacheDir().getAbsolutePath();
         fileName += "/audiorecordtest.3gp";
-       // storyDiscription.setText(storyTitle.getText().toString());
+        // storyDiscription.setText(storyTitle.getText().toString());
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         storageRef = storage.getReference();
 
@@ -95,12 +102,9 @@ public class Tab2StoryInfo extends Fragment {
             public void onClick(View view) {
 
 
-                addStoryToCollection();
-                uploadAudio ();
-
-
-
-
+               // addStoryToCollection();
+                uploadAudio();
+                uploadImage();
 
             }
         });
@@ -117,13 +121,8 @@ public class Tab2StoryInfo extends Fragment {
         });
 
 
-
-
         return view;
     }//end of onCreate()
-
-
-
 
 
     @Override
@@ -143,12 +142,12 @@ public class Tab2StoryInfo extends Fragment {
                     img.setImageBitmap(bitmap);
                     isSelectImage = true;
                     persistImage(bitmap);
-                    uploadImage (contentURI);
+                    //uploadImage();
 
 
                 } catch (IOException e) {
                     e.printStackTrace();
-                  Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), "Failed!", Toast.LENGTH_SHORT).show();
                 }// end catch
             }//end if statement
 
@@ -216,40 +215,41 @@ public class Tab2StoryInfo extends Fragment {
         startActivityForResult(cameraIntent, INTENT_CAMERA);
     }// END OF cameraIntent()
 
-    public void addStoryAdd(){
-        Map<String,Object> story= new HashMap<>();
-                String title= storyTitle.getText().toString();
-                String  descripstion = storyDiscription.getText().toString();
-                //String  pic = imgFile.toURI().toURL().getFile().toString();
-               // String  uid =
+    public void addStoryAdd() {
+        Map<String, Object> story = new HashMap<>();
+        String title = storyTitle.getText().toString();
+        String descripstion = storyDiscription.getText().toString();
+        //String  pic = imgFile.toURI().toURL().getFile().toString();
+        // String  uid =
 
-       firebaseFirestore.collection("stories").document().set(story)
-               .addOnSuccessListener(new OnSuccessListener<Void>() {
-                   @Override
-                   public void onSuccess(Void aVoid) {
-                       Toast.makeText(getContext(),"successful", Toast.LENGTH_LONG).show();
-                   }
-               }).addOnFailureListener(new OnFailureListener() {
-                   @Override
-           public void onFailure(@NonNull Exception e) {
-                       Toast.makeText(getContext(),"failed", Toast.LENGTH_LONG).show();
+        firebaseFirestore.collection("stories").document().set(story)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getContext(), "successful", Toast.LENGTH_LONG).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "failed", Toast.LENGTH_LONG).show();
 
 
-                   }
-       });
+            }
+        });
     }
 
-    private  void uploadAudio (){
+    private void uploadAudio() {
         //FirebaseStorage uploadTask = FirebaseStorage.getInstance().ch;
 
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setContentType("audio/3gp")
                 .build();
-
-        StorageReference filepath = storageRef.child("story_audio").child("new_record.3gp");
+        String userId = mAuth.getCurrentUser().getUid();
+        String storyId = storyTitleToStoryId();
+        StorageReference filepath = storageRef.child(userId).child(storyId).child("audio.3gp");
         Uri uri = Uri.fromFile(new File(fileName));
-        MySharedPreference.putString(getContext(), Constants.Keys.STORY_AUDIO, filepath+"");
-        Log.d(LOG_TAG,filepath+" audio");
+        MySharedPreference.putString(getContext(), Constants.Keys.STORY_AUDIO, filepath + "");
+        Log.d(LOG_TAG, filepath + " audio");
         filepath.putFile(uri, metadata).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -261,13 +261,14 @@ public class Tab2StoryInfo extends Fragment {
 
     }// uploadAudio
 
-    private  void uploadImage (Uri c){
+    private void uploadImage() {
 
         //FirebaseStorage uploadTask = FirebaseStorage.getInstance().ch;
-
-        StorageReference filepath = storageRef.child("story_cover").child("img.png");
-        MySharedPreference.putString(getContext(), Constants.Keys.STORY_COVER,filepath+"");
-        Log.d(LOG_TAG,filepath+" cover");
+        String userId = mAuth.getCurrentUser().getUid();
+        String storyId = storyTitleToStoryId();
+        StorageReference filepath = storageRef.child(userId).child(storyId).child("img.jpeg");
+        // MySharedPreference.putString(getContext( ), Constants.Keys.STORY_COVER,filepath+"");
+        Log.d(LOG_TAG, filepath + " cover");
 //        Uri uri = Uri.fromFile(new File(imgPath));
         filepath.putFile(contentURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -280,27 +281,27 @@ public class Tab2StoryInfo extends Fragment {
 
     }
 
-    private void addStoryToCollection(){
+    private void addStoryToCollection() {
 
         ;
-        Map<String,Object> stroy = new HashMap<>();
+        Map<String, Object> stroy = new HashMap<>();
 
         String description = storyDiscription.getText().toString();
         String rate = "5";
         String title = storyTitle.getText().toString();
         String userId = id;
-        String pic = MySharedPreference.getString(getContext(),Constants.Keys.STORY_COVER,"");
-        String sound = MySharedPreference.getString(getContext(),Constants.Keys.STORY_AUDIO,"");
+        String pic = MySharedPreference.getString(getContext(), Constants.Keys.STORY_COVER, "");
+        String sound = MySharedPreference.getString(getContext(), Constants.Keys.STORY_AUDIO, "");
 
-        stroy.put("description",description);
-        stroy.put("rate",rate);
-        stroy.put("title",title);
-        stroy.put("userId",userId);
-        stroy.put("pic",pic);
-        stroy.put("sound",sound);
+        stroy.put("description", description);
+        stroy.put("rate", rate);
+        stroy.put("title", title);
+        stroy.put("userId", userId);
+        stroy.put("pic", pic);
+        stroy.put("sound", sound);
 
 
-        Log.d(LOG_TAG,description+title+pic+sound);
+        Log.d(LOG_TAG, description + title + pic + sound);
 
 
         firebaseFirestore.collection("stories").document().set(stroy)
@@ -315,11 +316,20 @@ public class Tab2StoryInfo extends Fragment {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Toast.makeText(getContext(), "Error_add_story", Toast.LENGTH_SHORT).show();
-                        Log.d(TAG,e.toString());
+                        Log.d(TAG, e.toString());
                     }
                 });
     }
 
+    private String storyTitleToStoryId() {
+        String title = storyTitle.getText().toString();
+        title = title.toLowerCase();
+        title = title.replace(" ", "_");
+        String userId = mAuth.getCurrentUser().getUid();
+        ref = database.getReference("stories/" + userId + "/counter");
+        title.concat(ref.toString());
+        return title;
+    }
 
 
 }
