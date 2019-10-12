@@ -26,9 +26,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Collection;
+import java.util.Collections;
 
 import sa.ksu.swe444.hackwati.MainActivity;
 import sa.ksu.swe444.hackwati.R;
@@ -48,7 +52,8 @@ public class StoryActivity extends AppCompatActivity{
     private ImageView back;
     final static FirebaseFirestore db = FirebaseFirestore.getInstance();
     private static final String TAG = StoryActivity.class.getSimpleName();
-
+    public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    public DocumentReference documentReference ;
     BottomNavigationView navView;
 
 
@@ -192,6 +197,13 @@ public class StoryActivity extends AppCompatActivity{
                         }
                     }
                 });
+
+    }
+
+
+    public void subscribeUser(){
+
+        firebaseFirestore.collection("stories").document("storyID");
 
     }
 

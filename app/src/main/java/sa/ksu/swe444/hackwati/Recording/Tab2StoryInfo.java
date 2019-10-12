@@ -80,6 +80,7 @@ public class Tab2StoryInfo extends Fragment {
     private String imgPath;
     public FirebaseAuth mAuth;
     Uri contentURI;
+    public static String  downloadURLA;
 
 
 
@@ -230,7 +231,7 @@ public class Tab2StoryInfo extends Fragment {
         final StorageReference filepath = storageRef.child(userId).child(storyId).child("audio.3gp");
         Uri uri = Uri.fromFile(new File(fileName));
         final UploadTask uploadTask = filepath.putFile(uri, metadata);
-        final String[] downloadURLA = {""};
+
 
         // get Uri
         Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -248,12 +249,12 @@ public class Tab2StoryInfo extends Fragment {
                 if (task.isSuccessful()) {
 
                     Uri downloadUri = task.getResult();
-                    downloadURLA[0] = downloadUri.toString()+"";
+                     downloadURLA = downloadUri.toString()+"";
 
-                   Log.d(LOG_TAG, downloadURLA[0] +" Ya1" );
+                   Log.d(LOG_TAG, downloadURLA +" Ya1" );
                     MySharedPreference.putString(getActivity(),Constants.Keys.STORY_AUDIO,"");
-                    MySharedPreference.putString(getActivity(),Constants.Keys.STORY_AUDIO, downloadURLA[0]);
-                    Log.d(LOG_TAG,MySharedPreference.getString(getContext(),Constants.Keys.STORY_AUDIO, downloadURLA[0])+" YaM" );
+                    MySharedPreference.putString(getActivity(),Constants.Keys.STORY_AUDIO,downloadURLA);
+                    Log.d(LOG_TAG,MySharedPreference.getString(getContext(),Constants.Keys.STORY_AUDIO, downloadURLA)+" YaM" );
 
 
                 } }
@@ -267,7 +268,7 @@ public class Tab2StoryInfo extends Fragment {
             }
         });
 
-        Log.d(LOG_TAG, downloadURLA[0]+" YaOut" );
+        Log.d(LOG_TAG,downloadURLA+" outClass" );
 
     }// uploadAudio
 
@@ -351,7 +352,7 @@ public class Tab2StoryInfo extends Fragment {
         stroy.put("sound", sound);
 
 
-Log.d(LOG_TAG, sound+" col");
+Log.d(LOG_TAG, downloadURLA+" collect");
 
 
         firebaseFirestore.collection("stories").document().set(stroy)

@@ -9,10 +9,20 @@ import android.os.Bundle;
 import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
 import com.fangxu.allangleexpandablebutton.ButtonData;
 import com.fangxu.allangleexpandablebutton.ButtonEventListener;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +37,7 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -38,6 +49,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import sa.ksu.swe444.hackwati.Recording.RecordingActivity;
 import sa.ksu.swe444.hackwati.storyActivity.StoryActivity;
@@ -53,6 +65,14 @@ public class MainActivity extends AppCompatActivity   {
     private Toolbar toolbarMain;
     BottomNavigationView navView;
     public View item;
+    public FirebaseAuth mAuth;
+    String userUid;
+    public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    public DocumentReference documentReference ;
+    public String[] subscribedUsers;
+    private static final String TAG = "MainActivity";
+    public static   List<String> list;
+
 
 
     @SuppressLint("ResourceType")
@@ -63,7 +83,13 @@ public class MainActivity extends AppCompatActivity   {
         navView = findViewById(R.id.nav_view);
         toolbarMain = (Toolbar) findViewById(R.id.toolbarMain);
         setSupportActionBar(toolbarMain);
+        userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
+
+
+      /*  MySharedPreference.clearValue(MainActivity.this,Constants.Keys.STORY_COVER);
+        MySharedPreference.clearValue(MainActivity.this,Constants.Keys.STORY_AUDIO);
+*/
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_explore, R.id.navigation_record, R.id.navigation_subscription)
@@ -122,7 +148,9 @@ public class MainActivity extends AppCompatActivity   {
             }
         });
 
-    }// end of setOnNavigationItemSelectedListener()
+        retriveSubscribedUsers();
+
+    }// end of OnCreate()
 
 
     ////MENU\\\\
@@ -183,50 +211,8 @@ public class MainActivity extends AppCompatActivity   {
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }//end dpToPx
 
+
     private void prepareItems() {
-        int[] covers = new int[]{
-                R.drawable.gray,
-
-        };
-
-
-        int[] pictures = new int[]{
-
-                R.drawable.animal_elp,
-                R.drawable.animal_p,
-                R.drawable.animal_r,
-                R.drawable.animal_z,
-                R.drawable.animal_t,
-
-
-        };
-
-        int views = R.drawable.ic_play_circle_outline_black_24dp;
-
-
-        Item a1 = new Item("أخي زيد", covers[0], pictures[0], "12 ألف ", "غيداء العجاجي", views);
-        itemList.add(a1);
-
-        Item a2 = new Item("ليس بعد !", covers[0], pictures[1], "10 آلاف ", "فاطمة القحطاني", views);
-        itemList.add(a2);
-
-        Item a3 = new Item("جود ودراجتها الجديدة", covers[0], pictures[2], "2 ألف ", "دار سلوى للنشر", views);
-        itemList.add(a3);
-
-        Item a4 = new Item("انتبهي يا جود", covers[0], pictures[3], "40 ألف ", "دار الوطن", views);
-        itemList.add(a4);
-
-        Item a5 = new Item("أخي زيد", covers[0], pictures[4], "12 ألف ", "غيداء العجاجي", views);
-        itemList.add(a5);
-
-        Item a6 = new Item("ليس بعد !", covers[0], pictures[1], "10 آلاف ", "فاطمة القحطاني", views);
-        itemList.add(a6);
-
-        Item a7 = new Item("جود ودراجتها الجديدة", covers[0], pictures[2], "2 ألف ", "دار سلوى للنشر", views);
-        itemList.add(a7);
-
-        Item a8 = new Item("انتبهي يا جود", covers[0], pictures[0], "40 ألف ", "دار الوطن", views);
-        itemList.add(a8);
 
 
     }
@@ -275,6 +261,61 @@ public class MainActivity extends AppCompatActivity   {
         startActivity(intent); // to start another activity
     }
 
+    public void retriveSubscribedUsers(){
 
+        //firebaseFirestore.collection("users").document(userUid);
+
+        DocumentReference docRef = firebaseFirestore.collection("users").document(userUid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        List<String> list = (List<String>) document.get("subscribedUsers");
+                        if(list!=null)
+                        for (String user : list) {
+                            Log.d("TAG", "soso "+user);
+                        }
+                        retriveStories(list);
+                       // String str = document.getString("subscribedUsers").toString();
+                     //   Log.d(TAG, "DocumentSnapshot data: " + str);
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+
+    }
+
+    public void retriveStories ( List<String> list) {
+
+        if (list == null)
+            return;
+
+        for (String story : list) {
+            Query subscribedStories = firebaseFirestore.collection("stories").whereEqualTo("userId", story);
+             subscribedStories.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                 @Override
+                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                     if (task.isSuccessful()) {
+
+                         for (QueryDocumentSnapshot document : task.getResult()) {
+                             Log.d(TAG, "asomy "+document.getId() + " => " + document.getData());
+                         }
+                     } else {
+                         Log.d(TAG, "Error getting documents: ", task.getException());
+                     }
+                 }
+             });
+
+
+        }// end for loop
 }
+    }
 
