@@ -88,6 +88,7 @@ public class Tab2StoryInfo extends Fragment {
         view = inflater.inflate(R.layout.recording_fragment_two, container, false);
         storyDiscription = view.findViewById(R.id.pp);
         storyTitle = view.findViewById(R.id.name);
+
         mAuth = FirebaseAuth.getInstance();
 
         fileName = getActivity().getExternalCacheDir().getAbsolutePath();
@@ -218,19 +219,18 @@ public class Tab2StoryInfo extends Fragment {
     }// END OF cameraIntent()
 
 
-    private void uploadAudio() {
-        //FirebaseStorage uploadTask = FirebaseStorage.getInstance().ch;
+    public void uploadAudio() {
 
         StorageMetadata metadata = new StorageMetadata.Builder()
                 .setContentType("audio/3gp")
                 .build();
+
         String userId = mAuth.getCurrentUser().getUid();
         String storyId = storyTitleToStoryId();
         final StorageReference filepath = storageRef.child(userId).child(storyId).child("audio.3gp");
         Uri uri = Uri.fromFile(new File(fileName));
-        MySharedPreference.putString(getContext(), Constants.Keys.STORY_AUDIO, filepath + "");
-        Log.d(LOG_TAG, filepath + " audio");
         final UploadTask uploadTask = filepath.putFile(uri, metadata);
+        final String[] downloadURLA = {""};
 
         // get Uri
         Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -246,10 +246,15 @@ public class Tab2StoryInfo extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 if (task.isSuccessful()) {
+
                     Uri downloadUri = task.getResult();
-                    String downloadURL = downloadUri.toString();
-                    MySharedPreference.putString(getContext(),Constants.Keys.STORY_AUDIO,downloadURL);
-                    Log.d(LOG_TAG,downloadUri+" soso" );
+                    downloadURLA[0] = downloadUri.toString()+"";
+
+                   Log.d(LOG_TAG, downloadURLA[0] +" Ya1" );
+                    MySharedPreference.putString(getActivity(),Constants.Keys.STORY_AUDIO,"");
+                    MySharedPreference.putString(getActivity(),Constants.Keys.STORY_AUDIO, downloadURLA[0]);
+                    Log.d(LOG_TAG,MySharedPreference.getString(getContext(),Constants.Keys.STORY_AUDIO, downloadURLA[0])+" YaM" );
+
 
                 } }
         });
@@ -262,8 +267,10 @@ public class Tab2StoryInfo extends Fragment {
             }
         });
 
+        Log.d(LOG_TAG, downloadURLA[0]+" YaOut" );
 
     }// uploadAudio
+
 
 
 
@@ -293,9 +300,15 @@ public class Tab2StoryInfo extends Fragment {
                     if (task.isSuccessful()) {
                         Uri downloadUri = task.getResult();
                         String downloadURL = downloadUri.toString();
+                        MySharedPreference.clearValue(getContext(),Constants.Keys.STORY_COVER);
+
                         MySharedPreference.putString(getContext(),Constants.Keys.STORY_COVER,downloadURL);
+                        Log.d(LOG_TAG,downloadURL+" Ya2" );
+
                     } }
             });
+
+
             uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -326,17 +339,19 @@ public class Tab2StoryInfo extends Fragment {
         String title = storyTitle.getText().toString();
         String userId = mAuth.getCurrentUser().getUid();
         String pic = MySharedPreference.getString(getContext(), Constants.Keys.STORY_COVER, "");
-        String sound = MySharedPreference.getString(getContext(), Constants.Keys.STORY_AUDIO, "");
+        String sound = MySharedPreference.getString(getActivity(), Constants.Keys.STORY_AUDIO, "");
+
+
 
         stroy.put("description", description);
-        stroy.put("rate", rate);
+        stroy.put("rate", "");
         stroy.put("title", title);
         stroy.put("userId", userId);
         stroy.put("pic", pic);
         stroy.put("sound", sound);
 
 
-        Log.d(LOG_TAG, description + title + pic + sound);
+Log.d(LOG_TAG, sound+" col");
 
 
         firebaseFirestore.collection("stories").document().set(stroy)
