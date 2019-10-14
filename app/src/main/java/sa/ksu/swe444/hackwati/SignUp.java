@@ -101,11 +101,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                                         Toast.LENGTH_SHORT).show();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 //send email by email to verify user account
-                                user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                              /*  user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                         //*   Toast.makeText(SignUp.this, "check your email " Toast.LENGTH_SHORT).show();*/
+                                         //  Toast.makeText(SignUp.this, "check your email " Toast.LENGTH_SHORT).show();
                                             showDialogWithOkButton("الرجاء توثيق بريدك الإلكتروني");
 
                                         } else {
@@ -113,7 +113,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                                                     Toast.LENGTH_SHORT).show();
                                         }
                                     }
-                                });
+                                });*/
                                 createUserCollection();
                             startActivity(new Intent(SignUp.this, Login.class));
                                 //updateUI(user);
@@ -167,6 +167,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         Map<String,Object> user = new HashMap<>();
         user.put("username",register_name.getText().toString());
         user.put("email",register_email.getText().toString());
+        user.put("thumbnail","https://firebasestorage.googleapis.com/v0/b/hackwati444.appspot.com/o/Hakawati%2Fdefult_thumbnail.png?alt=media&token=be4ed812-e028-493c-a703-593e4a993c1f");
 
         MySharedPreference.clearData(this);
         MySharedPreference.putString(this, Constants.Keys.ID, mAuth.getInstance().getUid());

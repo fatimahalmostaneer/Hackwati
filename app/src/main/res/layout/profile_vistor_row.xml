@@ -31,7 +31,22 @@
                 android:layout_marginTop="80dp"
                 android:alpha=".6"
                 android:onClick="selectImage"
-                android:src="@drawable/animal_p" />
+                android:src="@drawable/defult_thumbnail" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@id/userImg"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@id/userImg"
+                android:layout_marginTop="-20dp"
+                android:gravity="center"
+                android:text="+"
+                android:textStyle="bold"
+                android:textSize="30dp"/>
+
 
             <TextView
                 android:id="@+id/nameSignUp"

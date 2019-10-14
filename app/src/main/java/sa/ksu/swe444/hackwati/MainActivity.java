@@ -3,9 +3,14 @@ package sa.ksu.swe444.hackwati;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
 import com.fangxu.allangleexpandablebutton.ButtonData;
 import com.fangxu.allangleexpandablebutton.ButtonEventListener;
@@ -26,6 +31,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.Toolbar;
@@ -85,12 +91,6 @@ public class MainActivity extends AppCompatActivity {
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
-
-
-      /*  MySharedPreference.clearValue(MainActivity.this,Constants.Keys.STORY_COVER);
-        MySharedPreference.clearValue(MainActivity.this,Constants.Keys.STORY_AUDIO);
-*/
-
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_explore, R.id.navigation_record, R.id.navigation_subscription)
                 .build();
@@ -110,7 +110,6 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         retriveSubscribedUsers();
         recyclerView.setAdapter(adapter);
-
 
 
 
@@ -150,9 +149,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     private void installButton110to250() {
+
+
+
         final AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable_110_250);
         final List<ButtonData> buttonDatas = new ArrayList<>();
-        int[] drawable = {R.drawable.animal_elp, R.drawable.ic_power_settings_new_black_24dp, R.drawable.animal_elp, R.drawable.ic_search_black_24dp};
+        int[] drawable = {R.drawable.defult_thumbnail, R.drawable.ic_power_settings_new_black_24dp, R.drawable.animal_elp, R.drawable.ic_search_black_24dp};
         int[] color = {R.color.colorAccent, R.color.colorAccent, R.color.colorAccent, R.color.colorAccent};
         for (int i = 0; i < 4; i++) {
             ButtonData buttonData;
@@ -326,5 +328,38 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
+    public void retriveUserData() {
+
+
+        DocumentReference docRef = firebaseFirestore.collection("users").document(userUid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String thumbnail = document.get("thumbnail").toString();
+                        if (thumbnail!=null){
+
+                            final AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable_110_250);
+
+
+
+                        }
+
+
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+
+    }
+
 }
 

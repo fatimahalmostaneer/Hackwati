@@ -50,6 +50,8 @@ dependencies {
     implementation 'com.tyorikan:voice-recording-visualizer:1.0.3@aar'
     implementation 'com.google.firebase:firebase-database:19.1.0'
     implementation 'com.google.firebase:firebase-storage:19.1.0'
+    implementation 'com.squareup.picasso:picasso:2.5.2'
+
 
 
     // side menu

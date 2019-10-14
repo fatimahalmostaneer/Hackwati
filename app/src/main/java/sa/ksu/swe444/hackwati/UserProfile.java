@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -21,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -38,6 +40,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.URL;
 import java.util.List;
 
 import sa.ksu.swe444.hackwati.Recording.RecordingActivity;
@@ -92,17 +95,14 @@ public class UserProfile extends AppCompatActivity {
             public void onClick(View view) {
                 openCameraChooser();
 
+
             }
         });
 
         record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                recordActivity();
-            }
-
-            private void recordActivity() {
-                startActivity(new Intent(UserProfile.this, RecordingActivity.class));
+                uploadImageWithUri();
             }
         });
         log_out = findViewById(R.id.logout_profile);
@@ -114,11 +114,15 @@ public class UserProfile extends AppCompatActivity {
         });
 
         retriveUserData();
-    }
+
+    }// end onCreate()
+
     private void signOut(){
         FirebaseAuth.getInstance().signOut();
         startActivity( new Intent(UserProfile.this, SplashActivity.class));
     }//end of signOut
+
+
     public void retriveUserData() {
 
 
@@ -132,9 +136,15 @@ public class UserProfile extends AppCompatActivity {
 
                       String userName =  document.get("username").toString();
                       String email =  document.get("email").toString();
+                      String thumbnail = document.get("thumbnail").toString();
                         if (userName != null && email !=null){
                             userNameText.setText(userName);
                             emailText.setText(email);
+
+                            Glide.with(UserProfile.this)
+                                    .load(thumbnail+"")
+                                    .into(img);
+
 
                         }
 
@@ -244,12 +254,17 @@ public class UserProfile extends AppCompatActivity {
 
 
     private  void uploadImageWithUri(){
+        Log.d(TAG, "aa2");
+
         if(imgPath != null) {
 
             final StorageReference filepath = storageRef.child(userUid).child("thumbnail.jpeg");
 
             //uploading the image
             final UploadTask uploadTask = filepath.putFile(contentURI);
+
+            Log.d(TAG, "aa1");
+
 
             // get Uri
             Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
@@ -268,6 +283,25 @@ public class UserProfile extends AppCompatActivity {
                         Uri downloadUri = task.getResult();
                         String downloadURL = downloadUri.toString();
                         MySharedPreference.putString(UserProfile.this,Constants.Keys.USER_IMG,downloadURL);
+
+
+                        DocumentReference updateRef = firebaseFirestore.collection("users").document(userUid);
+
+                        // reset the thumbnail" field
+                        updateRef
+                                .update("thumbnail", downloadUri+"")
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "DocumentSnapshot successfully updated!");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error updating document", e);
+                                    }
+                                });
 
 
 
@@ -293,5 +327,6 @@ public class UserProfile extends AppCompatActivity {
             Toast.makeText(UserProfile.this, "Select an image", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 }
