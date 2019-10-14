@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#eee"
+    android:background="#F5F5F5"
     android:orientation="vertical"
     android:padding="40dp">
 
@@ -17,15 +17,18 @@
             android:layout_width="146dp"
             android:layout_height="54dp"
             android:background="@drawable/icon_shape"
-            android:backgroundTint="#F7F7F7">
+
+            android:backgroundTint="#F7E459">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="تسجيل الدخول"
-                android:textColor="@color/colorPrimary"
-                android:textSize="20sp" />
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                />
 
         </RelativeLayout>
 
@@ -35,7 +38,8 @@
             android:layout_width="match_parent"
             android:layout_height="367dp"
             android:layout_below="@id/relTab"
-            android:background="@drawable/box_shape">
+            android:background="@drawable/box_shape_reg"
+            >
 
 
             <Button
@@ -47,7 +51,7 @@
                 android:layout_centerInParent="true"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/shape"
-                android:backgroundTint="#F7F7F7"
+                android:backgroundTint="#C6E9E9"
                 android:text="تسجيل الدخول"
                />
 
@@ -62,7 +66,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
                 android:text="نسيت كلمة المرور؟"
-                android:textColor="@color/colorAccent" />
+                android:textColor="#3C3C3C" />
 
 
             <com.google.android.gms.common.SignInButton
@@ -116,7 +120,7 @@
             android:layout_marginTop="30dp"
             android:text="انشاء حساب جديد"
             android:layout_centerInParent="true"
-            android:textColor="@color/colorAccent"
+            android:textColor="#3C3C3C"
             android:textSize="18dp"/>
     </RelativeLayout>
 

@@ -55,11 +55,11 @@ import sa.ksu.swe444.hackwati.Recording.RecordingActivity;
 import sa.ksu.swe444.hackwati.storyActivity.StoryActivity;
 
 
-public class MainActivity extends AppCompatActivity   {
+public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private storyAdapter adapter;
-    private List<Item> itemList;
+    public List<Item> itemList;
     private static CircularImageView channelimage;
     private RelativeLayout relativeLayout;
     private Toolbar toolbarMain;
@@ -68,11 +68,10 @@ public class MainActivity extends AppCompatActivity   {
     public FirebaseAuth mAuth;
     String userUid;
     public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    public DocumentReference documentReference ;
+    public DocumentReference documentReference;
     public String[] subscribedUsers;
     private static final String TAG = "MainActivity";
-    public static   List<String> list;
-
+    public static List<String> list;
 
 
     @SuppressLint("ResourceType")
@@ -84,6 +83,7 @@ public class MainActivity extends AppCompatActivity   {
         toolbarMain = (Toolbar) findViewById(R.id.toolbarMain);
         setSupportActionBar(toolbarMain);
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
 
 
@@ -99,6 +99,8 @@ public class MainActivity extends AppCompatActivity   {
         NavigationUI.setupWithNavController(navView, navController);
 
 
+
+
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         itemList = new ArrayList<>();
         adapter = new storyAdapter(this, itemList);
@@ -106,21 +108,11 @@ public class MainActivity extends AppCompatActivity   {
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+        retriveSubscribedUsers();
         recyclerView.setAdapter(adapter);
-        prepareItems();
 
 
-      /*  channelimage = findViewById(R.id.channelimage);
 
-        relativeLayout.bringToFront();
-
-       channelimage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(MainActivity.this, UserProfile.class); // from where? and to the distanation
-                startActivity(intent); // to start another activity
-            }
-        });*/
 
         // MENU::::::
         installButton110to250();
@@ -128,8 +120,7 @@ public class MainActivity extends AppCompatActivity   {
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
 
                     case R.id.navigation_record:
                         startActivity(new Intent(MainActivity.this, RecordingActivity.class));
@@ -144,11 +135,10 @@ public class MainActivity extends AppCompatActivity   {
                         break;
 
                 }// end of switch
-             return true;
+                return true;
             }
         });
 
-        retriveSubscribedUsers();
 
     }// end of OnCreate()
 
@@ -156,11 +146,14 @@ public class MainActivity extends AppCompatActivity   {
     ////MENU\\\\
 
 
+
+
+
     private void installButton110to250() {
         final AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable_110_250);
         final List<ButtonData> buttonDatas = new ArrayList<>();
-        int[] drawable = {R.drawable.animal_elp, R.drawable.ic_power_settings_new_black_24dp,R.drawable.animal_elp, R.drawable.ic_search_black_24dp};
-        int[] color = {R.color.colorAccent, R.color.colorAccent, R.color.colorAccent,R.color.colorAccent };
+        int[] drawable = {R.drawable.animal_elp, R.drawable.ic_power_settings_new_black_24dp, R.drawable.animal_elp, R.drawable.ic_search_black_24dp};
+        int[] color = {R.color.colorAccent, R.color.colorAccent, R.color.colorAccent, R.color.colorAccent};
         for (int i = 0; i < 4; i++) {
             ButtonData buttonData;
             if (i == 0) {
@@ -179,10 +172,10 @@ public class MainActivity extends AppCompatActivity   {
         button.setButtonEventListener(new ButtonEventListener() {
             @Override
             public void onButtonClicked(int index) {
-                switch (index){
+                switch (index) {
                     case 1:
                         FirebaseAuth.getInstance().signOut();
-                        startActivity( new Intent(MainActivity.this, SplashActivity.class));
+                        startActivity(new Intent(MainActivity.this, SplashActivity.class));
                         break;
                     case 2:
                         startActivity(new Intent(MainActivity.this, UserProfile.class));
@@ -202,21 +195,18 @@ public class MainActivity extends AppCompatActivity   {
                 buttonData = ButtonData.buildIconButton(MainActivity.this, drawable[0], 7);
                 buttonDatas.add(buttonData);*/
 
-    }
+            }
+
             @Override
-            public void onCollapse() { }  }); }
+            public void onCollapse() {
+            }
+        });
+    }
 
     private int dpToPx(int dp) {
         Resources r = getResources();
         return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
     }//end dpToPx
-
-
-    private void prepareItems() {
-
-
-    }
-
 
     public static class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
 
@@ -261,7 +251,8 @@ public class MainActivity extends AppCompatActivity   {
         startActivity(intent); // to start another activity
     }
 
-    public void retriveSubscribedUsers(){
+
+    public void retriveSubscribedUsers() {
 
         //firebaseFirestore.collection("users").document(userUid);
 
@@ -274,13 +265,13 @@ public class MainActivity extends AppCompatActivity   {
                     if (document.exists()) {
 
                         List<String> list = (List<String>) document.get("subscribedUsers");
-                        if(list!=null)
-                        for (String user : list) {
-                            Log.d("TAG", "soso "+user);
-                        }
+                        if (list != null)
+                            for (String user : list) {
+                                Log.d("TAG", "soso " + user);
+                            }
                         retriveStories(list);
-                       // String str = document.getString("subscribedUsers").toString();
-                     //   Log.d(TAG, "DocumentSnapshot data: " + str);
+                        // String str = document.getString("subscribedUsers").toString();
+                        //   Log.d(TAG, "DocumentSnapshot data: " + str);
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -293,29 +284,47 @@ public class MainActivity extends AppCompatActivity   {
 
     }
 
-    public void retriveStories ( List<String> list) {
+    public void retriveStories(List<String> list) {
 
         if (list == null)
             return;
 
         for (String story : list) {
             Query subscribedStories = firebaseFirestore.collection("stories").whereEqualTo("userId", story);
-             subscribedStories.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                 @Override
-                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                     if (task.isSuccessful()) {
+            subscribedStories.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
 
-                         for (QueryDocumentSnapshot document : task.getResult()) {
-                             Log.d(TAG, "asomy "+document.getId() + " => " + document.getData());
-                         }
-                     } else {
-                         Log.d(TAG, "Error getting documents: ", task.getException());
-                     }
-                 }
-             });
+                        for (QueryDocumentSnapshot document : task.getResult())         {
+                            document.getData();
+                            String description = (String) document.get("description");
+                            String pic = (String) document.get("pic");
+                            String rate = (String) document.get("rate");
+                            String sound = (String) document.get("sound");
+                            String title = (String) document.get("title");
+                            String userId = (String) document.get("userId");
+
+                            Log.d(TAG, "asomy " + description);
+                            Log.d(TAG, "asomy " + pic);
+                            Log.d(TAG, "asomy " + title);
+
+                            Item item = new Item(title,pic,userId);
+                            itemList.add(item);
+
+
+                        }
+
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                    }
+                }
+            });
 
 
         }// end for loop
-}
+
+
     }
+}
 

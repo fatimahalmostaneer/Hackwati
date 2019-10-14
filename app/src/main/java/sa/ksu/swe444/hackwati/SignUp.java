@@ -101,12 +101,11 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                                         Toast.LENGTH_SHORT).show();
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 //send email by email to verify user account
-                                /*user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                user.sendEmailVerification().addOnCompleteListener(new OnCompleteListener<Void>() {
                                     @Override
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if (task.isSuccessful()) {
-                                         *//*   Toast.makeText(SignUp.this, "check your email ",
-                                                    Toast.LENGTH_SHORT).show();*//*
+                                         //*   Toast.makeText(SignUp.this, "check your email " Toast.LENGTH_SHORT).show();*/
                                             showDialogWithOkButton("الرجاء توثيق بريدك الإلكتروني");
 
                                         } else {
@@ -114,7 +113,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                                                     Toast.LENGTH_SHORT).show();
                                         }
                                     }
-                                });*/
+                                });
                                 createUserCollection();
                             startActivity(new Intent(SignUp.this, Login.class));
                                 //updateUI(user);

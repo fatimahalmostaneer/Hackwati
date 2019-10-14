@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
 
+
 <LinearLayout
-    android:layout_marginTop="30dp"
+    android:layout_marginTop="10dp"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_centerInParent="true"
@@ -15,8 +18,8 @@
 
     <ImageButton
         android:id="@+id/record_lion"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:background="@drawable/circle"
         android:layout_below="@+id/recording"
         android:src="@drawable/ic_lion"
@@ -24,9 +27,10 @@
 
     <ImageButton
         android:id="@+id/record_monkey"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:background="@drawable/circle"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+
         android:layout_below="@+id/recording"
         android:src="@drawable/ic_monkey"
         android:layout_margin="5dp"/>
@@ -34,18 +38,19 @@
 
     <ImageButton
         android:id="@+id/record_bird"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:background="@drawable/circle"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
         android:layout_below="@+id/recording"
         android:src="@drawable/ic_owl"
         android:layout_margin="5dp"/>
 
     <ImageButton
         android:id="@+id/record_dog"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:background="@drawable/circle"
-        android:layout_width="90dp"
-        android:layout_height="90dp"
+
         android:layout_below="@+id/recording"
         android:src="@drawable/ic_dog"
         android:layout_margin="5dp"/>
@@ -57,14 +62,16 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/waves"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="30dp"
+        android:layout_margin="30dp">
 
         <ImageButton
             android:id="@+id/record_btn"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
             android:background="@drawable/circle"
             android:layout_centerInParent="true"
+
             android:src="@drawable/ic_microphone"/>
         <ImageButton
         android:id="@+id/listen_record_btn"
@@ -100,24 +107,26 @@
 
     <Button
         android:id="@+id/next_btn"
-        android:background="@drawable/box_shape"
-        android:layout_width="90dp"
-        android:layout_height="40dp"
+        android:layout_width="144dp"
+        android:layout_height="wrap_content"
         android:layout_below="@+id/recording"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="160dp"
+        android:layout_marginTop="130dp"
+        android:background="@drawable/box_shape"
+        android:backgroundTint="#F7E459"
         android:text="التالي"
         android:textSize="20dp" />
 
 
     <Button
         android:id="@+id/cancel_recording"
-        android:background="@drawable/box_shape"
+        android:background="@drawable/shape"
         android:layout_width="90dp"
         android:layout_height="31dp"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
+android:layout_marginTop="20dp"        android:layout_below="@id/next_btn"
+        android:layout_marginBottom
+            ="50dp"
         android:text="إلغاء"
         android:textColor="@android:color/black"
         android:textSize="20dp" />

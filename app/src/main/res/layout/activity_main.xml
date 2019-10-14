@@ -104,6 +104,10 @@
 
     <include layout="@layout/toolbar_main" />
 
-
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="لا يوجد قصص ! تابع واستمتع"/>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

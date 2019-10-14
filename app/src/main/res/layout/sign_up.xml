@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#eee"
+    android:background="#F5F5F5"
     android:orientation="vertical"
     android:padding="40dp">
 
@@ -18,25 +18,27 @@
             android:layout_width="146dp"
             android:layout_height="54dp"
             android:background="@drawable/icon_shape"
-            android:backgroundTint="#F7F7F7">
+            android:backgroundTint="#C6E9E9">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="التسجيل"
-                android:textColor="@color/colorPrimary"
-                android:textSize="20sp" />
+                android:textColor="#fff"
+                android:textSize="18sp"
+                android:textStyle="bold"
+             />
 
         </RelativeLayout>
 
 
         <RelativeLayout
             android:id="@+id/bigBox"
-            android:layout_width="match_parent"
-            android:layout_height="392dp"
+            android:layout_width="328dp"
+            android:layout_height="365dp"
             android:layout_below="@id/relTab"
-            android:background="@drawable/box_shape">
+            android:background="@drawable/box_shape_reg">
 
 
             <Button
@@ -46,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/repass"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="35dp"
                 android:background="@drawable/shape"
                 android:backgroundTint="#F7F7F7"
                 android:text="سجل" />
@@ -56,16 +58,15 @@
                 android:id="@+id/username"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:paddingLeft="20dp"
-                android:layout_marginTop="10dp"
                 android:paddingRight="20dp">
 
                 <EditText
                     android:id="@+id/username_login"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="اسم المستخدم"
-                   />
+                    android:hint="اسم المستخدم" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -99,8 +100,7 @@
                     android:layout_height="wrap_content"
                     android:hint="كلمة المرور"
                     android:inputType="textPassword"
-                    app:passwordToggleEnabled="true"
-                    />
+                    app:passwordToggleEnabled="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -117,7 +117,7 @@
                     android:layout_height="wrap_content"
                     android:hint="إعادة كلمة المرور"
                     android:inputType="textPassword"
-                    app:passwordToggleEnabled="true"/>
+                    app:passwordToggleEnabled="true" />
             </com.google.android.material.textfield.TextInputLayout>
 
         </RelativeLayout>
@@ -130,7 +130,7 @@
             android:layout_centerInParent="true"
             android:layout_marginTop="30dp"
             android:text="هل تمتلك حسابًا؟"
-            android:textColor="@color/colorAccent"
+            android:textColor="#3C3C3C"
             android:textSize="18dp"
             />
     </RelativeLayout>

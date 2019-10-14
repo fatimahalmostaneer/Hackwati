@@ -37,7 +37,7 @@
 
         </activity>
 
-        <activity android:name=".SplashActivity" />
+        <activity android:name=".Login" />
 
         <activity
             android:name=".ui.profileActivity.ProfileActivity"
@@ -54,7 +54,7 @@
         <activity android:name=".Recording.RecordingActivity" >
 
         </activity>
-        <activity android:name=".Login">
+        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

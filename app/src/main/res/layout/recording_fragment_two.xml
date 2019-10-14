@@ -50,6 +50,7 @@
         android:textSize="25dp"
         android:layout_marginLeft="50dp"
         android:background="@drawable/box_shape"
+        android:backgroundTint="#F7E459"
         android:onClick="addStoryAdd"/>
 
     <androidx.appcompat.widget.AppCompatButton
@@ -60,6 +61,7 @@
         android:layout_centerInParent="true"
         android:layout_marginTop="15dp"
         android:background="@drawable/box_shape"
+        android:backgroundTint="#DBDBDB"
         android:text="حفظ لوقت لاحق" />
 
     </RelativeLayout>

@@ -3,20 +3,43 @@ package sa.ksu.swe444.hackwati;
 
 public class Item {
     private String title;
-    private String channelName;
-    private int image;
-    private int channelImage;
+    private String userId;
+    private String image;
+    private String description;
+    private String rate;
+    private String sound;
 
-    public Item(String title, int image, int channelImage, String views,String channelName,int soundImage) {
+    private int channelImage;
+    private int soundImage;
+
+
+    public Item(String title, String image, String description, String rate , String sound, String userId) {
         this.title = title;
         this.image = image;
+        this.userId=userId;
+        this.description=description;
+        this.rate=rate;
+        this.sound=sound;
+    }
+
+    public Item(String title, String image, String userId) {
+        this.title = title;
+        this.image = image;
+        this.userId=userId;
+
+    }
+
+    public Item(String title, int image, int channelImage, String views, String channelName, int soundImage) {
+        this.title = title;
+        this.image = channelName;
         this.channelImage = channelImage;
-        this.channelName=channelName;
+        this.soundImage = soundImage;
+        this.rate = views;
+        this.title=channelName;
     }
 
     public Item(String title, int image) {
         this.title = title;
-        this.image = image;
     }
 
     public String getTitle() {
@@ -27,27 +50,13 @@ public class Item {
         this.title = title;
     }
 
-    public int getImage() {
+    public String getImage() {
         return image;
     }
 
-    public void setImage(int image) {
+    public void setImage(String image) {
         this.image = image;
     }
 
-    public int getChannelImage() {
-        return channelImage;
-    }
 
-    public void setChannelImage(int channelImage) {
-        this.channelImage = channelImage;
-    }
-
-    public String getChannelName() {
-        return channelName;
-    }
-
-    public void setChannelName(String channelName) {
-        this.channelName = channelName;
-    }
 }

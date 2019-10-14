@@ -7,14 +7,15 @@
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:minHeight="?actionBarSize"
         app:tabGravity="fill"
-        app:tabIndicatorColor="@android:color/white"
         app:tabIndicatorHeight="4dp"
-        app:tabBackground="@color/colorPrimary"
+        android:background="@drawable/icon_shape_botum"
+        android:backgroundTint="#C6E9E9"
         app:tabMode="fixed">
     </com.google.android.material.tabs.TabLayout>
+
 
     <sa.ksu.swe444.hackwati.Recording.RecordViewPager
         android:id="@+id/viewPager"

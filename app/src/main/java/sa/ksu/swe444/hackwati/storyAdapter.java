@@ -77,9 +77,9 @@ public class storyAdapter extends RecyclerView.Adapter<storyAdapter.MyViewHolder
 
         Item item = itemList.get(position);
         holder.title.setText(item.getTitle());
-        holder.channelName.setText(item.getChannelName());
-        Glide.with(mContext).load(item.getImage()).into(holder.image);
-        Glide.with(mContext).load(item.getChannelImage()).into(holder.channelImage);
+      //  holder.channelName.setText(item.getChannelName());
+        Glide.with(mContext).load(R.drawable.animal_p).into(holder.image);
+       // Glide.with(mContext).load(item.getChannelImage()).into(holder.channelImage);
 
 
     }
