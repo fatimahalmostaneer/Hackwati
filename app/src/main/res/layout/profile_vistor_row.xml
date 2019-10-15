@@ -32,7 +32,7 @@
 
                 android:alpha=".6"
                 android:onClick="selectImage"
-                android:src="@drawable/defult_thumbnail" />
+                android:src="@drawable/gray" />
 
 
             <Button
