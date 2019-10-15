@@ -42,8 +42,8 @@
                 android:scaleY=".4" />
         </FrameLayout>
 
-        <LinearLayout
-            android:id="@+id/imageView"
+        <ImageView
+            android:id="@+id/cover"
             android:layout_width="173dp"
             android:layout_height="200dp"
             android:layout_alignParentEnd="true"
@@ -62,7 +62,7 @@
             android:layout_width="216dp"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="أنا أستطيع"
+            android:text=""
             android:textSize="33sp" />
 
 
@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/bookName"
             android:layout_marginRight="75dp"
-            android:text="40 دقيقة"
+            android:text=""
             android:textSize="18sp"
 
             />

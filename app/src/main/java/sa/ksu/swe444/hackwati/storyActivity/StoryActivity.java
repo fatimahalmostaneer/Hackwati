@@ -43,19 +43,18 @@ import sa.ksu.swe444.hackwati.Recording.RecordingActivity;
 import sa.ksu.swe444.hackwati.UserProfile;
 
 
-public class StoryActivity extends AppCompatActivity{
+public class StoryActivity extends AppCompatActivity {
 
 
     private TextView change, bookName, duration;
-    private  String user_id;
-    private Button listenBtn,subscribedBtn;
-    private ImageView back;
+    private String user_id;
+    private Button listenBtn, subscribedBtn;
+    private ImageView back, cover;
     private static final String TAG = StoryActivity.class.getSimpleName();
     public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    public DocumentReference documentReference ;
+    public DocumentReference documentReference;
 
-    private String storyId,userStoryId;
-
+    private String storyId, userStoryId;
 
 
     @TargetApi(Build.VERSION_CODES.O)
@@ -66,21 +65,15 @@ public class StoryActivity extends AppCompatActivity{
 
         duration = findViewById(R.id.duration);
         bookName = findViewById(R.id.bookName);
+        cover = (ImageView) findViewById(R.id.cover);
+
 
         getExtras();
-
-
-
-
-
-
         subscribeUser();
+        retriveStory();
 
     }
     // end of setOnNavigationItemSelectedListener()
-
-
-
 
 
     private void getExtras() {
@@ -94,19 +87,14 @@ public class StoryActivity extends AppCompatActivity{
     }
 
 
-    public void subscribeUser(){
-
-
-
-
-
+    public void subscribeUser() {
 
 
     }
 
-    public void retriveStory(){
+    public void retriveStory() {
 
-        DocumentReference docRef = firebaseFirestore.collection("story").document(storyId);
+        DocumentReference docRef = firebaseFirestore.collection("stories").document(storyId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -114,8 +102,16 @@ public class StoryActivity extends AppCompatActivity{
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
+                        String title = (String)document.get("title");
+                        String description = (String) document.get("description");
+                        String pic =  document.get("pic").toString();
 
 
+                        bookName.setText(title);
+                        duration.setText(description);
+                        Glide.with(StoryActivity.this)
+                                .load(pic+"")
+                                .into(cover);
 
                     } else {
                         Log.d(TAG, "No such document");
