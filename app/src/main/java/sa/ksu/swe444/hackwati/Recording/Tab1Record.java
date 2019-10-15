@@ -81,6 +81,8 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
     private ImageButton stopPlayRecord;
     private MediaPlayer player = null;
     private Button cancelRecording;
+    // pass this att to
+    private long duration;
 
 
 
@@ -256,6 +258,7 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
 
                 }else {
                     recorder.stop();
+                    duration = elapsedTime;
                     isRecording = false;
                     recordButton.setEnabled(false);
                     Toast.makeText(getContext(),"btn is enabled" , Toast.LENGTH_LONG).show();

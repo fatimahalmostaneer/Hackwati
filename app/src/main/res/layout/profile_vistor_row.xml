@@ -31,7 +31,7 @@
                 android:layout_marginTop="80dp"
                 android:alpha=".6"
                 android:onClick="selectImage"
-                android:src="@drawable/defult_thumbnail" />
+                android:src="@drawable/box_shape" />
 
             <TextView
                 android:layout_width="wrap_content"
