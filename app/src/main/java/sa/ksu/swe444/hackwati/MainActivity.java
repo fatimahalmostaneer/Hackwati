@@ -6,6 +6,7 @@ import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 
+import com.bumptech.glide.Glide;
 import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
 import com.fangxu.allangleexpandablebutton.ButtonData;
 import com.fangxu.allangleexpandablebutton.ButtonEventListener;
@@ -58,6 +59,8 @@ public class MainActivity extends AppCompatActivity {
     private String userUid;
     public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private static final String TAG = "MainActivity";
+
+    public String userName, userTumbnail;
 
 
     @SuppressLint("ResourceType")
@@ -252,30 +255,43 @@ public class MainActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                                     if (task.isSuccessful()) {
 
-                                        for (QueryDocumentSnapshot document : task.getResult())         {
-                                            document.getData();
-                                            String description = (String) document.get("description");
-                                            String pic = (String) document.get("pic");
-                                            String rate = (String) document.get("rate");
-                                            String sound = (String) document.get("sound");
-                                            String title = (String) document.get("title");
+                                        for (final QueryDocumentSnapshot document : task.getResult())         {
+
                                             String userId = (String) document.get("userId");
 
-                                            Log.d(TAG, "asomy " + description);
-                                            Log.d(TAG, "asomy " + pic);
-                                            Log.d(TAG, "asomy " + title);
 
-                                            Item item = new Item(title,pic,userId);
-                                            itemList.add(item);
-                                            adapter.notifyDataSetChanged();
+                                            DocumentReference docRef = firebaseFirestore.collection("users").document(userId);
+                                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                                    if (task.isSuccessful()) {
+                                                        DocumentSnapshot documentUser = task.getResult();
+                                                        if (documentUser.exists()) {
+                                                            document.getData();
+                                                            String description = (String) document.get("description");
+                                                            String pic = (String) document.get("pic");
+                                                            String rate = (String) document.get("rate");
+                                                            String sound = (String) document.get("sound");
+                                                            String title = (String) document.get("title");
+                                                            String userId = (String) document.get("userId");
+                                                            String storyId = (String) document.getId();
+                                                            userName = (String) documentUser.get("username");
+                                                           userTumbnail = (String) documentUser.get("username");
+                                                            Item item = new Item(storyId,title,pic,userId,userName,userTumbnail);
+                                                            itemList.add(item);
+                                                            adapter.notifyDataSetChanged();
+                                                        }
 
-
-                                            for (int i =0;i<=itemList.size();i++) {
-                                                if(itemList.size()==0) {
-                                                    Log.d("TAG", "itemlest is empty");
-                                                    return;
+                                                    }
                                                 }
-                                            }
+                                            });
+
+
+
+
+
+
+
                                         }
                                         Log.d("TAG", "soso "+itemList.size() );
 
@@ -288,6 +304,12 @@ public class MainActivity extends AppCompatActivity {
 
                         }// end for loop
 
+                        for (int i =0;i<=itemList.size();i++) {
+                            if(itemList.size()==0) {
+                                Log.d("TAG", "itemlest is empty");
+                                return;
+                            }
+                        }
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -303,4 +325,3 @@ public class MainActivity extends AppCompatActivity {
 
 
 }
-
