@@ -8,11 +8,27 @@ public class Item {
     private String description;
     private String rate;
     private String sound;
-
-    private int channelImage;
+    private String channelName;
+    private String channelImage;
     private int soundImage;
+    private String storyId;
 
+    public String getChannelName() {
+        return channelName;
+    }
 
+    public void setChannelName(String channelName) {
+        this.channelName = channelName;
+    }
+
+    public String getChannelImage() {
+        return channelImage;
+    }
+
+    public void setChannelImage(String channelImage) {
+        this.channelImage = channelImage;
+    }
+/*
     public Item(String title, String image, String description, String rate , String sound, String userId) {
         this.title = title;
         this.image = image;
@@ -20,23 +36,26 @@ public class Item {
         this.description=description;
         this.rate=rate;
         this.sound=sound;
-    }
+    }*/
 
-    public Item(String title, String image, String userId) {
+    public Item (String storyId, String title, String image, String userId, String channelName, String channelImage) {
         this.title = title;
         this.image = image;
         this.userId=userId;
+        this.channelName=channelName;
+        this.channelImage=channelImage;
+        this.storyId=storyId;
 
     }
 
-    public Item(String title, int image, int channelImage, String views, String channelName, int soundImage) {
+/*    public Item(String title, int image, String channelImage, String views, String channelName, int soundImage) {
         this.title = title;
         this.image = channelName;
         this.channelImage = channelImage;
         this.soundImage = soundImage;
         this.rate = views;
         this.title=channelName;
-    }
+    }*/
 
     public Item(String title, int image) {
         this.title = title;
@@ -58,5 +77,19 @@ public class Item {
         this.image = image;
     }
 
+    public String getStoryId() {
+        return storyId;
+    }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public void setStoryId(String storyId) {
+        this.storyId = storyId;
+    }
 }

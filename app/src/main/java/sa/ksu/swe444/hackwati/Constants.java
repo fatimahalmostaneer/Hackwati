@@ -14,6 +14,9 @@ public class Constants {
         String USER_PASS = "user_pass";
         String STORY_COVER = "story_cover";
         String STORY_AUDIO = "story_audio";
+        String STORY_ID = "story_id";
+        String STORY_USER_ID = "story_user_id";
+
 
 
     }//end Keys interface
