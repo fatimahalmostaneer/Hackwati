@@ -105,9 +105,11 @@
     <include layout="@layout/toolbar_main" />
 
     <TextView
+        android:id="@+id/emptyStories"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
-        android:text="لا يوجد قصص ! تابع واستمتع"/>
+        android:text=""
+        />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

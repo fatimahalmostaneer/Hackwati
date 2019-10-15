@@ -16,10 +16,13 @@ import com.bumptech.glide.Glide;
 
 import java.util.List;
 
+import sa.ksu.swe444.hackwati.storyActivity.StoryActivity;
+
 
 public class storyAdapter extends RecyclerView.Adapter<storyAdapter.MyViewHolder> {
     private Context mContext;
     private List<Item> itemList;
+    private String storyId,userId;
 
 
 
@@ -38,11 +41,28 @@ public class storyAdapter extends RecyclerView.Adapter<storyAdapter.MyViewHolder
             image=itemView.findViewById(R.id.storyimage);
             channelImage=itemView.findViewById(R.id.channelimage);
 
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(mContext, MainActivity.class);
+                  /*  Intent intent = new Intent(mContext, MainActivity.class);
                     mContext.startActivity(intent); // to start another activity
+*/
+
+                    int clickedPosition = getAdapterPosition();
+                    //todo intent action
+                    if (clickedPosition != RecyclerView.NO_POSITION) {
+
+                        Item clickedStory = itemList.get(clickedPosition);
+                        storyId = clickedStory.getStoryId();
+                        Context context = view.getContext();
+                        Intent intent = new Intent(context, StoryActivity.class);
+                        intent.putExtra(Constants.Keys.STORY_ID, storyId);
+                        intent.putExtra(Constants.Keys.STORY_USER_ID, clickedStory.getUserId());
+                        context.startActivity(intent);
+
+                    }
+
                 }
             });
         }
@@ -77,9 +97,9 @@ public class storyAdapter extends RecyclerView.Adapter<storyAdapter.MyViewHolder
 
         Item item = itemList.get(position);
         holder.title.setText(item.getTitle());
-      //  holder.channelName.setText(item.getChannelName());
-        Glide.with(mContext).load(R.drawable.animal_p).into(holder.image);
-       // Glide.with(mContext).load(item.getChannelImage()).into(holder.channelImage);
+       holder.channelName.setText(item.getChannelName());
+        Glide.with(mContext).load(item.getImage()+"").into(holder.image);
+     Glide.with(mContext).load(item.getChannelImage()+"").into(holder.channelImage);
 
 
     }

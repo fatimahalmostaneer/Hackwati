@@ -31,8 +31,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
 import androidx.annotation.NonNull;
-
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -44,17 +45,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Map;
 
 import sa.ksu.swe444.hackwati.Recording.RecordingActivity;
+import sa.ksu.swe444.hackwati.storyActivity.StoryActivity;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -126,7 +130,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.navigation_explore:
-                        startActivity(new Intent(MainActivity.this, InnerStoryActivity.class));
+                        startActivity(new Intent(MainActivity.this, StoryActivity.class));
                         break;
 
                 }// end of switch
@@ -150,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
         final AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable_110_250);
         final List<ButtonData> buttonDatas = new ArrayList<>();
-        int[] drawable = {R.drawable.box_shape, R.drawable.ic_power_settings_new_black_24dp, R.drawable.animal_elp, R.drawable.ic_search_black_24dp};
+        int[] drawable = {R.drawable.defult_thumbnail, R.drawable.ic_power_settings_new_black_24dp, R.drawable.animal_elp, R.drawable.ic_search_black_24dp};
         int[] color = {R.color.colorAccent, R.color.colorAccent, R.color.colorAccent, R.color.colorAccent};
         for (int i = 0; i < 4; i++) {
             ButtonData buttonData;

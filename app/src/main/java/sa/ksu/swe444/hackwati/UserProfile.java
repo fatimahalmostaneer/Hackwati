@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -28,6 +30,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -35,6 +38,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.kinda.alert.KAlertDialog;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -53,11 +57,11 @@ public class UserProfile extends AppCompatActivity {
     private static int INTENT_GALLERY = 301;
     private boolean isSelectImage;
     Uri contentURI;
-    public static String  downloadURLA;
+    public static String downloadURLA;
     private File imgFile;
     public FirebaseAuth mAuth;
+    private Button uploadImg;
     private String imgPath;
-
 
 
 
@@ -68,10 +72,7 @@ public class UserProfile extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
 
-
     TextView userNameText, emailText;
-
-
 
 
     @Override
@@ -81,20 +82,30 @@ public class UserProfile extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        userNameText= findViewById(R.id.nameSignUpHin);
-        emailText=findViewById(R.id.emailSignUpHin);
+        userNameText = findViewById(R.id.nameSignUpHin);
+        emailText = findViewById(R.id.emailSignUpHin);
 
-        record=findViewById(R.id.record_profile);
+        record = findViewById(R.id.record_profile);
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         storageRef = storage.getReference();
         mAuth = FirebaseAuth.getInstance();
 
         img = findViewById(R.id.userImg);
+        uploadImg = findViewById(R.id.uploadImg);
+        uploadImg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                uploadImageWithUri();
+
+
+            }
+        });
+
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openCameraChooser();
 
+                openCameraChooser();
 
             }
         });
@@ -102,7 +113,9 @@ public class UserProfile extends AppCompatActivity {
         record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                uploadImageWithUri();
+              //  CreateAlertDialogWithRadioButtonGroup();
+                showDialog();
+
             }
         });
         log_out = findViewById(R.id.logout_profile);
@@ -117,9 +130,9 @@ public class UserProfile extends AppCompatActivity {
 
     }// end onCreate()
 
-    private void signOut(){
+    private void signOut() {
         FirebaseAuth.getInstance().signOut();
-        startActivity( new Intent(UserProfile.this, SplashActivity.class));
+        startActivity(new Intent(UserProfile.this, SplashActivity.class));
     }//end of signOut
 
 
@@ -134,15 +147,15 @@ public class UserProfile extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
-                      String userName =  document.get("username").toString();
-                      String email =  document.get("email").toString();
-                      String thumbnail = document.get("thumbnail").toString();
-                        if (userName != null && email !=null){
+                        String userName = document.get("username").toString();
+                        String email = document.get("email").toString();
+                        String thumbnail = document.get("thumbnail").toString();
+                        if (userName != null && email != null) {
                             userNameText.setText(userName);
                             emailText.setText(email);
 
                             Glide.with(UserProfile.this)
-                                    .load(thumbnail+"")
+                                    .load(thumbnail + "")
                                     .into(img);
 
 
@@ -181,8 +194,7 @@ public class UserProfile extends AppCompatActivity {
                     persistImage(bitmap);
 
 
-                }
-                catch (IOException e) {
+                } catch (IOException e) {
                     e.printStackTrace();
                     Toast.makeText(UserProfile.this, "Failed!", Toast.LENGTH_SHORT).show();
                 }// end catch
@@ -207,8 +219,7 @@ public class UserProfile extends AppCompatActivity {
             imgPath = imgFile.getPath();
             os.flush();
             os.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
         }//end catch
     }//end of persistImage()
@@ -251,12 +262,10 @@ public class UserProfile extends AppCompatActivity {
         startActivityForResult(cameraIntent, INTENT_CAMERA);
     }// END OF cameraIntent()
 
-
-
-    private  void uploadImageWithUri(){
+    private void uploadImageWithUri() {
         Log.d(TAG, "aa2");
 
-        if(imgPath != null) {
+        if (imgPath != null) {
 
             final StorageReference filepath = storageRef.child(userUid).child("thumbnail.jpeg");
 
@@ -282,14 +291,14 @@ public class UserProfile extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         Uri downloadUri = task.getResult();
                         String downloadURL = downloadUri.toString();
-                        MySharedPreference.putString(UserProfile.this,Constants.Keys.USER_IMG,downloadURL);
+                        MySharedPreference.putString(UserProfile.this, Constants.Keys.USER_IMG, downloadURL);
 
 
                         DocumentReference updateRef = firebaseFirestore.collection("users").document(userUid);
 
                         // reset the thumbnail" field
                         updateRef
-                                .update("thumbnail", downloadUri+"")
+                                .update("thumbnail", downloadUri + "")
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
@@ -304,10 +313,10 @@ public class UserProfile extends AppCompatActivity {
                                 });
 
 
-
                         //Log.d(TAG,downloadURL+" Ya2" );
 
-                    } }
+                    }
+                }
             });
 
 
@@ -322,11 +331,80 @@ public class UserProfile extends AppCompatActivity {
                     Toast.makeText(UserProfile.this, "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
                 }
             });
-        }
-        else {
+        } else {
             Toast.makeText(UserProfile.this, "Select an image", Toast.LENGTH_SHORT).show();
         }
     }
 
+    private void updateProfile() {
 
+    }
+
+    public void CreateAlertDialogWithRadioButtonGroup() {
+
+
+        KAlertDialog pDialog = new KAlertDialog(this, KAlertDialog.PROGRESS_TYPE);
+        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
+        pDialog.setTitleText("Loading");
+        pDialog.setCancelable(false);
+        pDialog.show();
+
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
+
+
+        AlertDialog alertDialog = builder.create();
+
+        alertDialog.show();
+
+        builder.setTitle("تعديل :");
+
+
+
+
+
+
+/*        builder.setSingleChoiceItems(values, -1, new DialogInterface.OnClickListener() {
+
+            public void onClick(DialogInterface dialog, int item) {
+
+                switch(item)
+                {
+                    case 0:
+
+                        Toast.makeText(UserProfile.this, "First Item Clicked", Toast.LENGTH_LONG).show();
+                        break;
+                    case 1:
+
+                        Toast.makeText(UserProfile.this, "Second Item Clicked", Toast.LENGTH_LONG).show();
+                        break;
+                    case 2:
+
+                        Toast.makeText(UserProfile.this, "Third Item Clicked", Toast.LENGTH_LONG).show();
+                        break;
+                }
+                alertDialog1.dismiss();
+            }
+        });
+        alertDialog1 = builder.create();
+        alertDialog1.show();
+
+    }*/
+
+    }
+
+    public void showDialog() {
+        final androidx.appcompat.app.AlertDialog builder = new MaterialAlertDialogBuilder(UserProfile.this)
+                .setTitle("Title")
+                .setMessage("Message")
+                .setPositiveButton("Ok", null)
+                .show();
+        builder.setTitle("sss");
+
+        String[] values = {" الاسم ", " البريد الإلكتروني ", " كلمة المرور "};
+
+
+    }
 }
+
+
