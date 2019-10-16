@@ -6,13 +6,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -44,10 +43,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
-import java.net.URL;
-import java.util.List;
-
-import sa.ksu.swe444.hackwati.Recording.RecordingActivity;
 
 public class UserProfile extends AppCompatActivity {
     Button log_out;
@@ -62,7 +57,7 @@ public class UserProfile extends AppCompatActivity {
     public FirebaseAuth mAuth;
     private Button uploadImg;
     private String imgPath;
-
+    private ImageView edit1,edit2,edit3;
 
 
     private static final String TAG = "UserProfile";
@@ -84,6 +79,8 @@ public class UserProfile extends AppCompatActivity {
 
         userNameText = findViewById(R.id.nameSignUpHin);
         emailText = findViewById(R.id.emailSignUpHin);
+
+
 
         record = findViewById(R.id.record_profile);
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
@@ -113,8 +110,7 @@ public class UserProfile extends AppCompatActivity {
         record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              //  CreateAlertDialogWithRadioButtonGroup();
-                showDialog();
+                //  CreateAlertDialogWithRadioButtonGroup();
 
             }
         });
@@ -223,7 +219,6 @@ public class UserProfile extends AppCompatActivity {
             Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
         }//end catch
     }//end of persistImage()
-
 
     private void openCameraChooser() {
         if (ActivityCompat.checkSelfPermission(UserProfile.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -338,73 +333,34 @@ public class UserProfile extends AppCompatActivity {
 
     private void updateProfile() {
 
-    }
-
-    public void CreateAlertDialogWithRadioButtonGroup() {
-
-
-        KAlertDialog pDialog = new KAlertDialog(this, KAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-        pDialog.setTitleText("Loading");
-        pDialog.setCancelable(false);
-        pDialog.show();
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
-
-
-        AlertDialog alertDialog = builder.create();
-
-        alertDialog.show();
-
-        builder.setTitle("تعديل :");
-
-
-
-
-
-
-/*        builder.setSingleChoiceItems(values, -1, new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int item) {
-
-                switch(item)
-                {
-                    case 0:
-
-                        Toast.makeText(UserProfile.this, "First Item Clicked", Toast.LENGTH_LONG).show();
-                        break;
-                    case 1:
-
-                        Toast.makeText(UserProfile.this, "Second Item Clicked", Toast.LENGTH_LONG).show();
-                        break;
-                    case 2:
-
-                        Toast.makeText(UserProfile.this, "Third Item Clicked", Toast.LENGTH_LONG).show();
-                        break;
-                }
-                alertDialog1.dismiss();
+        edit1 = findViewById(R.id.edit1);
+        edit1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
             }
         });
-        alertDialog1 = builder.create();
-        alertDialog1.show();
 
-    }*/
+
+        edit2 = findViewById(R.id.edit2);
+        edit2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
+
+        edit3 = findViewById(R.id.edit3);
+        edit3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
 
     }
 
-    public void showDialog() {
-        final androidx.appcompat.app.AlertDialog builder = new MaterialAlertDialogBuilder(UserProfile.this)
-                .setTitle("Title")
-                .setMessage("Message")
-                .setPositiveButton("Ok", null)
-                .show();
-        builder.setTitle("sss");
-
-        String[] values = {" الاسم ", " البريد الإلكتروني ", " كلمة المرور "};
 
 
-    }
 }
 
 
