@@ -81,6 +81,7 @@ public class Tab2StoryInfo extends Fragment {
     public FirebaseAuth mAuth;
     Uri contentURI;
     public static String  downloadURLA;
+    public  static String arr[]  = {"",""};
 
 
 
@@ -250,11 +251,8 @@ public class Tab2StoryInfo extends Fragment {
 
                     Uri downloadUri = task.getResult();
                      downloadURLA = downloadUri.toString()+"";
-
+                     arr[1]=downloadURLA+"";
                    Log.d(LOG_TAG, downloadURLA +" Ya1" );
-                    MySharedPreference.putString(getActivity(),Constants.Keys.STORY_AUDIO,"");
-                    MySharedPreference.putString(getActivity(),Constants.Keys.STORY_AUDIO,downloadURLA);
-                    Log.d(LOG_TAG,MySharedPreference.getString(getContext(),Constants.Keys.STORY_AUDIO, downloadURLA)+" YaM" );
 
 
                 } }
@@ -301,9 +299,7 @@ public class Tab2StoryInfo extends Fragment {
                     if (task.isSuccessful()) {
                         Uri downloadUri = task.getResult();
                         String downloadURL = downloadUri.toString();
-                        MySharedPreference.clearValue(getContext(),Constants.Keys.STORY_COVER);
-
-                        MySharedPreference.putString(getContext(),Constants.Keys.STORY_COVER,downloadURL);
+                        arr[0]= downloadURL;
                         Log.d(LOG_TAG,downloadURL+" Ya2" );
 
                     } }
@@ -348,8 +344,8 @@ public class Tab2StoryInfo extends Fragment {
         stroy.put("rate", "");
         stroy.put("title", title);
         stroy.put("userId", userId);
-        stroy.put("pic", pic);
-        stroy.put("sound", sound);
+        stroy.put("pic", arr[0]);
+        stroy.put("sound", arr[1]);
 
 
 Log.d(LOG_TAG, downloadURLA+" collect");
