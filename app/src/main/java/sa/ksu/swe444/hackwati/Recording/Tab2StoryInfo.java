@@ -7,7 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.media.MediaPlayer;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -80,8 +80,13 @@ public class Tab2StoryInfo extends Fragment {
     private String imgPath;
     public FirebaseAuth mAuth;
     Uri contentURI;
-    public static String  downloadURLA;
+    private String audioUri;
+    private String imgUri;
+    private String downloadURLA;
 
+
+    //upload story
+    String id = "7o2gIudtyqhIqej2n7TsvHrcATV2";
 
 
     @Override
@@ -89,7 +94,6 @@ public class Tab2StoryInfo extends Fragment {
         view = inflater.inflate(R.layout.recording_fragment_two, container, false);
         storyDiscription = view.findViewById(R.id.pp);
         storyTitle = view.findViewById(R.id.name);
-
         mAuth = FirebaseAuth.getInstance();
 
         fileName = getActivity().getExternalCacheDir().getAbsolutePath();
@@ -105,12 +109,11 @@ public class Tab2StoryInfo extends Fragment {
             public void onClick(View view) {
 
 
-               // addStoryToCollection();
                 uploadAudio();
-                uploadImageWithUri();
+                uploadImage();
                 addStoryToCollection();
-            }
 
+            }
         });
 
         img = view.findViewById(R.id.Img);
@@ -219,6 +222,28 @@ public class Tab2StoryInfo extends Fragment {
         startActivityForResult(cameraIntent, INTENT_CAMERA);
     }// END OF cameraIntent()
 
+    public void addStoryAdd() {
+        Map<String, Object> story = new HashMap<>();
+        String title = storyTitle.getText().toString();
+        String descripstion = storyDiscription.getText().toString();
+        //String  pic = imgFile.toURI().toURL().getFile().toString();
+        // String  uid =
+
+        firebaseFirestore.collection("stories").document().set(story)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getContext(), "successful", Toast.LENGTH_LONG).show();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "failed", Toast.LENGTH_LONG).show();
+
+
+            }
+        });
+    }
 
     public void uploadAudio() {
 
@@ -249,15 +274,12 @@ public class Tab2StoryInfo extends Fragment {
                 if (task.isSuccessful()) {
 
                     Uri downloadUri = task.getResult();
-                     downloadURLA = downloadUri.toString()+"";
-
-                   Log.d(LOG_TAG, downloadURLA +" Ya1" );
-                    MySharedPreference.putString(getActivity(),Constants.Keys.STORY_AUDIO,"");
-                    MySharedPreference.putString(getActivity(),Constants.Keys.STORY_AUDIO,downloadURLA);
-                    Log.d(LOG_TAG,MySharedPreference.getString(getContext(),Constants.Keys.STORY_AUDIO, downloadURLA)+" YaM" );
+                    audioUri = downloadUri.toString() + "";
+                    Log.d(LOG_TAG, downloadURLA + " Ya1");
 
 
-                } }
+                }
+            }
         });
 
         uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -268,94 +290,61 @@ public class Tab2StoryInfo extends Fragment {
             }
         });
 
-        Log.d(LOG_TAG,downloadURLA+" outClass" );
+        Log.d(LOG_TAG, downloadURLA + " outClass");
 
     }// uploadAudio
 
 
+    private void uploadImage() {
+
+        //FirebaseStorage uploadTask = FirebaseStorage.getInstance().ch;
+        String userId = mAuth.getCurrentUser().getUid();
+        String storyId = storyTitleToStoryId();
+        final StorageReference filepath = storageRef.child(userId).child(storyId).child("img.jpeg");
+        // MySharedPreference.putString(getContext( ), Constants.Keys.STORY_COVER,filepath+"");
+        Log.d(LOG_TAG, filepath + " cover");
+//        Uri uri = Uri.fromFile(new File(imgPath));
+        filepath.putFile(contentURI).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getContext(), "success Image", Toast.LENGTH_SHORT);
 
 
-    private  void uploadImageWithUri(){
-        if(imgPath != null) {
+            }
+        }).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
 
-            String userId = mAuth.getCurrentUser().getUid();
-            String storyId = storyTitleToStoryId();
-            final StorageReference filepath = storageRef.child(userId).child(storyId).child("img.jpeg");
-
-            //uploading the image
-            final UploadTask uploadTask = filepath.putFile(contentURI);
-
-            // get Uri
-            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                @Override
-                public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                    if (!task.isSuccessful()) {
-                        throw task.getException();
-                    }
-                    // Continue with the task to get the download URL
-                    return filepath.getDownloadUrl();
-                }
-            }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                @Override
-                public void onComplete(@NonNull Task<Uri> task) {
-                    if (task.isSuccessful()) {
-                        Uri downloadUri = task.getResult();
-                        String downloadURL = downloadUri.toString();
-                        MySharedPreference.clearValue(getContext(),Constants.Keys.STORY_COVER);
-
-                        MySharedPreference.putString(getContext(),Constants.Keys.STORY_COVER,downloadURL);
-                        Log.d(LOG_TAG,downloadURL+" Ya2" );
-
-                    } }
-            });
+            }
+        });
 
 
-            uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                    Toast.makeText(getContext(), "Upload successful", Toast.LENGTH_SHORT).show();
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(getContext(), "Upload Failed -> " + e, Toast.LENGTH_SHORT).show();
-                }
-            });
-        }
-        else {
-            Toast.makeText(getContext(), "Select an image", Toast.LENGTH_SHORT).show();
-        }
     }
-
-
-
 
     private void addStoryToCollection() {
 
-        ;
-        Map<String, Object> stroy = new HashMap<>();
+        Map<String, Object> story = new HashMap<>();
 
         String description = storyDiscription.getText().toString();
         String rate = "5";
         String title = storyTitle.getText().toString();
-        String userId = mAuth.getCurrentUser().getUid();
+        String userId = id;
         String pic = MySharedPreference.getString(getContext(), Constants.Keys.STORY_COVER, "");
-        String sound = MySharedPreference.getString(getActivity(), Constants.Keys.STORY_AUDIO, "");
+        String sound = MySharedPreference.getString(getContext(), Constants.Keys.STORY_AUDIO, "");
+
+        story.put("description", description);
+        story.put("rate", rate);
+        story.put("title", title);
+        story.put("userId", userId);
+        story.put("pic", imgUri);
+        story.put("sound", audioUri);
+        story.put("duration", audioUri);
 
 
-
-        stroy.put("description", description);
-        stroy.put("rate", "");
-        stroy.put("title", title);
-        stroy.put("userId", userId);
-        stroy.put("pic", pic);
-        stroy.put("sound", sound);
+        Log.d(LOG_TAG, description + title + pic + sound);
 
 
-Log.d(LOG_TAG, downloadURLA+" collect");
-
-
-        firebaseFirestore.collection("stories").document().set(stroy)
+        firebaseFirestore.collection("stories").document().set(story)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -382,5 +371,46 @@ Log.d(LOG_TAG, downloadURLA+" collect");
         return title;
     }
 
+    public void uploadImg() {
+
+        String userId = mAuth.getCurrentUser().getUid();
+        String storyId = storyTitleToStoryId();
+        final StorageReference filepath = storageRef.child(userId).child(storyId).child("img.jpeg");
+        Uri uri = Uri.fromFile(new File(imgPath));
+        final UploadTask uploadTask = filepath.putFile(uri);
+
+
+        // get Uri
+        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+                // Continue with the task to get the download URL
+                return filepath.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+
+                    Uri downloadUri = task.getResult();
+                    imgUri = downloadUri.toString() + "";
+                    Log.d(LOG_TAG, downloadURLA + " Ya1");
+                }
+            }
+        });
+
+        uploadTask.addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                Toast.makeText(getContext(), "success", Toast.LENGTH_SHORT);
+
+            }
+        });
+
+
+    }
 
 }

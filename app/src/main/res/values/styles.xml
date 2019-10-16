@@ -11,6 +11,7 @@
         <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.MyApp.SmallComponent</item>
         <item name="android:typeface">monospace</item>
         <item name="android:text"></item>
+
     </style>
 
     <style name="ShapeAppearance.MyApp.SmallComponent" parent="ShapeAppearance.MaterialComponents.SmallComponent">

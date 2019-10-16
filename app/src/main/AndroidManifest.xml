@@ -19,6 +19,7 @@
 
         <activity android:name=".storyActivity.StoryActivity">
 
+
         </activity>
 
         <activity android:name=".SignUp">
@@ -30,14 +31,22 @@
             android:screenOrientation="portrait" >
 
 
+
+
+
         </activity>
+
 
         <activity android:name=".MainActivity" >
 
 
         </activity>
 
-        <activity android:name=".Login" />
+
+        <activity android:name=".Login" >
+
+        </activity>
+
 
         <activity
             android:name=".ui.profileActivity.ProfileActivity"
@@ -52,18 +61,19 @@
         </activity>
 
         <activity android:name=".Recording.RecordingActivity" >
-
-        </activity>
-        <activity android:name=".SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-        <activity android:name=".exploreActivity">
+
 
         </activity>
+
+        <activity android:name=".SplashActivity"></activity>
+
+
+
     </application>
 
     <uses-permission android:name="android.permission.RECORD_AUDIO" />

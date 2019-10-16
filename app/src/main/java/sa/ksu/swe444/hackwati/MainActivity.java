@@ -3,7 +3,10 @@ package sa.ksu.swe444.hackwati;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Resources;
+
 import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import com.bumptech.glide.Glide;
@@ -11,7 +14,11 @@ import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
 import com.fangxu.allangleexpandablebutton.ButtonData;
 import com.fangxu.allangleexpandablebutton.ButtonEventListener;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -20,9 +27,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.mikhaellopez.circularimageview.CircularImageView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -34,14 +44,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import sa.ksu.swe444.hackwati.Recording.RecordingActivity;
 import sa.ksu.swe444.hackwati.storyActivity.StoryActivity;
@@ -51,16 +64,19 @@ public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private storyAdapter adapter;
-    private List<Item>   itemList = new ArrayList<>();
+    public List<Item> itemList;
+    private static CircularImageView channelimage;
+    private RelativeLayout relativeLayout;
     private Toolbar toolbarMain;
-    public BottomNavigationView navView;
+    BottomNavigationView navView;
     public View item;
-    private TextView emptyStories;
-    private String userUid;
+    public FirebaseAuth mAuth;
+    String userUid;
     public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    public DocumentReference documentReference;
+    public String[] subscribedUsers;
     private static final String TAG = "MainActivity";
-
-    public String userName, userTumbnail;
+    public static List<String> list;
 
 
     @SuppressLint("ResourceType")
@@ -68,10 +84,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        emptyStories =findViewById(R.id.emptyStories);
         navView = findViewById(R.id.nav_view);
         toolbarMain = (Toolbar) findViewById(R.id.toolbarMain);
         setSupportActionBar(toolbarMain);
+        userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -81,11 +97,22 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-        initRecyclerView();
 
 
+
+        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        itemList = new ArrayList<>();
+        adapter = new storyAdapter(this, itemList);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        recyclerView.setLayoutManager(mLayoutManager);
+        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        retriveSubscribedUsers();
+        recyclerView.setAdapter(adapter);
+
+
+
+        // MENU::::::
         installButton110to250();
 
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -113,17 +140,11 @@ public class MainActivity extends AppCompatActivity {
 
     }// end of OnCreate()
 
-    private void initRecyclerView() {
 
-        recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        adapter = new storyAdapter(this, itemList);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
-        recyclerView.setLayoutManager(mLayoutManager);
-        recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.setAdapter(adapter);
-        retrieveSubscribedUsers();
-    }
+    ////MENU\\\\
+
+
+
 
 
     private void installButton110to250() {
@@ -132,7 +153,7 @@ public class MainActivity extends AppCompatActivity {
 
         final AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable_110_250);
         final List<ButtonData> buttonDatas = new ArrayList<>();
-        int[] drawable = {R.drawable.gray, R.drawable.ic_power_settings_new_black_24dp, R.drawable.animal_elp, R.drawable.ic_search_black_24dp};// gray is some thing else
+        int[] drawable = {R.drawable.defult_thumbnail, R.drawable.ic_power_settings_new_black_24dp, R.drawable.animal_elp, R.drawable.ic_search_black_24dp};
         int[] color = {R.color.colorAccent, R.color.colorAccent, R.color.colorAccent, R.color.colorAccent};
         for (int i = 0; i < 4; i++) {
             ButtonData buttonData;
@@ -232,8 +253,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    public void retrieveSubscribedUsers() {
+    public void retriveSubscribedUsers() {
 
+        //firebaseFirestore.collection("users").document(userUid);
 
         DocumentReference docRef = firebaseFirestore.collection("users").document(userUid);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -244,72 +266,13 @@ public class MainActivity extends AppCompatActivity {
                     if (document.exists()) {
 
                         List<String> list = (List<String>) document.get("subscribedUsers");
-                        if (list == null){
-                            emptyStories.setText("لا يوجد قصص تابع واستمتع!");
-                        }
-
-                        else for (String story : list) {
-                            Query subscribedStories = firebaseFirestore.collection("stories").whereEqualTo("userId", story);
-                            subscribedStories.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-
-                                        for (final QueryDocumentSnapshot document : task.getResult())         {
-
-                                            String userId = (String) document.get("userId");
-
-
-                                            DocumentReference docRef = firebaseFirestore.collection("users").document(userId);
-                                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    if (task.isSuccessful()) {
-                                                        DocumentSnapshot documentUser = task.getResult();
-                                                        if (documentUser.exists()) {
-                                                            document.getData();
-                                                            String description = (String) document.get("description");
-                                                            String pic = (String) document.get("pic");
-                                                            String rate = (String) document.get("rate");
-                                                            String sound = (String) document.get("sound");
-                                                            String title = (String) document.get("title");
-                                                            String userId = (String) document.get("userId");
-                                                            String storyId = (String) document.getId();
-                                                            userName = (String) documentUser.get("username");
-                                                           userTumbnail = (String) documentUser.get("username");
-                                                            Item item = new Item(storyId,title,pic,userId,userName,userTumbnail);
-                                                            itemList.add(item);
-                                                            adapter.notifyDataSetChanged();
-                                                        }
-
-                                                    }
-                                                }
-                                            });
-
-
-
-
-
-
-
-                                        }
-                                        Log.d("TAG", "soso "+itemList.size() );
-
-                                    } else {
-                                        Log.d(TAG, "Error getting documents: ", task.getException());
-                                    }
-                                }
-                            });
-
-
-                        }// end for loop
-
-                        for (int i =0;i<=itemList.size();i++) {
-                            if(itemList.size()==0) {
-                                Log.d("TAG", "itemlest is empty");
-                                return;
+                        if (list != null)
+                            for (String user : list) {
+                                Log.d("TAG", "soso " + user);
                             }
-                        }
+                        retriveStories(list);
+                        // String str = document.getString("subscribedUsers").toString();
+                        //   Log.d(TAG, "DocumentSnapshot data: " + str);
                     } else {
                         Log.d(TAG, "No such document");
                     }
@@ -322,6 +285,80 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    public void retriveStories(List<String> list) {
 
+        if (list == null)
+            return;
+
+        for (String story : list) {
+            Query subscribedStories = firebaseFirestore.collection("stories").whereEqualTo("userId", story);
+            subscribedStories.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+
+                        for (QueryDocumentSnapshot document : task.getResult())         {
+                            document.getData();
+                            String description = (String) document.get("description");
+                            String pic = (String) document.get("pic");
+                            String rate = (String) document.get("rate");
+                            String sound = (String) document.get("sound");
+                            String title = (String) document.get("title");
+                            String userId = (String) document.get("userId");
+
+                            Log.d(TAG, "asomy " + description);
+                            Log.d(TAG, "asomy " + pic);
+                            Log.d(TAG, "asomy " + title);
+
+                            Item item = new Item(title,pic,userId);
+                            itemList.add(item);
+
+
+                        }
+
+                    } else {
+                        Log.d(TAG, "Error getting documents: ", task.getException());
+                    }
+                }
+            });
+
+
+        }// end for loop
+
+
+    }
+
+    public void retriveUserData() {
+
+
+        DocumentReference docRef = firebaseFirestore.collection("users").document(userUid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+                        String thumbnail = document.get("thumbnail").toString();
+                        if (thumbnail!=null){
+
+                            final AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable_110_250);
+
+
+
+                        }
+
+
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
+
+
+    }
 
 }
+

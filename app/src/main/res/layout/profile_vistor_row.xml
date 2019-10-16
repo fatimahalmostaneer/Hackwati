@@ -32,7 +32,7 @@
 
                 android:alpha=".6"
                 android:onClick="selectImage"
-                android:src="@drawable/gray" />
+                android:src="@drawable/box_shape" />
 
 
             <Button
