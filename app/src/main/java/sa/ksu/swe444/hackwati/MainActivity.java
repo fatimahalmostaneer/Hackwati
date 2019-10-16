@@ -259,8 +259,6 @@ public class MainActivity extends AppCompatActivity {
 
                                             String userId = (String) document.get("userId");
 
-                                            DocumentReference docRefUser = firebaseFirestore.collection("users").document(userId);
-
 
                                             DocumentReference docRef = firebaseFirestore.collection("users").document(userId);
                                             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -278,7 +276,7 @@ public class MainActivity extends AppCompatActivity {
                                                             String userId = (String) document.get("userId");
                                                             String storyId = (String) document.getId();
                                                             userName = (String) documentUser.get("username");
-                                                           userTumbnail = (String) documentUser.get("username");
+                                                            userTumbnail = (String) documentUser.get("username");
                                                             Item item = new Item(storyId,title,pic,userId,userName,userTumbnail);
                                                             itemList.add(item);
                                                             adapter.notifyDataSetChanged();
@@ -294,12 +292,6 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-                                            for (int i =0;i<=itemList.size();i++) {
-                                                if(itemList.size()==0) {
-                                                    Log.d("TAG", "itemlest is empty");
-                                                    return;
-                                                }
-                                            }
                                         }
                                         Log.d("TAG", "soso "+itemList.size() );
 
@@ -312,6 +304,12 @@ public class MainActivity extends AppCompatActivity {
 
                         }// end for loop
 
+                        for (int i =0;i<=itemList.size();i++) {
+                            if(itemList.size()==0) {
+                                Log.d("TAG", "itemlest is empty");
+                                return;
+                            }
+                        }
                     } else {
                         Log.d(TAG, "No such document");
                     }

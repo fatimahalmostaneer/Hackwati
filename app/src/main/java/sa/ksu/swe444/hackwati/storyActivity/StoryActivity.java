@@ -27,6 +27,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.tabs.TabLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -53,6 +54,10 @@ public class StoryActivity extends AppCompatActivity {
     private static final String TAG = StoryActivity.class.getSimpleName();
     public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     public DocumentReference documentReference;
+    public FirebaseAuth mAuth;
+    String userUid;
+
+
 
     private String storyId, userStoryId;
 
@@ -62,6 +67,9 @@ public class StoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.story_activity_main);
+
+        userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
         duration = findViewById(R.id.duration);
         bookName = findViewById(R.id.bookName);
@@ -88,6 +96,10 @@ public class StoryActivity extends AppCompatActivity {
 
 
     public void subscribeUser() {
+
+
+
+
 
 
     }

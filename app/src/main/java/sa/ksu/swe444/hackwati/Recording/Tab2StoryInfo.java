@@ -82,6 +82,7 @@ public class Tab2StoryInfo extends Fragment {
     Uri contentURI;
     public static String  downloadURLA;
     public  static String arr[]  = {"",""};
+    Map<String, Object> stroy = new HashMap<>();
 
 
 
@@ -251,8 +252,10 @@ public class Tab2StoryInfo extends Fragment {
 
                     Uri downloadUri = task.getResult();
                      downloadURLA = downloadUri.toString()+"";
-                     arr[1]=downloadURLA+"";
-                   Log.d(LOG_TAG, downloadURLA +" Ya1" );
+                    String sound = downloadURLA;
+                    stroy.put("sound", sound);
+
+                    Log.d(LOG_TAG, downloadURLA +" Ya1" );
 
 
                 } }
@@ -299,7 +302,9 @@ public class Tab2StoryInfo extends Fragment {
                     if (task.isSuccessful()) {
                         Uri downloadUri = task.getResult();
                         String downloadURL = downloadUri.toString();
-                        arr[0]= downloadURL;
+                        String pic =downloadURL;
+                        stroy.put("pic", pic);
+
                         Log.d(LOG_TAG,downloadURL+" Ya2" );
 
                     } }
@@ -329,14 +334,12 @@ public class Tab2StoryInfo extends Fragment {
     private void addStoryToCollection() {
 
         ;
-        Map<String, Object> stroy = new HashMap<>();
+
 
         String description = storyDiscription.getText().toString();
         String rate = "5";
         String title = storyTitle.getText().toString();
         String userId = mAuth.getCurrentUser().getUid();
-        String pic = MySharedPreference.getString(getContext(), Constants.Keys.STORY_COVER, "");
-        String sound = MySharedPreference.getString(getActivity(), Constants.Keys.STORY_AUDIO, "");
 
 
 
@@ -344,8 +347,6 @@ public class Tab2StoryInfo extends Fragment {
         stroy.put("rate", "");
         stroy.put("title", title);
         stroy.put("userId", userId);
-        stroy.put("pic", arr[0]);
-        stroy.put("sound", arr[1]);
 
 
 Log.d(LOG_TAG, downloadURLA+" collect");
