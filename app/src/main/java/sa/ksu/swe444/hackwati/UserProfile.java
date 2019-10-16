@@ -80,30 +80,6 @@ public class UserProfile extends AppCompatActivity {
         userNameText = findViewById(R.id.nameSignUpHin);
         emailText = findViewById(R.id.emailSignUpHin);
 
-        edit1 = findViewById(R.id.edit1);
-        edit1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialog("name");
-            }
-        });
-
-
-        edit2 = findViewById(R.id.edit2);
-        edit2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialog("email");
-            }
-        });
-
-        edit3 = findViewById(R.id.edit3);
-        edit3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                showDialog("pass");
-            }
-        });
 
 
         record = findViewById(R.id.record_profile);
@@ -136,7 +112,6 @@ public class UserProfile extends AppCompatActivity {
             public void onClick(View view) {
                 //  CreateAlertDialogWithRadioButtonGroup();
 
-                showChoiceDialog();
             }
         });
         log_out = findViewById(R.id.logout_profile);
@@ -244,7 +219,6 @@ public class UserProfile extends AppCompatActivity {
             Log.e(getClass().getSimpleName(), "Error writing bitmap", e);
         }//end catch
     }//end of persistImage()
-
 
     private void openCameraChooser() {
         if (ActivityCompat.checkSelfPermission(UserProfile.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -359,172 +333,34 @@ public class UserProfile extends AppCompatActivity {
 
     private void updateProfile() {
 
-    }
-
-    public void CreateAlertDialogWithRadioButtonGroup() {
-
-
-        KAlertDialog pDialog = new KAlertDialog(this, KAlertDialog.PROGRESS_TYPE);
-        pDialog.getProgressHelper().setBarColor(Color.parseColor("#A5DC86"));
-        pDialog.setTitleText("Loading");
-        pDialog.setCancelable(false);
-        pDialog.show();
-
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
-
-
-        AlertDialog alertDialog = builder.create();
-
-        alertDialog.show();
-
-        builder.setTitle("تعديل :");
-
-
-
-
-
-
-/*        builder.setSingleChoiceItems(values, -1, new DialogInterface.OnClickListener() {
-
-            public void onClick(DialogInterface dialog, int item) {
-
-                switch(item)
-                {
-                    case 0:
-
-                        Toast.makeText(UserProfile.this, "First Item Clicked", Toast.LENGTH_LONG).show();
-                        break;
-                    case 1:
-
-                        Toast.makeText(UserProfile.this, "Second Item Clicked", Toast.LENGTH_LONG).show();
-                        break;
-                    case 2:
-
-                        Toast.makeText(UserProfile.this, "Third Item Clicked", Toast.LENGTH_LONG).show();
-                        break;
-                }
-                alertDialog1.dismiss();
+        edit1 = findViewById(R.id.edit1);
+        edit1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
             }
         });
-        alertDialog1 = builder.create();
-        alertDialog1.show();
-
-    }*/
-
-    }
-
-  public void showDialog(String edit) {
-
-      AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
 
+        edit2 = findViewById(R.id.edit2);
+        edit2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+            }
+        });
 
+        edit3 = findViewById(R.id.edit3);
+        edit3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
-
-      switch(edit)
-      {
-          case "name":
-            //  builder.setTitle("تعديل الاسم");
-
-              Toast.makeText(UserProfile.this, "First Item Clicked", Toast.LENGTH_LONG).show();
-              break;
-          case "email":
-            //  builder.setTitle("تعديل البريد الإلكتروني");
-
-              Toast.makeText(UserProfile.this, "Second Item Clicked", Toast.LENGTH_LONG).show();
-              break;
-          case "pass":
-           //   builder.setTitle("تعديل كلمة المرور");
-              Toast.makeText(UserProfile.this, "Third Item Clicked", Toast.LENGTH_LONG).show();
-              break;
-      }
-
-
-
-builder.show();
-
-
-
-   /*   AlertDialog.Builder dialog = new AlertDialog.Builder(UserProfile.this);
-      dialog.setTitle("Set Target Title & Description");
-      dialog.setMessage("Title: ");
-
-      Context context = UserProfile.this;
-      LinearLayout layout = new LinearLayout(context);
-      layout.setOrientation(LinearLayout.VERTICAL);
-
-// Add a TextView here for the "Title" label, as noted in the comments
-      final EditText titleBox = new EditText(context);
-      titleBox.setHint("Title");
-      layout.addView(titleBox); // Notice this is an add method
-
-// Add another TextView here for the "Description" label
-      final EditText descriptionBox = new EditText(context);
-      descriptionBox.setHint("Description");
-      layout.addView(descriptionBox); // Another add method
-
-      dialog.setView(layout); // Again this is a set method, not add*/
+            }
+        });
 
 
     }
 
-    public void showChoiceDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
-        builder.setTitle("تجربة");
-
-//list of items
-        final String[] items = {" الاسم ", " البريد الإلكتروني ", " كلمة المرور "};
-// set single choice items
-        builder.setSingleChoiceItems(items, 0,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        switch(which)
-                        {
-                            case 0:
-
-                                Toast.makeText(UserProfile.this, "First Item Clicked", Toast.LENGTH_LONG).show();
-                                break;
-                            case 1:
-
-                                Toast.makeText(UserProfile.this, "Second Item Clicked", Toast.LENGTH_LONG).show();
-                                break;
-                            case 2:
-
-                                Toast.makeText(UserProfile.this, "Third Item Clicked", Toast.LENGTH_LONG).show();
-                                break;
-                        }
-                    }
-                });
-
-        String positiveText = getString(android.R.string.ok);
-        builder.setPositiveButton(positiveText,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // positive button logic here
-                        showDialog("");
-                        // dismiss dialog too
 
 
-                    }
-                });
-
-        String negativeText = getString(android.R.string.cancel);
-        builder.setNegativeButton(negativeText,
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // negative button logic
-                        dialog.dismiss();
-                    }
-                });
-
-        AlertDialog dialog = builder.create();
-// display dialog
-        dialog.show();
-    }
 }
 
 

@@ -44,6 +44,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sa.ksu.swe444.hackwati.Recording.RecordingActivity;
+import sa.ksu.swe444.hackwati.explor.ExploreActivity;
 import sa.ksu.swe444.hackwati.storyActivity.StoryActivity;
 
 
@@ -102,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
 
                     case R.id.navigation_explore:
-                        startActivity(new Intent(MainActivity.this, StoryActivity.class));
+                        startActivity(new Intent(MainActivity.this, ExploreActivity.class));
                         break;
 
                 }// end of switch
@@ -231,7 +232,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent); // to start another activity
     }
 
-
     public void retrieveSubscribedUsers() {
 
 
@@ -260,7 +260,7 @@ public class MainActivity extends AppCompatActivity {
                                             String userId = (String) document.get("userId");
 
 
-                                            DocumentReference docRef = firebaseFirestore.collection("users").document(userId);
+                                            DocumentReference docRef = firebaseFirestore.collection("users").document();
                                             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                                                 @Override
                                                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {

@@ -31,13 +31,16 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import sa.ksu.swe444.hackwati.Constants;
+import sa.ksu.swe444.hackwati.Item;
 import sa.ksu.swe444.hackwati.MainActivity;
 import sa.ksu.swe444.hackwati.R;
 import sa.ksu.swe444.hackwati.Recording.RecordingActivity;
@@ -49,13 +52,14 @@ public class StoryActivity extends AppCompatActivity {
 
     private TextView change, bookName, duration;
     private String user_id;
-    private Button listenBtn, subscribedBtn;
+    //private Button listenBtn, subscribedBtn;
     private ImageView back, cover;
     private static final String TAG = StoryActivity.class.getSimpleName();
     public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     public DocumentReference documentReference;
     public FirebaseAuth mAuth;
     String userUid;
+     Button subscribe,subscribed;
 
 
 
@@ -67,8 +71,13 @@ public class StoryActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.story_activity_main);
-
+        getExtras();
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        subscribe=findViewById(R.id.subscribeBtn);
+
+       subscribed =findViewById(R.id.subscribedBtn);
+
 
 
         duration = findViewById(R.id.duration);
@@ -76,7 +85,7 @@ public class StoryActivity extends AppCompatActivity {
         cover = (ImageView) findViewById(R.id.cover);
 
 
-        getExtras();
+
         subscribeUser();
         retriveStory();
 
@@ -96,11 +105,62 @@ public class StoryActivity extends AppCompatActivity {
 
 
     public void subscribeUser() {
+        DocumentReference docRef = firebaseFirestore.collection("users").document(userUid);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot document = task.getResult();
+                    if (document.exists()) {
+
+                        Log.d(TAG, " 111 document exist");
+
+
+                        List<String> list = (List<String>) document.get("subscribedUsers");
+                        if (list == null) {
+                            return;
+
+                        } else for (String subscribedUsers : list) {
+
+                            Log.d(TAG, " ** "+ subscribedUsers);
+                            Log.d(TAG, " userStoryId: "+ userStoryId);
+
+                           if (userStoryId.equals(userUid)){
+
+                                subscribe.setVisibility(View.INVISIBLE);
+                                subscribed.setVisibility(View.INVISIBLE);
+                                Log.d(TAG, "user");
+
+                            }
+                            if(userStoryId.equals(subscribedUsers)){
+
+                                subscribe.setVisibility(View.VISIBLE);
+                                subscribed.setVisibility(View.INVISIBLE);
+                               // Log.d(TAG, " user not exist");
+
+                            }
+                            else {
+
+                                subscribe.setVisibility(View.INVISIBLE);
+                                subscribed.setVisibility(View.VISIBLE);
+                               // Log.d(TAG, "user exist");
+
+
+                            }
 
 
 
+                        }// end for loop
 
 
+                    } else {
+                        Log.d(TAG, "No such document");
+                    }
+                } else {
+                    Log.d(TAG, "get failed with ", task.getException());
+                }
+            }
+        });
 
     }
 
