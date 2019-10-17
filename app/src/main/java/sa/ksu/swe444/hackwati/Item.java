@@ -48,6 +48,16 @@ public class Item {
 
     }
 
+    public Item ( String title, String image, String userId) {
+        this.title = title;
+        this.image = image;
+        this.userId=userId;
+
+
+    }
+
+
+
 /*    public Item(String title, int image, String channelImage, String views, String channelName, int soundImage) {
         this.title = title;
         this.image = channelName;

@@ -196,10 +196,32 @@ private final String TAG = "Login";
 
     private void signIn() {
         //input
+
         entered_email = login_email.getText().toString();
         entered_password = login_password.getText().toString();
 
 
+        if(entered_password.equals("")&& entered_email.equals("")){
+            //show a popup for result
+            showDialogWithOkButton("الرجاء ادخال البريد الالكتروني وكلمة المرور");
+
+        }
+
+        else if (entered_email.equals("")) {
+            //show a popup for result
+            showDialogWithOkButton("الرجاء ادخال البريد الالكتروني");
+
+        }//end if
+
+        else if (entered_password.equals("")) {
+            //show a popup for result
+            showDialogWithOkButton("الرجاء ادخال كلمة المرور");
+
+
+        }
+
+        if(!entered_email.equals("")&& !entered_password.equals(""))
+        {
         mAuth.signInWithEmailAndPassword(entered_email, entered_password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -210,9 +232,9 @@ private final String TAG = "Login";
                             Toast.makeText(Login.this, "Authentication succeeded",
                                     Toast.LENGTH_SHORT).show();
 
-                            if(mAuth.getCurrentUser().isEmailVerified()){
+                            if (mAuth.getCurrentUser().isEmailVerified()) {
                                 startActivity(new Intent(Login.this, MainActivity.class));
-                            }else {
+                            } else {
                                 showDialogWithOkButton("تحقق من الرابط المرسل على بريدك لإكمال عملية تسجيل الدخول ");
                             }
 
@@ -224,12 +246,15 @@ private final String TAG = "Login";
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(Login.this, "Authentication failed google.",
                                     Toast.LENGTH_SHORT).show();
-                           // updateUI(null);
+                            showDialogWithOkButton("البريد الإلكتروني غير صالح");
+                            // updateUI(null);
                         }
 
                         // ...
                     }
                 });
+
+    }
 
     }//end of signIn
 
@@ -289,13 +314,14 @@ private final String TAG = "Login";
                             }else {
                                /* Toast.makeText(Login.this, "email not verified",
                                         Toast.LENGTH_SHORT).show();*/
-                              showDialogWithOkButton("بريد إلكتروني غير صالح");
+                              showDialogWithOkButton("البريد الإلكتروني غير صالح");
                             }
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                            // Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             //updateUI(null);
+                            showDialogWithOkButton("الرجاء ادخال المعلومات");
                         }
 
                         // [START_EXCLUDE]
