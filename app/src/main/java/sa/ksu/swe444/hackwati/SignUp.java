@@ -70,6 +70,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         register_name = findViewById(R.id.username_login);
 
 
+
     }
 
     private boolean checkPassword(String pass, String repass) {
@@ -90,7 +91,38 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         String entered_email = register_email.getText().toString();
         String entered_password =register_password.getText().toString();
 
-            mAuth.createUserWithEmailAndPassword(entered_email, entered_password)
+        if(register_email.getText().toString().equals("")&& register_password.getText().toString().equals("") && register_name.getText().toString().equals("") && register_re_password.getText().toString().equals("")){
+            //show a popup for result
+            showDialogWithOkButton("الرجاء ادخال اسم المستخدم و البريد الالكتروني وكلمة المرور");
+
+        }
+
+        else if (register_email.getText().toString().equals("")) {
+            //show a popup for result
+            showDialogWithOkButton("الرجاء ادخال البريد الالكتروني");
+
+        }//end if
+
+         else if (register_name.getText().toString().equals("")) {
+            //show a popup for result
+            showDialogWithOkButton("الرجاء ادخال اسم المستخدم");
+
+        }//end if
+
+        else if (register_re_password.getText().toString().equals("")) {
+            //show a popup for result
+            showDialogWithOkButton("الرجاء اعادة تعين كلمة المرور");
+
+        }//end if
+
+        else if (register_password.getText().toString().equals("")) {
+            //show a popup for result
+            showDialogWithOkButton("الرجاء ادخال كلمة المرور");
+
+
+        }
+        if(!entered_email.equals("")&& !entered_password.equals("") && !register_re_password.equals("") && !register_name.equals("")){
+        mAuth.createUserWithEmailAndPassword(entered_email, entered_password)
                     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
@@ -130,6 +162,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                         }
                     });
     }//end of register
+    }
 
     private void showErrorMsg() {
        // Toast.makeText(SignUp.this, "password didn't match", Toast.LENGTH_LONG).show();
@@ -190,6 +223,13 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                     }
                 });
     }
+
+
+
+    // [START basic_write]
+
+}// end of class
+
   /*  public void addNewUser(){/// اللي بتعدل بجلدها
         Map<String,Object> user= new HashMap<>();
 
@@ -240,4 +280,4 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
 
 
-}
+
