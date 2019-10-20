@@ -13,16 +13,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.List;
-
-import sa.ksu.swe444.hackwati.storyActivity.StoryActivity;
 
 
 public class storyAdapter extends RecyclerView.Adapter<storyAdapter.MyViewHolder> {
     private Context mContext;
     private List<Item> itemList;
     private String storyId,userId;
+    public String  userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
 
 
 
@@ -56,10 +57,17 @@ public class storyAdapter extends RecyclerView.Adapter<storyAdapter.MyViewHolder
                         Item clickedStory = itemList.get(clickedPosition);
                         storyId = clickedStory.getStoryId();
                         Context context = view.getContext();
-                        Intent intent = new Intent(context, StoryActivity.class);
+                        if(userUid.equals("DUbp3gH497gydI7fJodUfRz9A2K3")){
+                        Intent intent = new Intent(context, AdminStoryActivity.class);
                         intent.putExtra(Constants.Keys.STORY_ID, storyId);
                         intent.putExtra(Constants.Keys.STORY_USER_ID, clickedStory.getUserId());
-                        context.startActivity(intent);
+                        context.startActivity(intent);}
+                        else{
+                            Intent intent = new Intent(context, StoryActivity.class);
+                            intent.putExtra(Constants.Keys.STORY_ID, storyId);
+                            intent.putExtra(Constants.Keys.STORY_USER_ID, clickedStory.getUserId());
+                            context.startActivity(intent);
+                        }
 
                     }
 
