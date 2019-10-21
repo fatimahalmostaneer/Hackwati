@@ -136,9 +136,9 @@ public class Tab2StoryInfo extends Fragment {
 
                 else if(imgPath==null)
                     showDialogWithOkButton("الرجاء رفع غلاف لقصتك");
-                else{
+
                     uploadImageWithUri();
-                uploadAudio();}
+                uploadAudio();
 
             }
         });
