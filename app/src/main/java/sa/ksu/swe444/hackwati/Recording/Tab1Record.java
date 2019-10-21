@@ -1,6 +1,7 @@
 package sa.ksu.swe444.hackwati.Recording;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -60,7 +61,7 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
     private boolean isRecording = false;
     private boolean startRecording = true;
     private ImageButton imageButton;
-
+    private SecondFragmentListener listener;
 
     // Requesting permission to RECORD_AUDIO
     private boolean permissionToRecordAccepted = false;
@@ -72,7 +73,6 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
     Runnable updater;
     private long elapsedTime;
     private long start;
-    private SecondFragmentListener  listener;
     private Button nextBtn;
     private List<VisualizerView> mVisualizerViews = new ArrayList<>();
     private RecordingSampler.CalculateVolumeListener mVolumeListener;
@@ -92,6 +92,8 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
 
 
 
+
+    @SuppressLint("ResourceAsColor")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.recording_fragment_one, container, false);
@@ -205,12 +207,17 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
          nextBtn.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
-                 if (isRecording)
-                     recorder.stop();
+                // if (isRecording)
+                //     recorder.stop();
+                 listener.onNextButton();
+
+
+                 //startActivity(new Intent(getContext(), ));
+
 
                /*  if (recorder != null)
                      showDialogWithOkButton("لم تقم بالتسجيل !");*/
-
+/*
                 else{ AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                  builder.setMessage("هل انتهيت التسجيل؟؟")
                          .setCancelable(false)
@@ -220,7 +227,7 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
 
 
                                  listener.onNextButton();
-                                 isRecording = false;
+                                // isRecording = false;
 
 
                              }
@@ -237,7 +244,7 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
                  alert.show();
 
 
-             }
+             }*/
 
 
              }
@@ -281,6 +288,7 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
 
 
 
+    @SuppressLint("ResourceAsColor")
     @Override
     public void onClick(View view) {
         switch (view.getId()){
@@ -290,17 +298,20 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
                     start = System.currentTimeMillis();
                     startRecording = false;
                     isRecording = true;
+                    nextBtn.setBackgroundColor(R.color.gray);
+                    nextBtn.setEnabled(false);
 
                 }else {
                     recorder.stop();
+                    nextBtn.setBackgroundColor(R.color.colorPrimary);
                     duration = elapsedTime;
                     isRecording = false;
-                    recordButton.setEnabled(false);
+                    nextBtn.setEnabled(true);
                     Toast.makeText(getContext(),"btn is enabled" , Toast.LENGTH_LONG).show();
+
                 }
 
 
-                break;
           /*  case R.id.play_btn:
                 onPlay(mStartPlaying);
                 if (mStartPlaying) {
@@ -354,11 +365,7 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
         void onNextButton();
     }
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        listener = (SecondFragmentListener) getActivity();
-    }
+
 
 
     private void onPlay(boolean start) {
@@ -398,5 +405,13 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
         AlertDialog alert = builder.create();
         alert.show();
     }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        listener = (SecondFragmentListener) getActivity();
+    }
+
+
 
 }// class

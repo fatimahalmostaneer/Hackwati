@@ -7,4 +7,7 @@
     <color name="basicblue">#149ec7</color>
     <color name="colorPrimaryDark">#FF9800</color>
     <color name="colorPrimary">#607D8B</color>
+    <color name="lightYellow">#F7E459</color>
+    <color name="gray">#a9a9a9</color>
+
 </resources>

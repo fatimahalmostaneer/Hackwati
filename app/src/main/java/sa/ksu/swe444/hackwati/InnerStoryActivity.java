@@ -81,7 +81,7 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
 
         Uri uri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/hackwati444.appspot.com/o/YEWKT0YD92bY2bGsG4evggu5X8t1%2Frere%2Faudio.3gp?alt=media&token=0ab52c20-5322-4041-8662-3076ba5827c3");
 
-        mediaPlayer = MediaPlayer.create(getBaseContext(), uri);
+        mediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.child_story);
         seekBar.setMax(mediaPlayer.getDuration());
 
 

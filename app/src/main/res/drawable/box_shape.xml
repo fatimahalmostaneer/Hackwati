@@ -15,7 +15,7 @@
         android:color="#B9B9B9"
         />-->
 
-    <solid android:color="@android:color/darker_gray" />
+    <solid android:color="@color/lightYellow" />
     <padding
         android:bottom="0dp"
         android:left="0dp"
