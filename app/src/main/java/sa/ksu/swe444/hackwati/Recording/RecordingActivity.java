@@ -77,6 +77,8 @@ public class RecordingActivity extends AppCompatActivity implements Tab1Record.S
     @Override
     public void onNextButton() {
         viewPager.setCurrentItem(1);
+        Tab2StoryInfo f2 = new Tab2StoryInfo();
+     //   f2.getInfo(duration , timestamp , id);
 
     }
 }

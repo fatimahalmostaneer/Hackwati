@@ -15,8 +15,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
@@ -24,9 +22,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
 public class StoryActivity extends AppCompatActivity implements View.OnClickListener {
@@ -41,7 +37,7 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
     public DocumentReference documentReference;
     public FirebaseAuth mAuth;
     String userUid;
-    Button subscribe, subscribed;
+    Button subscribe;
 
 
     private String storyId, userStoryId;
@@ -54,26 +50,20 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.story_activity_main);
         getExtras();
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
-
         duration = findViewById(R.id.duration);
         bookName = findViewById(R.id.bookName);
         cover = (ImageView) findViewById(R.id.cover);
 
 
         subscribe = findViewById(R.id.subscribeBtn);
-
-        subscribed = findViewById(R.id.subscribedBtn);
+        subscribe.setOnClickListener(this);
 
 
         subscribeUser();
-
         retriveStory();
 
-        subscribe.setOnClickListener(this); subscribed.setOnClickListener(this);
 
-    }
-    // end of setOnNavigationItemSelectedListener()
+    }// end of setOnNavigationItemSelectedListener()
 
 
     private void getExtras() {
@@ -111,26 +101,22 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
                             return;
                         } else for (String subscribedUsers : list) {
 
-                            Log.d(TAG, " ** " + subscribedUsers);
-                            Log.d(TAG, " userStoryId: " + userStoryId);
-                    /*       if (userStoryId.equals(userUid)){
+
+                            if (userStoryId.equals(userUid)) {
 
                                 subscribe.setVisibility(View.INVISIBLE);
-                                subscribed.setVisibility(View.INVISIBLE);
-                                Log.d(TAG, "user");
+                                break;
+                            } else if (userStoryId.equals(subscribedUsers)) {
 
-                            }*/
-                            if (userStoryId.equals(subscribedUsers)) {
-
-                                subscribe.setVisibility(View.INVISIBLE);
-                                subscribed.setVisibility(View.VISIBLE);
-                                // Log.d(TAG, " user not exist");
+                                subscribe.setVisibility(View.VISIBLE);
+                                subscribe.setText("مشترك");
+                                break;
 
                             } else {
 
                                 subscribe.setVisibility(View.VISIBLE);
-                                subscribed.setVisibility(View.INVISIBLE);
-                                // Log.d(TAG, "user exist");
+                                subscribe.setText("اشتراك");
+                                break;
 
 
                             }
@@ -139,11 +125,7 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
                         }// end for loop
 
 
-                    } else {
-                        Log.d(TAG, "No such document");
                     }
-                } else {
-                    Log.d(TAG, "get failed with ", task.getException());
                 }
             }
         });
@@ -163,13 +145,13 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
                         String title = (String) document.get("title");
                         String description = (String) document.get("description");
                         String pic = document.get("pic").toString();
-
-
                         bookName.setText(title);
                         duration.setText(description);
                         Glide.with(StoryActivity.this)
                                 .load(pic + "")
                                 .into(cover);
+
+
 
                     } else {
                         Log.d(TAG, "No such document");
@@ -185,14 +167,18 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.subscribedBtn:
-                updateDeleteField();
 
-                break;
 
             case R.id.subscribeBtn:
 
-                updateDeleteField();
+                if (subscribe.getText().equals("اشتراك"))
+                    subscribUser();
+                else if (subscribe.getText().equals("مشترك")) {
+                    unsubscribUser();
+                } else
+                    subscribe.setVisibility(View.INVISIBLE);
+
+
                 break;
 
 
@@ -200,24 +186,20 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
+    public void subscribUser() {
+        DocumentReference washingtonRef = firebaseFirestore.collection("users").document(userUid);
+        washingtonRef.update("subscribedUsers", FieldValue.arrayUnion(userStoryId));
+        washingtonRef.update("numSubscribers", FieldValue.increment(1));
+        subscribe.setText("مشترك");
 
-    public void updateDeleteField() {
-       /* // [START update_delete_field]
-        DocumentReference docRef = firebaseFirestore.collection("users").document(userUid);
-
-        // Remove the 'capital' field from the document
-        Map<String,Object> updates = new HashMap<>();
-        updates.put("subscribedUsers", FieldValue.delete());
-
-        docRef.update(updates).addOnCompleteListener(new OnCompleteListener<Void>() {
-
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {}
-            // [START_EXCLUDE]
-        });
-        // [END update_delete_field]*/
     }
 
+    public void unsubscribUser() {
+        DocumentReference washingtonRef = firebaseFirestore.collection("users").document(userUid);
+        washingtonRef.update("subscribedUsers", FieldValue.arrayRemove(userStoryId));
+        washingtonRef.update("numSubscribers", FieldValue.increment(-1));
+        subscribe.setText("اشتراك");
+    }
 }
 
 

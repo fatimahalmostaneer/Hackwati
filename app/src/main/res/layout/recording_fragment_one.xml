@@ -113,7 +113,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="130dp"
         android:background="@drawable/box_shape"
-        android:backgroundTint="#F7E459"
+        android:backgroundTint="@color/lightYellow"
         android:text="التالي"
         android:textSize="20dp" />
 
@@ -124,9 +124,9 @@
         android:layout_width="90dp"
         android:layout_height="31dp"
         android:layout_centerHorizontal="true"
-android:layout_marginTop="20dp"        android:layout_below="@id/next_btn"
-        android:layout_marginBottom
-            ="50dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@id/next_btn"
+        android:layout_marginBottom="50dp"
         android:text="إلغاء"
         android:textColor="@android:color/black"
         android:textSize="20dp" />
