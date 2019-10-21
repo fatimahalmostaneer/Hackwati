@@ -11,7 +11,6 @@ import com.google.android.material.tabs.TabLayout;
 import java.util.ArrayList;
 
 import sa.ksu.swe444.hackwati.R;
-import sa.ksu.swe444.hackwati.storyActivity.Tab1Fragment;
 
 
 public class ProfileActivity extends AppCompatActivity {

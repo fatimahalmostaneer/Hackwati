@@ -1,12 +1,12 @@
 package sa.ksu.swe444.hackwati;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 
-import com.bumptech.glide.Glide;
 import com.fangxu.allangleexpandablebutton.AllAngleExpandableButton;
 import com.fangxu.allangleexpandablebutton.ButtonData;
 import com.fangxu.allangleexpandablebutton.ButtonEventListener;
@@ -17,11 +17,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
@@ -45,14 +44,13 @@ import java.util.List;
 
 import sa.ksu.swe444.hackwati.Recording.RecordingActivity;
 import sa.ksu.swe444.hackwati.explor.ExploreActivity;
-import sa.ksu.swe444.hackwati.storyActivity.StoryActivity;
 
 
 public class MainActivity extends AppCompatActivity {
 
     private RecyclerView recyclerView;
     private storyAdapter adapter;
-    private List<Item>   itemList = new ArrayList<>();
+    private List<Item> itemList = new ArrayList<>();
     private Toolbar toolbarMain;
     public BottomNavigationView navView;
     public View item;
@@ -60,8 +58,7 @@ public class MainActivity extends AppCompatActivity {
     private String userUid;
     public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private static final String TAG = "MainActivity";
-
-    public String userName, userTumbnail;
+    ArrayList<User> arrayList = new ArrayList<User>();
 
 
     @SuppressLint("ResourceType")
@@ -69,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        emptyStories =findViewById(R.id.emptyStories);
+        emptyStories = findViewById(R.id.emptyStories);
         navView = findViewById(R.id.nav_view);
         toolbarMain = (Toolbar) findViewById(R.id.toolbarMain);
         setSupportActionBar(toolbarMain);
@@ -123,17 +120,20 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
+
+
         retrieveSubscribedUsers();
+
+
     }
 
 
     private void installButton110to250() {
 
 
-
         final AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable_110_250);
         final List<ButtonData> buttonDatas = new ArrayList<>();
-        int[] drawable = {R.drawable.gray, R.drawable.ic_power_settings_new_black_24dp, R.drawable.animal_elp, R.drawable.ic_search_black_24dp};// gray is some thing else
+        int[] drawable = {R.drawable.defult_thumbnail, R.drawable.ic_power_settings_new_black_24dp, R.drawable.defult_thumbnail, R.drawable.ic_search_black_24dp};// gray is some thing else
         int[] color = {R.color.colorAccent, R.color.colorAccent, R.color.colorAccent, R.color.colorAccent};
         for (int i = 0; i < 4; i++) {
             ButtonData buttonData;
@@ -155,8 +155,34 @@ public class MainActivity extends AppCompatActivity {
             public void onButtonClicked(int index) {
                 switch (index) {
                     case 1:
-                        FirebaseAuth.getInstance().signOut();
-                        startActivity(new Intent(MainActivity.this, SplashActivity.class));
+
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                        builder.setMessage("هل أنت متأكد من أنك تريد تسجيل الخروج؟")
+                                .setCancelable(false)
+                                .setPositiveButton("أنا متأكد", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+
+                                        FirebaseAuth.getInstance().signOut();
+                                        startActivity(new Intent(MainActivity.this, SplashActivity.class));
+
+                                        finish();
+
+                                    }
+
+                                });
+                        builder.setNeutralButton("إلغاء", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+
+                        });
+
+                        AlertDialog alert = builder.create();
+                        alert.show();
+
+
+
                         break;
                     case 2:
                         startActivity(new Intent(MainActivity.this, UserProfile.class));
@@ -169,12 +195,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onExpand() {
                 Toast.makeText(MainActivity.this, "jjjj", Toast.LENGTH_SHORT).show();
-            /*    int[] drawable = {R.drawable.animal_r};
 
-                final List<ButtonData> buttonDatas = new ArrayList<>();
-                ButtonData buttonData;
-                buttonData = ButtonData.buildIconButton(MainActivity.this, drawable[0], 7);
-                buttonDatas.add(buttonData);*/
 
             }
 
@@ -232,8 +253,8 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent); // to start another activity
     }
 
-    public void retrieveSubscribedUsers() {
 
+    public void retrieveSubscribedUsers() {
 
         DocumentReference docRef = firebaseFirestore.collection("users").document(userUid);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -243,69 +264,23 @@ public class MainActivity extends AppCompatActivity {
                     DocumentSnapshot document = task.getResult();
                     if (document.exists()) {
 
-                        List<String> list = (List<String>) document.get("subscribedUsers");
-                        if (list == null){
+                        final List<String> list = (List<String>) document.get("subscribedUsers");
+                        if (list == null) {
                             emptyStories.setText("لا يوجد قصص تابع واستمتع!");
-                        }
+                        } else { // has SubscribedUsers
 
-                        else for (String story : list) {
-                            Query subscribedStories = firebaseFirestore.collection("stories").whereEqualTo("userId", story);
-                            subscribedStories.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                            retriveUserData(list, new MyCallback() {
                                 @Override
-                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                                    if (task.isSuccessful()) {
-
-                                        for (final QueryDocumentSnapshot document : task.getResult())         {
-
-                                            String userId = (String) document.get("userId");
-
-
-                                            DocumentReference docRef = firebaseFirestore.collection("users").document();
-                                            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                                @Override
-                                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                    if (task.isSuccessful()) {
-                                                        DocumentSnapshot documentUser = task.getResult();
-                                                        if (documentUser.exists()) {
-                                                            document.getData();
-                                                            String description = (String) document.get("description");
-                                                            String pic = (String) document.get("pic");
-                                                            String rate = (String) document.get("rate");
-                                                            String sound = (String) document.get("sound");
-                                                            String title = (String) document.get("title");
-                                                            String userId = (String) document.get("userId");
-                                                            String storyId = (String) document.getId();
-                                                            userName = (String) documentUser.get("username");
-                                                            userTumbnail = (String) documentUser.get("username");
-                                                            Item item = new Item(storyId,title,pic,userId,userName,userTumbnail);
-                                                            itemList.add(item);
-                                                            adapter.notifyDataSetChanged();
-                                                        }
-
-                                                    }
-                                                }
-                                            });
-
-
-
-
-
-
-
-                                        }
-                                        Log.d("TAG", "soso "+itemList.size() );
-
-                                    } else {
-                                        Log.d(TAG, "Error getting documents: ", task.getException());
-                                    }
+                                public void onCallback(ArrayList<User> usersDataList) {
+                                    retriveSubscribedUserStories(list, usersDataList);
                                 }
                             });
 
 
                         }// end for loop
 
-                        for (int i =0;i<=itemList.size();i++) {
-                            if(itemList.size()==0) {
+                        for (int i = 0; i <= itemList.size(); i++) {
+                            if (itemList.size() == 0) {
                                 Log.d("TAG", "itemlest is empty");
                                 return;
                             }
@@ -323,5 +298,117 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public void retriveSubscribedUserStories(List<String> list, final ArrayList<User> usersDataList) {
+
+
+        for (int i = 0; i < list.size(); i++) {
+            Log.d("TAG", "list: " + list.get(i));
+
+
+            firebaseFirestore.collection("stories")
+                    .whereEqualTo("userId", list.get(i) + "") // <-- This line
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull final Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+
+
+                                Log.d(TAG, " 1 => test");
+
+                                for (DocumentSnapshot document : task.getResult()) {
+
+
+
+                                    document.getData();
+
+                                    String description = (String) document.get("description");
+                                    String rate = (String) document.get("rate");
+                                    String sound = (String) document.get("sound");
+                                    String title = (String) document.get("title");
+                                    String userId = (String) document.get("userId");
+                                    String storyId = (String) document.getId();
+                                    String userName = "";
+                                    String pic = (String) document.get("pic");
+
+                                    String thumbnail = "";
+
+
+                                    //retrive user data
+                                    for (int i = 0; i < usersDataList.size(); i++) {
+                                        if (usersDataList.get(i).getEmail().equals(userId)) {
+                                            userName = (String) usersDataList.get(i).getUsername();
+                                            thumbnail = (String) usersDataList.get(i).getImg();
+                                            break;
+                                        }
+                                    }
+
+
+                                    Item item = new Item(storyId, title, pic, userId, userName, thumbnail);
+                                    itemList.add(item);
+                                    adapter.notifyDataSetChanged();
+
+                                }
+
+                            } else {
+                                Log.d(TAG, "Error getting documents: ", task.getException());
+                            }
+                        }
+                    });
+
+        }
+
+    }
+
+    public void retriveUserData(final List<String> subscribedUsers, final MyCallback myCallback) {
+
+
+        for (int i = 0; i < subscribedUsers.size(); i++) {
+            DocumentReference docRef2 = firebaseFirestore.collection("users").document(subscribedUsers.get(i));
+            docRef2.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        int c = 0;
+                        DocumentSnapshot userDocument = task.getResult();
+                        if (userDocument.exists()) {
+                            String userName = userDocument.get("username").toString();
+                            String userID = userDocument.getId().toString();
+                            String thumbnail = userDocument.get("thumbnail").toString();
+                            arrayList.add(new User(userID, userName, thumbnail));
+
+                            if (c < subscribedUsers.size())
+                                myCallback.onCallback(arrayList);
+
+                            c++;
+
+                        }
+
+                    }
+                }
+            });
+        }// end retriveUserData
+
+
+    }
+
+
+    public interface MyCallback {
+        void onCallback(ArrayList<User> arrayList);
+    }
+
+
+    private void showDialogWithOkButton(String msg){
+        AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+        builder.setMessage(msg)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
 }

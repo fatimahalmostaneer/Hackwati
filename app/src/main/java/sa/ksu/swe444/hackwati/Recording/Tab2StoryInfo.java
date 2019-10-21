@@ -56,6 +56,7 @@ import sa.ksu.swe444.hackwati.Constants;
 import sa.ksu.swe444.hackwati.MainActivity;
 import sa.ksu.swe444.hackwati.MySharedPreference;
 import sa.ksu.swe444.hackwati.R;
+import sa.ksu.swe444.hackwati.SignUp;
 
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
@@ -114,8 +115,30 @@ public class Tab2StoryInfo extends Fragment {
             public void onClick(View view) {
                 storyId = storyTitleToStoryId();
 
-                uploadImageWithUri();
-                uploadAudio();
+
+                if(storyDiscription.getText().toString().equals("")&& storyTitle.getText().toString().equals("") ){
+                    //show a popup for result
+                    showDialogWithOkButton("الرجاء ادخال عنوان وملخص للقصة!");
+
+                }
+
+                else if (storyDiscription.getText().toString().equals("")) {
+                    //show a popup for result
+                    showDialogWithOkButton("الرجاء مخلص القصة");
+
+                }//end if
+
+                else if (storyTitle.getText().toString().equals("")) {
+                    //show a popup for result
+                    showDialogWithOkButton("الرجاء ادخال عنوان القصة");
+
+                }//end if
+
+                else if(imgPath==null)
+                    showDialogWithOkButton("الرجاء رفع غلاف لقصتك");
+                else{
+                    uploadImageWithUri();
+                uploadAudio();}
 
             }
         });
@@ -407,5 +430,17 @@ public class Tab2StoryInfo extends Fragment {
         Log.d(LOG_TAG, description + title + pic + sound);
 
 
+    }
+    private void showDialogWithOkButton(String msg){
+        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(getContext());
+        builder.setMessage(msg)
+                .setCancelable(false)
+                .setPositiveButton("حسنًا", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                    }
+                });
+        androidx.appcompat.app.AlertDialog alert = builder.create();
+        alert.show();
     }
 }

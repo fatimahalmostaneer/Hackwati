@@ -233,6 +233,10 @@ private final String TAG = "Login";
                                     Toast.LENGTH_SHORT).show();
 
                             if (mAuth.getCurrentUser().isEmailVerified()) {
+
+
+
+
                                 startActivity(new Intent(Login.this, MainActivity.class));
                             } else {
                                 showDialogWithOkButton("تحقق من الرابط المرسل على بريدك لإكمال عملية تسجيل الدخول ");

@@ -22,19 +22,19 @@
             android:layout_marginLeft="25dp"
             android:layout_marginRight="25dp">
 
+
             <Button
                 android:id="@+id/uploadImg"
                 android:layout_width="70dp"
-                android:layout_height="30dp"
+                android:layout_height="50dp"
                 android:layout_below="@id/userImg"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="-6dp"
-                android:layout_marginRight="-90dp"
+                android:layout_marginTop="-57dp"
+                android:layout_marginRight="19dp"
                 android:layout_toLeftOf="@id/userImg"
                 android:background="@drawable/box_shape"
                 android:backgroundTint="#F7E459"
-                android:text="رفع" />
-
+                android:text="ارفع" />
 
             <ImageView
                 android:id="@+id/userImg"
@@ -52,6 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/userImg"
+                android:layout_centerInParent="true"
                 android:layout_marginTop="25dp"
                 android:layout_toLeftOf="@id/nameSignUpHin"
                 android:src="@drawable/ic_edit_black_24dp"
@@ -69,7 +70,7 @@
 
             <TextView
                 android:id="@+id/nameSignUpHin"
-                android:layout_width="270dp"
+                android:layout_width="280dp"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/userImg"
                 android:layout_marginTop="25dp"
@@ -91,7 +92,7 @@
 
             <TextView
                 android:id="@+id/emailSignUpHin"
-                android:layout_width="270dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/nameSignUp"
                 android:layout_marginTop="25dp"
@@ -101,15 +102,6 @@
                 android:hint="البريد الالكتروني"
                 android:textSize="18dp" />
 
-            <ImageView
-                android:id="@+id/edit2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edit1"
-                android:layout_marginTop="25dp"
-                android:layout_toLeftOf="@id/nameSignUpHin"
-                android:layout_alignParentLeft="true"
-                android:src="@drawable/ic_edit_black_24dp" />
 
             <TextView
                 android:id="@+id/passwordSignUp"
@@ -123,7 +115,7 @@
 
             <TextView
                 android:id="@+id/passwordSignUpHin"
-                android:layout_width="240dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/emailSignUp"
                 android:layout_marginTop="25dp"
@@ -133,16 +125,6 @@
                 android:inputType="numberPassword"
                 android:textSize="18dp" />
 
-            <ImageView
-                android:id="@+id/edit3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edit2"
-                android:layout_marginTop="25dp"
-                android:layout_toLeftOf="@id/nameSignUpHin"
-                android:src="@drawable/ic_edit_black_24dp"
-                android:layout_alignParentLeft="true"
-                />
 
             <View
                 android:id="@+id/separator"
@@ -249,26 +231,17 @@
             android:gravity="center">
 
 
-            <Button
-                android:id="@+id/record_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="25dp"
-                android:backgroundTint="#F7E459"
-                android:text="تعديل الملف الشخصي" />
 
 
             <Button
                 android:id="@+id/logout_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/record_profile"
                 android:layout_gravity="center"
                 android:layout_marginTop="15dp"
 
                 android:background="@drawable/box_shape"
-                android:backgroundTint="#E7E7E7"
+                android:backgroundTint="#F1675C"
                 android:text="تسجيل االخروج" />
 
 

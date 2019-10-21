@@ -14,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +44,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-public class UserProfile extends AppCompatActivity {
+public class UserProfile extends BaseActivity {
     Button log_out;
     Button record;
     private ImageView img;
@@ -57,7 +60,7 @@ public class UserProfile extends AppCompatActivity {
     public FirebaseAuth mAuth;
     private Button uploadImg;
     private String imgPath;
-    private ImageView edit1,edit2,edit3;
+    private ImageView edit1;
 
 
     private static final String TAG = "UserProfile";
@@ -67,7 +70,8 @@ public class UserProfile extends AppCompatActivity {
     FirebaseStorage storage = FirebaseStorage.getInstance();
 
 
-    TextView userNameText, emailText;
+    private TextView userNameText, emailText, subscribedno;
+
 
 
     @Override
@@ -81,8 +85,6 @@ public class UserProfile extends AppCompatActivity {
         emailText = findViewById(R.id.emailSignUpHin);
 
 
-
-        record = findViewById(R.id.record_profile);
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         storageRef = storage.getReference();
         mAuth = FirebaseAuth.getInstance();
@@ -98,6 +100,8 @@ public class UserProfile extends AppCompatActivity {
             }
         });
 
+        subscribedno =findViewById(R.id.subscribedno);
+
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,13 +111,16 @@ public class UserProfile extends AppCompatActivity {
             }
         });
 
-        record.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //  CreateAlertDialogWithRadioButtonGroup();
 
-            }
+        edit1 = findViewById(R.id.edit1);
+        edit1.setOnClickListener(new View.OnClickListener() {
+                                     @Override
+                                     public void onClick(View view) {
+                                         showDialogWithTextInput("تعديل اسم المستخدم");
+                                     }
         });
+
+
         log_out = findViewById(R.id.logout_profile);
         log_out.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,6 +163,8 @@ public class UserProfile extends AppCompatActivity {
 
 
                         }
+
+                        subscribedno.setText(document.get("numSubscribers").toString());
 
 
                     } else {
@@ -290,6 +299,7 @@ public class UserProfile extends AppCompatActivity {
 
 
                         DocumentReference updateRef = firebaseFirestore.collection("users").document(userUid);
+                        Toast.makeText(UserProfile.this, "تم رفع الصورة", Toast.LENGTH_SHORT).show();
 
                         // reset the thumbnail" field
                         updateRef
@@ -331,34 +341,56 @@ public class UserProfile extends AppCompatActivity {
         }
     }
 
-    private void updateProfile() {
-
-        edit1 = findViewById(R.id.edit1);
-        edit1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
 
 
-        edit2 = findViewById(R.id.edit2);
-        edit2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
+    public void showDialogWithTextInput(String title) {
 
-        edit3 = findViewById(R.id.edit3);
-        edit3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(UserProfile.this);
+        View mView = layoutInflaterAndroid.inflate(R.layout.user_input_dialog_box, null);
+        final androidx.appcompat.app.AlertDialog.Builder alertDialogBuilderUserInput = new androidx.appcompat.app
+                .AlertDialog.Builder(UserProfile.this);
 
-            }
-        });
+        alertDialogBuilderUserInput.setView(mView)
+                .setTitle(title + "");
+
+        final EditText userInputDialogEditText = (EditText) mView.findViewById(R.id.userInputDialog);
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setPositiveButton("send", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+                        // ToDo get user input here
 
 
+                        DocumentReference washingtonRef = firebaseFirestore.collection("users").document(userUid);
+                        washingtonRef
+                                .update("username", userInputDialogEditText.getText().toString() + "")
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "تم تعديل الاسم");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error updating document", e);
+                                    }
+                                });
+
+
+                    }
+                })
+
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                            }
+                        });
+
+        androidx.appcompat.app.AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        alertDialogAndroid.show();
     }
-
 
 
 }

@@ -2,6 +2,7 @@ package sa.ksu.swe444.hackwati.Recording;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.media.MediaPlayer;
@@ -20,9 +21,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.tyorikan.voicerecordingvisualizer.RecordingSampler;
 
 import java.io.IOException;
@@ -32,6 +35,8 @@ import java.util.Timer;
 
 import sa.ksu.swe444.hackwati.MainActivity;
 import sa.ksu.swe444.hackwati.R;
+import sa.ksu.swe444.hackwati.SignUp;
+import sa.ksu.swe444.hackwati.SplashActivity;
 
 
 @RequiresApi(api = Build.VERSION_CODES.O)
@@ -200,10 +205,40 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
          nextBtn.setOnClickListener(new View.OnClickListener() {
              @Override
              public void onClick(View view) {
-                 if(isRecording)
+                 if (isRecording)
                      recorder.stop();
-                 listener.onNextButton();
-                 isRecording= false;
+
+               /*  if (recorder != null)
+                     showDialogWithOkButton("لم تقم بالتسجيل !");*/
+
+                else{ AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                 builder.setMessage("هل انتهيت التسجيل؟؟")
+                         .setCancelable(false)
+                         .setPositiveButton("نعم، التالي", new DialogInterface.OnClickListener() {
+                             public void onClick(DialogInterface dialog, int id) {
+
+
+
+                                 listener.onNextButton();
+                                 isRecording = false;
+
+
+                             }
+
+                         });
+                 builder.setNeutralButton("إلغاء", new DialogInterface.OnClickListener() {
+                     public void onClick(DialogInterface dialog, int id) {
+
+                     }
+
+                 });
+
+                 AlertDialog alert = builder.create();
+                 alert.show();
+
+
+             }
+
 
              }
          });
@@ -351,6 +386,17 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
         player = null;
     }//stopPlaying()
 
-
+    private void showDialogWithOkButton(String msg){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+        builder.setMessage(msg)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
 
 }// class
