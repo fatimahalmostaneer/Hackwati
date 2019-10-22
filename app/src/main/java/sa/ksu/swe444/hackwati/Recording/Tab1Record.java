@@ -59,7 +59,7 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
     boolean mStartPlaying;
     private TextView timer ;
     private boolean isRecording = false;
-    private boolean startRecording = true;
+    private boolean startRecording;
     private ImageButton imageButton;
     private SecondFragmentListener listener;
 
@@ -101,7 +101,7 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
         // Record to the external cache directory for visibility
         fileName = getActivity().getExternalCacheDir().getAbsolutePath();
         fileName += "/audiorecordtest.3gp";
-
+        startRecording = true;
         ActivityCompat.requestPermissions(getActivity(), permissions, REQUEST_RECORD_AUDIO_PERMISSION);
         recordButton = view.findViewById(R.id.record_btn);
         cancelRecording = view.findViewById(R.id.cancel_recording);
@@ -300,6 +300,8 @@ public class Tab1Record extends Fragment implements View.OnClickListener, IOnFoc
                     isRecording = true;
                     nextBtn.setBackgroundColor(R.color.gray);
                     nextBtn.setEnabled(false);
+                    Toast.makeText(getContext(),"start recording" , Toast.LENGTH_LONG).show();
+
 
                 }else {
                     recorder.stop();
