@@ -34,6 +34,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
@@ -324,6 +325,7 @@ public class Tab2StoryInfo extends Fragment {
         story.put("pic", imgUri);
         story.put("sound", audioUri);
         story.put("duration", audioUri);
+        story.put("timestamp", FieldValue.serverTimestamp());
 
 
         Log.d(LOG_TAG, description + title + pic + sound);
