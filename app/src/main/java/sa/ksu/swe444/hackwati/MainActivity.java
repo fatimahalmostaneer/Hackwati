@@ -82,8 +82,6 @@ public class MainActivity extends AppCompatActivity {
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         initRecyclerView();
-
-
         installButton110to250();
 
         navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -305,8 +303,8 @@ public class MainActivity extends AppCompatActivity {
             Log.d("TAG", "list: " + list.get(i));
 
 
-            firebaseFirestore.collection("stories")
-                    .whereEqualTo("userId", list.get(i) + "") // <-- This line
+            firebaseFirestore.collection("stories").orderBy("timestamp")
+                    .whereEqualTo("userId", list.get(i) + "")// <-- This line
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
@@ -322,9 +320,6 @@ public class MainActivity extends AppCompatActivity {
 
                                     document.getData();
 
-                                    String description = (String) document.get("description");
-                                    String rate = (String) document.get("rate");
-                                    String sound = (String) document.get("sound");
                                     String title = (String) document.get("title");
                                     String userId = (String) document.get("userId");
                                     String storyId = (String) document.getId();

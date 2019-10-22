@@ -28,7 +28,7 @@ public class Item {
     public void setChannelImage(String channelImage) {
         this.channelImage = channelImage;
     }
-/*
+
     public Item(String title, String image, String description, String rate , String sound, String userId) {
         this.title = title;
         this.image = image;
@@ -36,9 +36,9 @@ public class Item {
         this.description=description;
         this.rate=rate;
         this.sound=sound;
-    }*/
+    }
 
-    public Item (String storyId, String title, String image, String userId, String channelName, String channelImage) {
+    public Item(String storyId, String title, String image,String userId) {
         this.title = title;
         this.image = image;
         this.userId=userId;
@@ -56,7 +56,10 @@ public class Item {
 
     }
 
-
+public Item ( String title, String image){
+    this.title = title;
+    this.image = image;
+}
 
 /*    public Item(String title, int image, String channelImage, String views, String channelName, int soundImage) {
         this.title = title;

@@ -41,7 +41,7 @@
 
         <activity android:name=".Recording.RecordingActivity" />
         <activity android:name=".explor.ExploreActivity" />
-
+<activity android:name=".exploreActivity"></activity>
 
         <activity android:name=".MainActivity"/>
         <activity android:name=".AdminActivity"/>

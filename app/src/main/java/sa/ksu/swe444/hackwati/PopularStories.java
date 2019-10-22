@@ -1,4 +1,4 @@
-package sa.ksu.swe444.hackwati.explor;
+package sa.ksu.swe444.hackwati;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -22,10 +22,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-import sa.ksu.swe444.hackwati.Item;
-import sa.ksu.swe444.hackwati.R;
-import sa.ksu.swe444.hackwati.storyAdapter;
-
 import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class PopularStories extends Fragment {
@@ -46,8 +42,7 @@ public class PopularStories extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view= inflater.inflate(R.layout.fragment_popular_stories, container, false);
-
-    recyclerView = view.findViewById(R.id.recycler_view);
+        recyclerView = view.findViewById(R.id.recycler_view);
 
         initRecyclerView();
 
@@ -55,8 +50,8 @@ public class PopularStories extends Fragment {
     }
 
     private void initRecyclerView() {
-        itemList = new ArrayList<>();
 
+        itemList = new ArrayList<>();
         adapter = new storyAdapter(getActivity(),itemList);
         mLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
         recyclerView.setLayoutManager(mLayoutManager);
@@ -73,21 +68,25 @@ public class PopularStories extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<QuerySnapshot> task) {
                         if (task.isSuccessful()) {
-                                for (QueryDocumentSnapshot document : task.getResult()) {
+                            int x=0;
+                            while (x!=10){
+                            for (QueryDocumentSnapshot document : task.getResult()) {
 
-                                    String title = (String) document.get("title");
-                                    String pic = (String) document.get("pic");
+                                String title = (String) document.get("title");
+                                String pic = (String) document.get("pic");
 
-                                    Log.d(TAG, document.getId() + "test rate" + document.get("rate"));
-                                    Item item = new Item( title, pic);
-                                    if(itemList.size()!=10)
-                                    itemList.add(item);
-                                    adapter.notifyDataSetChanged();
-                                }
-                            }else {
+                                Log.d(TAG, document.getId() + "test rate" + document.get("rate"));
+                                Item item = new Item( title, pic);
+                                itemList.add(item);
+                                adapter.notifyDataSetChanged();
+                                x++;
+                            }
+                        } }else {
                             Log.d(TAG, "Error getting documents: ", task.getException());
                         }
                     }
                 });
     }
+
+
 }
