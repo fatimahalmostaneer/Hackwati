@@ -309,8 +309,6 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
         request.setDestinationInExternalFilesDir(context, destinationDir, fileName + fileExtention);
 
         downloadManager.enqueue(request);
-
-
     }
 
 

@@ -372,7 +372,7 @@ public class Tab2StoryInfo extends Fragment {
 
     }
 
-
+    //٠١١٨٠٥٠٠٠٠
     private void uploadImageWithUri() {
         if (imgPath != null) {
 
@@ -405,7 +405,6 @@ public class Tab2StoryInfo extends Fragment {
                         imgUri = downloadURL;
                         addImgToCollection();
                         Log.d(LOG_TAG, downloadURL + " Ya2");
-
                     }
                 }
             });
@@ -413,10 +412,8 @@ public class Tab2StoryInfo extends Fragment {
                 @Override
                 public void onSuccess(Uri uri) {
                     imgUri = uri.toString();
-
                 }
             });
-
 
         }
     }
@@ -436,10 +433,7 @@ public class Tab2StoryInfo extends Fragment {
 
         Task<Void> task = firebaseFirestore.collection("stories").document(storyId).set(story, SetOptions.merge());
 
-
-
         Log.d(LOG_TAG, description + title + pic + sound);
-
 
     }
     private void showDialogWithOkButton(String msg){
