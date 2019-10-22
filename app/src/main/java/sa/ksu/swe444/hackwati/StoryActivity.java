@@ -30,7 +30,8 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
 
     private TextView change, bookName, duration;
     private String user_id;
-    //private Button listenBtn, subscribedBtn;
+    private Button listenBtn;
+        //subscribedBtn;
     private ImageView back, cover;
     private static final String TAG = StoryActivity.class.getSimpleName();
     public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
@@ -38,6 +39,11 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
     public FirebaseAuth mAuth;
     String userUid;
     Button subscribe;
+    String storyDuration;
+    String storyUri;
+    String storyCover;
+
+
 
 
     private String storyId, userStoryId;
@@ -53,10 +59,10 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
         duration = findViewById(R.id.duration);
         bookName = findViewById(R.id.bookName);
         cover = (ImageView) findViewById(R.id.cover);
-
-
+        listenBtn = findViewById(R.id.listenBtn);
         subscribe = findViewById(R.id.subscribeBtn);
         subscribe.setOnClickListener(this);
+        listenBtn.setOnClickListener(this);
 
 
         subscribeUser();
@@ -87,7 +93,6 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
                     if (document.exists()) {
 
                         Log.d(TAG, " 111 document exist");
-
 
                         Intent intent = getIntent();
                         if (intent.getExtras() != null) {
@@ -145,6 +150,10 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
                         String title = (String) document.get("title");
                         String description = (String) document.get("description");
                         String pic = document.get("pic").toString();
+                        storyDuration = (String) document.get("duration");
+                        storyUri = (String) document.get("sound");
+                        storyCover = (String)document.get("pic");
+
                         bookName.setText(title);
                         duration.setText(description);
                         Glide.with(StoryActivity.this)
@@ -177,9 +186,12 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
                     unsubscribUser();
                 } else
                     subscribe.setVisibility(View.INVISIBLE);
-
-
                 break;
+            case R.id.listenBtn:
+                Intent intent = new Intent(StoryActivity.this, InnerStoryActivity.class);
+                intent.putExtra(Constants.Keys.STORY_AUDIO,storyUri );
+                intent.putExtra(Constants.Keys.STORY_COVER ,storyCover);
+                startActivity(intent);
 
 
         }

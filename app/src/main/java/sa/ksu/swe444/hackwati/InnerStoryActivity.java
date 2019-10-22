@@ -19,6 +19,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -59,6 +60,11 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
 
 
     Uri audio_url;
+    Uri uri ;
+    Uri  img;
+
+    ImageView storyCover;
+
 
 
     @Override
@@ -79,9 +85,8 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
         // download();
 
 
-        Uri uri = Uri.parse("https://firebasestorage.googleapis.com/v0/b/hackwati444.appspot.com/o/YEWKT0YD92bY2bGsG4evggu5X8t1%2Frere%2Faudio.3gp?alt=media&token=0ab52c20-5322-4041-8662-3076ba5827c3");
-
-        mediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.child_story);
+        getExtras();
+        mediaPlayer = MediaPlayer.create(getBaseContext(), uri);
         seekBar.setMax(mediaPlayer.getDuration());
 
 
@@ -102,6 +107,10 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
 
         seekBar.postDelayed(mUpdateSeekbar, 100);
 
+        Glide.with(InnerStoryActivity.this)
+                .load(img + "")
+                .into(storyCover);
+
     }//end onCreate
 
     private void init() {
@@ -115,6 +124,7 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
         speed = findViewById(R.id.speed);
         remainingTime = findViewById(R.id.remaining_time);
         currentTime = findViewById(R.id.currentTime);
+        storyCover = findViewById(R.id.story_cover);
         //  myService = new MyService();
         RL = findViewById(R.id.Dialog);
         storage = FirebaseStorage.getInstance();
@@ -339,5 +349,17 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
 
             }
         });
+    }
+
+    private void getExtras() {
+
+        Intent intent = getIntent();
+        if (intent.getExtras() != null) {
+       uri = Uri.parse(intent.getExtras().getString(Constants.Keys.STORY_AUDIO));
+       img = Uri.parse(intent.getExtras().getString(Constants.Keys.STORY_COVER));
+
+
+        }
+
     }
 }// end class

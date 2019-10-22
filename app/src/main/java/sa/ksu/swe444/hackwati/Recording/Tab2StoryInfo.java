@@ -3,11 +3,13 @@ package sa.ksu.swe444.hackwati.Recording;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -43,6 +45,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -138,7 +141,7 @@ public class Tab2StoryInfo extends Fragment {
                 else if(imgPath==null)
                     showDialogWithOkButton("الرجاء رفع غلاف لقصتك");
 
-                    uploadImageWithUri();
+                uploadImageWithUri();
                 uploadAudio();
 
             }
@@ -173,7 +176,6 @@ public class Tab2StoryInfo extends Fragment {
                 try {
                     Bitmap bitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), contentURI);
                     // String path = saveImage(bitmap);
-                    Toast.makeText(getContext(), "Image Saved!", Toast.LENGTH_SHORT).show();
                     img.setImageBitmap(bitmap);
                     isSelectImage = true;
                     persistImage(bitmap);
@@ -189,8 +191,15 @@ public class Tab2StoryInfo extends Fragment {
         } else if (requestCode == INTENT_CAMERA) {
             Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
             img.setImageBitmap(thumbnail);
+
+            if(data != null)
+                contentURI = bitmapToUriConverter(thumbnail);
+            else
+                Toast.makeText(getContext(), "NULLLLLLLLL", Toast.LENGTH_LONG).show();
+
+
+
             // saveImage(thumbnail);
-            Toast.makeText(getContext(), "Image Saved!", Toast.LENGTH_SHORT).show();
         }//end if statement1
     }//end onActivityResult()
 
@@ -264,7 +273,7 @@ public class Tab2StoryInfo extends Fragment {
 
 
         // get Uri
-        Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+        uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
             @Override
             public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                 if (!task.isSuccessful()) {
@@ -296,7 +305,6 @@ public class Tab2StoryInfo extends Fragment {
                         audioUri = uri.toString();
                         addStoryToCollection();
 
-                        Toast.makeText(getContext(), "Audio URI !!!", Toast.LENGTH_LONG).show();
                     }
                 });
             }
@@ -319,14 +327,13 @@ public class Tab2StoryInfo extends Fragment {
         String sound = MySharedPreference.getString(getContext(), Constants.Keys.STORY_AUDIO, "");
 
         story.put("description", description);
-        story.put("rate", rate);
+        story.put("rate", "0");
         story.put("title", title);
         story.put("userId", userId);
         story.put("pic", imgUri);
         story.put("sound", audioUri);
-        story.put("duration", audioUri);
+        //call back tto get Duration
         story.put("timestamp", FieldValue.serverTimestamp());
-
 
         Log.d(LOG_TAG, description + title + pic + sound);
 
@@ -335,7 +342,6 @@ public class Tab2StoryInfo extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getContext(), "story audio added", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getContext(), MainActivity.class));
 
 
@@ -375,10 +381,13 @@ public class Tab2StoryInfo extends Fragment {
             final StorageReference filepathImg = storageRef.child(userId).child(storyId).child("img.jpeg");
 
             //uploading the image
+            if(contentURI == null)
+                Toast.makeText(getContext(), "NULLLLLLLLL!!!!!!!!!!!!!", Toast.LENGTH_LONG).show();
+
             final UploadTask uploadTask = filepathImg.putFile(contentURI);
 
             // get Uri
-            Task<Uri> urlTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+             uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                 @Override
                 public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
                     if (!task.isSuccessful()) {
@@ -444,5 +453,58 @@ public class Tab2StoryInfo extends Fragment {
                 });
         androidx.appcompat.app.AlertDialog alert = builder.create();
         alert.show();
+    }
+
+    public Uri bitmapToUriConverter(Bitmap mBitmap) {
+        Uri uri = null;
+        try {
+            final BitmapFactory.Options options = new BitmapFactory.Options();
+            // Calculate inSampleSize
+            options.inSampleSize = calculateInSampleSize(options, 100, 100);
+
+            // Decode bitmap with inSampleSize set
+            options.inJustDecodeBounds = false;
+            Bitmap newBitmap = Bitmap.createScaledBitmap(mBitmap, 200, 200,
+                    true);
+            File file = new File(getActivity().getFilesDir(), "Image"
+                    + new Random().nextInt() + ".png");
+            FileOutputStream out = getActivity().openFileOutput(file.getName(),
+                    Context.MODE_WORLD_READABLE);
+            newBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.flush();
+            out.close();
+            //get absolute path
+            String realPath = file.getAbsolutePath();
+            File f = new File(realPath);
+            uri = Uri.fromFile(f);
+
+        } catch (Exception e) {
+            Log.e("Your Error Message", e.getMessage());
+        }
+        return uri;
+    }
+
+
+    public static int calculateInSampleSize(
+            BitmapFactory.Options options, int reqWidth, int reqHeight) {
+        // Raw height and width of image
+        final int height = options.outHeight;
+        final int width = options.outWidth;
+        int inSampleSize = 1;
+
+        if (height > reqHeight || width > reqWidth) {
+
+            final int halfHeight = height / 2;
+            final int halfWidth = width / 2;
+
+            // Calculate the largest inSampleSize value that is a power of 2 and keeps both
+            // height and width larger than the requested height and width.
+            while ((halfHeight / inSampleSize) >= reqHeight
+                    && (halfWidth / inSampleSize) >= reqWidth) {
+                inSampleSize *= 2;
+            }
+        }
+
+        return inSampleSize;
     }
 }
