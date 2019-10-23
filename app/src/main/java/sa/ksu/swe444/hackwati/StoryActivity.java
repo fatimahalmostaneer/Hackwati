@@ -28,7 +28,7 @@ import java.util.List;
 public class StoryActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    private TextView change, bookName, duration;
+    private TextView change, bookName, duration,discrebtionM;
     private String user_id;
     private Button listenBtn;
         //subscribedBtn;
@@ -59,6 +59,7 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         duration = findViewById(R.id.duration);
         bookName = findViewById(R.id.bookName);
+        discrebtionM = findViewById(R.id.discrebtion);
         cover = (ImageView) findViewById(R.id.cover);
         listenBtn = findViewById(R.id.listenBtn);
         subscribe = findViewById(R.id.subscribeBtn);
@@ -162,6 +163,7 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
                         Glide.with(StoryActivity.this)
                                 .load(pic + "")
                                 .into(cover);
+                        discrebtionM.setText(description);
 
 
 
