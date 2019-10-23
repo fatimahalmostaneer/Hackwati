@@ -30,7 +30,7 @@
                 android:layout_below="@id/relImg"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="-57dp"
-                android:layout_marginRight="19dp"
+                android:layout_marginRight="-5dp"
                 android:layout_toLeftOf="@id/relImg"
                 android:background="@drawable/box_shape"
                 android:backgroundTint="#F7E459"
@@ -41,8 +41,9 @@
                 android:layout_width="105dp"
                 android:layout_height="73dp"
                 android:layout_marginTop="80dp"
+
                 android:layout_alignParentTop="true"
-                android:layout_centerInParent="true">
+                android:layout_alignParentRight="true">
             <ImageView
                 android:id="@+id/userImg"
                 android:layout_width="105dp"
@@ -59,7 +60,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="+ "
-                    android:textSize="70dp" />
+                    android:textSize="70dp"
+                    android:textColor="#94B9B8"/>
 
             </RelativeLayout>
             <ImageView
@@ -81,6 +83,8 @@
                 android:layout_below="@+id/relImg"
                 android:layout_marginTop="25dp"
                 android:text="الاسم:   "
+                android:textColor="#94B9B8"
+                android:textStyle="bold"
                 android:textSize="18dp" />
 
             <TextView
@@ -103,6 +107,8 @@
                 android:layout_below="@+id/nameSignUp"
                 android:layout_marginTop="25dp"
                 android:text="الايميل: "
+                android:textColor="#94B9B8"
+                android:textStyle="bold"
                 android:textSize="18dp" />
 
             <TextView
@@ -137,6 +143,8 @@
                 android:layout_below="@+id/emailSignUp"
                 android:layout_marginTop="25dp"
                 android:text="النبذة:   "
+                android:textColor="#94B9B8"
+                android:textStyle="bold"
                 android:textSize="18dp" />
 
             <TextView
@@ -148,8 +156,24 @@
                 android:layout_toLeftOf="@+id/nameSignUp"
                 android:ems="10"
                 android:gravity="left"
-                android:hint="النبذة"
+                android:hint="     "
                 android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/infotext"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/infoSignUp"
+                android:layout_marginTop="10dp"
+                android:ems="10"
+                android:gravity="left"
+                android:hint="    gpojposj "
+                android:textAlignment="center"
+                android:textSize="18dp"
+                android:background="@drawable/box_shape"
+                android:backgroundTint="#F5F5F5"
+
+                />
 
 
 
@@ -160,7 +184,7 @@
                 android:id="@+id/separator"
                 android:layout_width="fill_parent"
                 android:layout_height="1dip"
-                android:layout_below="@id/infoSignUp"
+                android:layout_below="@id/infotext"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="25dp"
                 android:background="#A0A0A0" />
@@ -183,60 +207,69 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
-                android:text="عدد المتابعين"
-                android:textSize="18dp" />
+                android:text=" المتابعين"
+                android:textSize="18dp"
+                android:textColor="#94B9B8"
+               />
 
             <TextView
                 android:id="@+id/subscriberno"
-                android:layout_width="match_parent"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="25dp"
                 android:layout_toLeftOf="@id/subscriber"
                 android:ems="10"
-                android:gravity="left"
-                android:hint="-"
-                android:textSize="18dp" />
+                android:textStyle="bold"
+                android:textAlignment="center"
+                android:textSize="18dp"
+                android:hint="-" />
 
             <TextView
                 android:id="@+id/subscribed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/subscriber"
+                android:layout_toLeftOf="@+id/subscriberno"
                 android:layout_marginTop="25dp"
-                android:text="عدد المتابعون"
+                android:text=" المتابعون"
+                android:textColor="#94B9B8"
+
                 android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/subscribedno"
-                android:layout_width="match_parent"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/subscriberno"
                 android:layout_marginTop="25dp"
                 android:layout_toLeftOf="@id/subscribed"
                 android:ems="10"
-                android:gravity="left"
+                android:textStyle="bold"
+                android:textAlignment="center"
                 android:hint="-"
-                android:textSize="18dp" />
+
+                android:textSize="18dp"/>
 
             <TextView
                 android:id="@+id/story"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/subscribed"
+                android:layout_toLeftOf="@id/subscribedno"
                 android:layout_marginTop="25dp"
-                android:text="عدد القصص"
+                android:text=" القصص"
+                android:textColor="#94B9B8"
+
                 android:textSize="18dp" />
 
             <TextView
                 android:id="@+id/storyno"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/subscribedno"
                 android:layout_marginTop="25dp"
                 android:layout_toLeftOf="@id/story"
                 android:ems="10"
                 android:gravity="left"
-                android:hint="-"
+                android:hint="0"
+                android:textStyle="bold"
+                android:textAlignment="center"
                 android:textSize="18dp" />
 
             <View
@@ -297,30 +330,6 @@
         />
 
 
-    <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
-        <at.blogc.android.views.ExpandableTextView
-            android:id="@+id/expandableTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="test"
-            android:maxLines="5"
-            android:ellipsize="end"
-            app:animation_duration="750"/>
-
-        <!-- Optional parameter animation_duration: sets the duration of the expand animation -->
-
-        <Button
-            android:id="@+id/button_toggle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+"/>
-
-    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
