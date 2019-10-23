@@ -37,7 +37,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
     private EditText login_password;
     private EditText login_email;
-    private  String entered_password;
+    private String entered_password;
     private String entered_email;
     private Button loginBtn;
     private SignInButton loginGoogleBtn;
@@ -47,6 +47,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private GoogleSignInOptions gso;
     private EditText forget_email;
 
+    public String userID;
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -56,7 +57,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private boolean verify = false;
 
     // ...
-private final String TAG = "Login";
+    private final String TAG = "Login";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,12 +65,23 @@ private final String TAG = "Login";
         setContentView(R.layout.login);
         init();
 
+        FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
+        if(mFirebaseUser != null) {
+            userID = mFirebaseUser.getUid(); //Do what you need to do with the id
+        }
+
+       // userID=FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(firebaseAuth.getCurrentUser() != null){
-                    if(verify) {
+                if (firebaseAuth.getCurrentUser() != null) {
+                    if (verify) {
+
+
                         startActivity(new Intent(Login.this, MainActivity.class));
+
+                        // startActivity(new Intent(Login.this, MainActivity.class));
                     }
 
                 }
@@ -87,7 +99,7 @@ private final String TAG = "Login";
 
     }// end of onCreate()
 
-    private  void init(){
+    private void init() {
 
         //init
         login_email = findViewById(R.id.email_login);
@@ -115,7 +127,7 @@ private final String TAG = "Login";
     @Override
     public void onClick(View view) {
 
-        switch (view.getId()){
+        switch (view.getId()) {
 
             case R.id.loginbutton_login:
                 signIn();
@@ -136,7 +148,7 @@ private final String TAG = "Login";
 
     }//end of onClick
 
-    private void showDialoge(){
+    private void showDialoge() {
         final AlertDialog dialogBuilder = new AlertDialog.Builder(this).create();
         LayoutInflater inflater = this.getLayoutInflater();
         View dialogView = inflater.inflate(R.layout.reset_password, null);
@@ -144,8 +156,8 @@ private final String TAG = "Login";
 
 
         forget_email = dialogView.findViewById(R.id.edt_comment);
-        Button button1 =  dialogView.findViewById(R.id.buttonSubmit);
-        Button button2 =  dialogView.findViewById(R.id.buttonCancel);
+        Button button1 = dialogView.findViewById(R.id.buttonSubmit);
+        Button button2 = dialogView.findViewById(R.id.buttonCancel);
 
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -157,7 +169,7 @@ private final String TAG = "Login";
             @Override
             public void onClick(View view) {
                 forgetPassword(forget_email.getText().toString());
-                Log.d(TAG, "signInWithEmail:"+forgetPassword.getText().toString());
+                Log.d(TAG, "signInWithEmail:" + forgetPassword.getText().toString());
 
                 dialogBuilder.dismiss();
             }
@@ -174,10 +186,10 @@ private final String TAG = "Login";
             @Override
             public void onComplete(@NonNull Task<Void> task) {
 
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     Toast.makeText(Login.this, "password is sent",
                             Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     Toast.makeText(Login.this, "password is NOT sent",
                             Toast.LENGTH_SHORT).show();
                 }
@@ -186,13 +198,11 @@ private final String TAG = "Login";
     }
 
 
-
-
     private void googleSignIn() {
         progressBar.setVisibility(View.VISIBLE);
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
-      }// end of googleSignIn
+    }// end of googleSignIn
 
     private void signIn() {
         //input
@@ -201,13 +211,11 @@ private final String TAG = "Login";
         entered_password = login_password.getText().toString();
 
 
-        if(entered_password.equals("")&& entered_email.equals("")){
+        if (entered_password.equals("") && entered_email.equals("")) {
             //show a popup for result
             showDialogWithOkButton("الرجاء ادخال البريد الالكتروني وكلمة المرور");
 
-        }
-
-        else if (entered_email.equals("")) {
+        } else if (entered_email.equals("")) {
             //show a popup for result
             showDialogWithOkButton("الرجاء ادخال البريد الالكتروني");
 
@@ -220,45 +228,51 @@ private final String TAG = "Login";
 
         }
 
-        if(!entered_email.equals("")&& !entered_password.equals(""))
-        {
-        mAuth.signInWithEmailAndPassword(entered_email, entered_password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            Toast.makeText(Login.this, "Authentication succeeded",
-                                    Toast.LENGTH_SHORT).show();
+        if (!entered_email.equals("") && !entered_password.equals("")) {
+            mAuth.signInWithEmailAndPassword(entered_email, entered_password)
+                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                // Sign in success, update UI with the signed-in user's information
+                                Log.d(TAG, "signInWithEmail:success");
+                                Toast.makeText(Login.this, "Authentication succeeded",
+                                        Toast.LENGTH_SHORT).show();
 
-                            if (mAuth.getCurrentUser().isEmailVerified()) {
-
+                                if (mAuth.getCurrentUser().isEmailVerified()) {
 
 
+                                   // startActivity(new Intent(Login.this, MainActivity.class));
+                                } else {
+                                    showDialogWithOkButton("تحقق من الرابط المرسل على بريدك لإكمال عملية تسجيل الدخول ");
+                                }
 
-                                startActivity(new Intent(Login.this, MainActivity.class));
+
+
+                                if (mAuth.getCurrentUser().getUid().equalsIgnoreCase("DUbp3gH497gydI7fJodUfRz9A2K3")
+                                        || mAuth.getCurrentUser().getUid() == "DUbp3gH497gydI7fJodUfRz9A2K3") {
+                                    Log.d(TAG, "addmin"+userID);
+                                    startActivity(new Intent(Login.this, AdminActivity.class));
+                                }
+                                else
+                                    startActivity(new Intent(Login.this, MainActivity.class));
+                                //    startActivity(new Intent(Login.this, AdminActivity.class));
+
+                                //updateUI(user);
                             } else {
-                                showDialogWithOkButton("تحقق من الرابط المرسل على بريدك لإكمال عملية تسجيل الدخول ");
+                                // If sign in fails, display a message to the user.
+                                Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                Toast.makeText(Login.this, "Authentication failed google.",
+                                        Toast.LENGTH_SHORT).show();
+                                showDialogWithOkButton("البريد الإلكتروني غير صالح");
+                                // updateUI(null);
                             }
 
-
-                            startActivity(new Intent(Login.this, MainActivity.class));
-                            //updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(Login.this, "Authentication failed google.",
-                                    Toast.LENGTH_SHORT).show();
-                            showDialogWithOkButton("البريد الإلكتروني غير صالح");
-                            // updateUI(null);
+                            // ...
                         }
+                    });
 
-                        // ...
-                    }
-                });
-
-    }
+        }
 
     }//end of signIn
 
@@ -301,7 +315,7 @@ private final String TAG = "Login";
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         // [START_EXCLUDE silent]
-       // showProgressDialog();
+        // showProgressDialog();
         // [END_EXCLUDE]
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -313,40 +327,40 @@ private final String TAG = "Login";
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            if(mAuth.getCurrentUser().isEmailVerified()){
+                            if (mAuth.getCurrentUser().isEmailVerified()) {
                                 startActivity(new Intent(Login.this, MainActivity.class));
-                            }else {
+                            } else {
                                /* Toast.makeText(Login.this, "email not verified",
                                         Toast.LENGTH_SHORT).show();*/
-                              showDialogWithOkButton("البريد الإلكتروني غير صالح");
+                                showDialogWithOkButton("البريد الإلكتروني غير صالح");
                             }
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
-                           // Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            // Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
                             //updateUI(null);
                             showDialogWithOkButton("الرجاء ادخال المعلومات");
                         }
 
                         // [START_EXCLUDE]
-                       // hideProgressDialog();
+                        // hideProgressDialog();
                         // [END_EXCLUDE]
                     }
                 });
     } // [END auth_with_google]
-private void showDialogWithOkButton(String msg){
-    AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
-    builder.setMessage(msg)
-            .setCancelable(false)
-            .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int id) {
-                    //do things
-                }
-            });
-    AlertDialog alert = builder.create();
-    alert.show();
-}
 
-    // [START basic_write]
+    private void showDialogWithOkButton(String msg) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Login.this);
+        builder.setMessage(msg)
+                .setCancelable(false)
+                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //do things
+                    }
+                });
+        AlertDialog alert = builder.create();
+        alert.show();
+    }
+
 
 }// end of class

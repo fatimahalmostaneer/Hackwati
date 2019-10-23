@@ -1,6 +1,7 @@
 package sa.ksu.swe444.hackwati;
 
 import android.annotation.SuppressLint;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Rect;
@@ -9,10 +10,12 @@ import android.util.Log;
 import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.navigation.NavController;
@@ -54,8 +57,9 @@ public class AdminActivity extends AppCompatActivity {
     public View item;
     private TextView emptyStories;
     private String userUid;
+    private Button goToStory;
     public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
-    private static final String TAG = "MainActivity";
+    private static final String TAG = "AdminActivity";
 
     public String userName, userTumbnail;
 
@@ -64,19 +68,13 @@ public class AdminActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.admin_activity_main);
         emptyStories =findViewById(R.id.emptyStories);
         navView = findViewById(R.id.nav_view);
         toolbarMain = (Toolbar) findViewById(R.id.toolbarMain);
         setSupportActionBar(toolbarMain);
 
-
-        AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_explore, R.id.navigation_record, R.id.navigation_subscription)
-                .build();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
-        NavigationUI.setupWithNavController(navView, navController);
+        installButton110to250();
 
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -84,27 +82,8 @@ public class AdminActivity extends AppCompatActivity {
 
 
 
-        navView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                switch (item.getItemId()) {
 
-                    case R.id.navigation_record:
-                        startActivity(new Intent(AdminActivity.this, RecordingActivity.class));
-                        break;
 
-                    case R.id.navigation_subscription:
-                        startActivity(new Intent(AdminActivity.this, AdminActivity.class));
-                        break;
-
-                    case R.id.navigation_explore:
-                        startActivity(new Intent(AdminActivity.this, ExploreActivity.class));
-                        break;
-
-                }// end of switch
-                return true;
-            }
-        });
 
 
     }// end of OnCreate()
@@ -113,15 +92,90 @@ public class AdminActivity extends AppCompatActivity {
 
         recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         adapter = new storyAdapter(this, itemList);
-        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 2);
+        RecyclerView.LayoutManager mLayoutManager = new GridLayoutManager(this, 1);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.addItemDecoration(new GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
         retrieveSubscribedUsers();
+
     }
 
 
+
+    private void installButton110to250() {
+
+
+        final AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable_110_250);
+        final List<ButtonData> buttonDatas = new ArrayList<>();
+        int[] drawable = {R.drawable.defult_thumbnail, R.drawable.ic_power_settings_new_black_24dp, R.drawable.ic_search_black_24dp};// gray is some thing else
+        int[] color = {R.color.colorAccent, R.color.colorAccent, R.color.colorAccent, R.color.colorAccent};
+        for (int i = 0; i < 3; i++) {
+            ButtonData buttonData;
+            if (i == 0) {
+                buttonData = ButtonData.buildIconButton(this, drawable[i], 7);
+            } else {
+                buttonData = ButtonData.buildIconButton(this, drawable[i], 0);
+            }
+            buttonData.setBackgroundColorId(this, color[i]);
+            buttonDatas.add(buttonData);
+        }
+        button.setButtonDatas(buttonDatas);
+        setListener(button);
+    }
+
+    private void setListener(final AllAngleExpandableButton button) {
+        button.setButtonEventListener(new ButtonEventListener() {
+            @Override
+            public void onButtonClicked(int index) {
+                switch (index) {
+                    case 1:
+
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(AdminActivity.this);
+                        builder.setMessage("هل أنت متأكد من أنك تريد تسجيل الخروج؟")
+                                .setCancelable(false)
+                                .setPositiveButton("أنا متأكد", new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int id) {
+
+                                        FirebaseAuth.getInstance().signOut();
+                                        startActivity(new Intent(AdminActivity.this, SplashActivity.class));
+
+                                        finish();
+
+                                    }
+
+                                });
+                        builder.setNeutralButton("إلغاء", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+
+                            }
+
+                        });
+
+                        AlertDialog alert = builder.create();
+                        alert.show();
+
+
+
+                        break;
+                    case 2:
+                        break;
+
+                }
+            }
+
+            @Override
+            public void onExpand() {
+
+
+            }
+
+            @Override
+            public void onCollapse() {
+            }
+        });
+    }
 
 
     private int dpToPx(int dp) {
@@ -197,7 +251,7 @@ public class AdminActivity extends AppCompatActivity {
                                         String storyId = (String) document.getId();
                                         userName = "";
                                         userTumbnail = "";
-                                        Item item = new Item(storyId,title,pic,userId,userName,userTumbnail);
+                                       Item item = new Item(storyId, title, pic,userId, sound);
                                         itemList.add(item);
                                         adapter.notifyDataSetChanged();
 

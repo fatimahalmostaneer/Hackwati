@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -25,6 +26,8 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -60,11 +63,10 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
 
 
     Uri audio_url;
-    Uri uri ;
-    Uri  img;
+    Uri uri;
+    Uri img;
 
     ImageView storyCover;
-
 
 
     @Override
@@ -353,11 +355,14 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
 
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
-       uri = Uri.parse(intent.getExtras().getString(Constants.Keys.STORY_AUDIO));
-       img = Uri.parse(intent.getExtras().getString(Constants.Keys.STORY_COVER));
+            uri = Uri.parse(intent.getExtras().getString(Constants.Keys.STORY_AUDIO));
+            img = Uri.parse(intent.getExtras().getString(Constants.Keys.STORY_COVER));
 
 
         }
 
     }
+
+
+
 }// end class

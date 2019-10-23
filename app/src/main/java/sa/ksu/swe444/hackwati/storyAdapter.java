@@ -35,7 +35,7 @@ public class storyAdapter extends RecyclerView.Adapter<storyAdapter.MyViewHolder
 
 
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull final View itemView) {
             super(itemView);
             title=itemView.findViewById(R.id.title);
             channelName=itemView.findViewById(R.id.channelname);
@@ -50,17 +50,27 @@ public class storyAdapter extends RecyclerView.Adapter<storyAdapter.MyViewHolder
                     mContext.startActivity(intent); // to start another activity
 */
 
+
+
                     int clickedPosition = getAdapterPosition();
                     //todo intent action
                     if (clickedPosition != RecyclerView.NO_POSITION) {
 
                         Item clickedStory = itemList.get(clickedPosition);
+
+
                         storyId = clickedStory.getStoryId();
+
+
                         Context context = view.getContext();
+
+
                         if(userUid.equals("DUbp3gH497gydI7fJodUfRz9A2K3")){
                         Intent intent = new Intent(context, AdminStoryActivity.class);
                         intent.putExtra(Constants.Keys.STORY_ID, storyId);
                         intent.putExtra(Constants.Keys.STORY_USER_ID, clickedStory.getUserId());
+                            intent.putExtra(Constants.Keys.STORY_AUDIO,clickedStory.getSound() );
+                            intent.putExtra(Constants.Keys.STORY_COVER ,clickedStory.getImage());
                         context.startActivity(intent);}
                         else{
                             Intent intent = new Intent(context, StoryActivity.class);
@@ -93,8 +103,15 @@ public class storyAdapter extends RecyclerView.Adapter<storyAdapter.MyViewHolder
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activit_main_item_layout, parent, false);
+        View itemView;
+        if (userUid.equals("DUbp3gH497gydI7fJodUfRz9A2K3")) {
+             itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.admin_activit_item_layout, parent, false);
+        }
+
+        else {
+             itemView = LayoutInflater.from(parent.getContext())
+                    .inflate(R.layout.activit_main_item_layout, parent, false);}
 
 
         return new MyViewHolder(itemView);

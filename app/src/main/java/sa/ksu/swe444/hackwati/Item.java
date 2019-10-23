@@ -13,6 +13,8 @@ public class Item {
     private int soundImage;
     private String storyId;
 
+
+
     public String getChannelName() {
         return channelName;
     }
@@ -45,6 +47,15 @@ public class Item {
         this.channelName=channelName;
         this.channelImage=channelImage;
         this.storyId=storyId;
+
+    }   public Item(String storyId, String title, String image,String userId,String sound) {
+        this.title = title;
+        this.image = image;
+        this.userId=userId;
+        this.channelName=channelName;
+        this.channelImage=channelImage;
+        this.storyId=storyId;
+        this.sound=sound;
 
     }
 
@@ -88,6 +99,15 @@ public Item ( String title, String image){
 
     public void setImage(String image) {
         this.image = image;
+    }
+
+
+   public String getSound() {
+        return sound;
+    }
+
+    public void setSound(String sound) {
+        this.sound = sound;
     }
 
     public String getStoryId() {

@@ -163,22 +163,14 @@ public class MainActivity extends AppCompatActivity {
 
                                         FirebaseAuth.getInstance().signOut();
                                         startActivity(new Intent(MainActivity.this, SplashActivity.class));
-
-                                        finish();
-
                                     }
 
                                 });
                         builder.setNeutralButton("إلغاء", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-
-                            }
-
-                        });
+                            public void onClick(DialogInterface dialog, int id) { }});
 
                         AlertDialog alert = builder.create();
                         alert.show();
-
 
 
                         break;
@@ -303,7 +295,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("TAG", "list: " + list.get(i));
 
 
-            firebaseFirestore.collection("stories").orderBy("timestamp")
+            firebaseFirestore.collection("stories")
                     .whereEqualTo("userId", list.get(i) + "")// <-- This line
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -315,7 +307,6 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d(TAG, " 1 => test");
 
                                 for (DocumentSnapshot document : task.getResult()) {
-
 
 
                                     document.getData();
@@ -393,7 +384,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void showDialogWithOkButton(String msg){
+    private void showDialogWithOkButton(String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
         builder.setMessage(msg)
                 .setCancelable(false)

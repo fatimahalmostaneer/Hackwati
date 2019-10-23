@@ -27,31 +27,46 @@
                 android:id="@+id/uploadImg"
                 android:layout_width="70dp"
                 android:layout_height="50dp"
-                android:layout_below="@id/userImg"
+                android:layout_below="@id/relImg"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="-57dp"
                 android:layout_marginRight="19dp"
-                android:layout_toLeftOf="@id/userImg"
+                android:layout_toLeftOf="@id/relImg"
                 android:background="@drawable/box_shape"
                 android:backgroundTint="#F7E459"
                 android:text="ارفع" />
 
+            <RelativeLayout
+                android:id="@+id/relImg"
+                android:layout_width="105dp"
+                android:layout_height="73dp"
+                android:layout_marginTop="80dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true">
             <ImageView
                 android:id="@+id/userImg"
                 android:layout_width="105dp"
                 android:layout_height="73dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
-                android:layout_marginTop="80dp"
                 android:alpha=".6"
+
                 android:onClick="selectImage"
                 android:src="@drawable/defult_thumbnail" />
 
+                <TextView
+                    android:id="@+id/plus"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="+ "
+                    android:textSize="70dp" />
+
+            </RelativeLayout>
             <ImageView
                 android:id="@+id/edit1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/userImg"
+                android:layout_below="@+id/relImg"
                 android:layout_centerInParent="true"
                 android:layout_marginTop="25dp"
                 android:layout_toLeftOf="@id/nameSignUpHin"
@@ -63,7 +78,7 @@
                 android:id="@+id/nameSignUp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/userImg"
+                android:layout_below="@+id/relImg"
                 android:layout_marginTop="25dp"
                 android:text="الاسم:   "
                 android:textSize="18dp" />
@@ -72,7 +87,7 @@
                 android:id="@+id/nameSignUpHin"
                 android:layout_width="280dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/userImg"
+                android:layout_below="@+id/relImg"
                 android:layout_marginTop="25dp"
                 android:layout_toLeftOf="@+id/nameSignUp"
                 android:ems="10"

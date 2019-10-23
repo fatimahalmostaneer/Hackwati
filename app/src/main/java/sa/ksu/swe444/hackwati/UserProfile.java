@@ -16,11 +16,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 
@@ -30,7 +30,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -50,8 +49,7 @@ import java.util.List;
 public class UserProfile extends BaseActivity {
     Button log_out;
     Button record;
-    private ImageView img;
-    private static int INTENT_CAMERA = 401;
+    private TextView relImg;
     private static int INTENT_GALLERY = 301;
     private boolean isSelectImage;
     Uri contentURI;
@@ -60,7 +58,7 @@ public class UserProfile extends BaseActivity {
     public FirebaseAuth mAuth;
     private Button uploadImg;
     private String imgPath;
-    private ImageView edit1;
+    private ImageView edit1,img;
 
 
     private static final String TAG = "UserProfile";
@@ -81,6 +79,7 @@ public class UserProfile extends BaseActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        img = findViewById(R.id.userImg);
         userNameText = findViewById(R.id.nameSignUpHin);
         emailText = findViewById(R.id.emailSignUpHin);
 
@@ -89,7 +88,7 @@ public class UserProfile extends BaseActivity {
         storageRef = storage.getReference();
         mAuth = FirebaseAuth.getInstance();
 
-        img = findViewById(R.id.userImg);
+        relImg = findViewById(R.id.plus);
         uploadImg = findViewById(R.id.uploadImg);
         uploadImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,7 +101,7 @@ public class UserProfile extends BaseActivity {
 
         subscribedno =findViewById(R.id.subscribedno);
 
-        img.setOnClickListener(new View.OnClickListener() {
+        relImg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -205,11 +204,7 @@ public class UserProfile extends BaseActivity {
                 }// end catch
             }//end if statement
 
-        } else if (requestCode == INTENT_CAMERA) {
-            Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
-            img.setImageBitmap(thumbnail);
-            Toast.makeText(UserProfile.this, "Image Saved!", Toast.LENGTH_SHORT).show();
-        }//end if statement1
+        }
     }//end onActivityResult()
 
     private void persistImage(Bitmap bitmap) {
@@ -238,14 +233,12 @@ public class UserProfile extends BaseActivity {
     }//end of openCameraChooser()
 
     private void showPhotoOptionsDialog() {
-        final CharSequence[] items = {"Camera", "Gallery"};
+        final CharSequence[] items = { "Gallery"};
         AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int item) {
-                if (items[item].equals("Camera")) {
-                    cameraIntent();
-                } else if (items[item].equals("Gallery")) {
+            if (items[item].equals("Gallery")) {
                     galleryIntent();
                 }//end if else
             }//end onClick()
@@ -261,10 +254,6 @@ public class UserProfile extends BaseActivity {
         startActivityForResult(intent, INTENT_GALLERY);
     }//END OF galleryIntent()
 
-    private void cameraIntent() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, INTENT_CAMERA);
-    }// END OF cameraIntent()
 
     private void uploadImageWithUri() {
         Log.d(TAG, "aa2");
