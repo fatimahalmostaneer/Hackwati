@@ -471,7 +471,7 @@ public class UserProfile extends BaseActivity {
         alertDialogAndroid.show();
     }
     public void countStories() {
-        firebaseFirestore.collection("stories")
+        firebaseFirestore.collection("publishedStories")
                 .whereEqualTo("userId", userUid)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

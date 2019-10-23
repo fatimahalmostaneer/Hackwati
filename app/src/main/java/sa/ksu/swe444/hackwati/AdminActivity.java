@@ -251,7 +251,7 @@ public class AdminActivity extends AppCompatActivity {
                                         String storyId = (String) document.getId();
                                         userName = "";
                                         userTumbnail = "";
-                                       Item item = new Item(storyId, title, pic,userId, sound);
+                                       Item item = new Item(storyId, title, pic,userId, sound,true);
                                         itemList.add(item);
                                         adapter.notifyDataSetChanged();
 

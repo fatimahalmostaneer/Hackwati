@@ -131,9 +131,9 @@ public class MainActivity extends AppCompatActivity {
 
         final AllAngleExpandableButton button = (AllAngleExpandableButton) findViewById(R.id.button_expandable_110_250);
         final List<ButtonData> buttonDatas = new ArrayList<>();
-        int[] drawable = {R.drawable.defult_thumbnail, R.drawable.ic_power_settings_new_black_24dp, R.drawable.defult_thumbnail, R.drawable.ic_search_black_24dp};// gray is some thing else
-        int[] color = {R.color.colorAccent, R.color.colorAccent, R.color.colorAccent, R.color.colorAccent};
-        for (int i = 0; i < 4; i++) {
+        int[] drawable = {R.drawable.defult_thumbnail, R.drawable.ic_power_settings_new_black_24dp, R.drawable.defult_thumbnail, R.drawable.ic_search_black_24dp, R.drawable.ic_error_outline_black_24dp};// gray is some thing else
+        int[] color = {R.color.colorAccent, R.color.colorAccent, R.color.colorAccent, R.color.colorAccent, R.color.colorAccent};
+        for (int i = 0; i < 5; i++) {
             ButtonData buttonData;
             if (i == 0) {
                 buttonData = ButtonData.buildIconButton(this, drawable[i], 7);
@@ -178,6 +178,9 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(new Intent(MainActivity.this, UserProfile.class));
                         break;
                     case 3:
+                        break;
+                    case 4:
+                        startActivity(new Intent(MainActivity.this, ConcatUsActivity.class));
                         break;
                 }
             }
@@ -295,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("TAG", "list: " + list.get(i));
 
 
-            firebaseFirestore.collection("stories")
+            firebaseFirestore.collection("publishedStories")
                     .whereEqualTo("userId", list.get(i) + "")// <-- This line
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -317,6 +320,7 @@ public class MainActivity extends AppCompatActivity {
                                     String storyId = (String) document.getId();
                                     String userName = "";
                                     String pic = (String) document.get("pic");
+                                    String sound = (String) document.get("sound");
 
                                     String thumbnail = "";
 
@@ -330,8 +334,7 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }
 
-
-                                    Item item = new Item(storyId, title, pic, userId, userName, thumbnail);
+                                    Item item = new Item(true,storyId, title, pic,sound, userId, userName, thumbnail);
                                     itemList.add(item);
                                     adapter.notifyDataSetChanged();
 

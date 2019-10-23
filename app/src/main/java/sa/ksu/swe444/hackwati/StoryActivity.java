@@ -28,7 +28,7 @@ import java.util.List;
 public class StoryActivity extends AppCompatActivity implements View.OnClickListener {
 
 
-    private TextView change, bookName, duration;
+    private TextView change, bookName, duration,discrebtionM;
     private String user_id;
     private Button listenBtn;
         //subscribedBtn;
@@ -59,6 +59,7 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         duration = findViewById(R.id.duration);
         bookName = findViewById(R.id.bookName);
+        discrebtionM = findViewById(R.id.discrebtion);
         cover = (ImageView) findViewById(R.id.cover);
         listenBtn = findViewById(R.id.listenBtn);
         subscribe = findViewById(R.id.subscribeBtn);
@@ -79,6 +80,8 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
         if (intent.getExtras() != null) {
             storyId = intent.getExtras().getString(Constants.Keys.STORY_ID);
             userStoryId = intent.getExtras().getString(Constants.Keys.STORY_USER_ID);
+            storyUri = intent.getExtras().getString(Constants.Keys.STORY_AUDIO);
+            storyCover = intent.getExtras().getString(Constants.Keys.STORY_COVER);
         }
 
     }
@@ -140,7 +143,7 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
 
     public void retriveStory() {
 
-        DocumentReference docRef = firebaseFirestore.collection("stories").document(storyId);
+        DocumentReference docRef = firebaseFirestore.collection("publishedStories").document(storyId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -162,6 +165,7 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
                         Glide.with(StoryActivity.this)
                                 .load(pic + "")
                                 .into(cover);
+                        discrebtionM.setText(description);
 
 
 

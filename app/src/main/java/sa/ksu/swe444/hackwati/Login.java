@@ -67,7 +67,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
         FirebaseUser mFirebaseUser = mAuth.getCurrentUser();
         if(mFirebaseUser != null) {
-            userID = mFirebaseUser.getUid(); //Do what you need to do with the id
+            userID = mFirebaseUser.getUid();
         }
 
 

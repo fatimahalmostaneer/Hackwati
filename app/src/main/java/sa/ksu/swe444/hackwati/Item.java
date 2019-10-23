@@ -12,6 +12,7 @@ public class Item {
     private String channelImage;
     private int soundImage;
     private String storyId;
+    boolean isMain ;
 
 
 
@@ -48,7 +49,7 @@ public class Item {
         this.channelImage=channelImage;
         this.storyId=storyId;
 
-    }   public Item(String storyId, String title, String image,String userId,String sound) {
+    }   public Item(String storyId, String title, String image,String userId,String sound, boolean x) {
         this.title = title;
         this.image = image;
         this.userId=userId;
@@ -58,6 +59,18 @@ public class Item {
         this.sound=sound;
 
     }
+
+    public Item(boolean x,String storyId, String title, String image,String sound,String userId, String userName,String userImg) {
+        this.title = title;
+        this.image = image;
+        this.userId=userId;
+        this.channelName=userName;
+        this.channelImage=userImg;
+        this.storyId=storyId;
+        this.sound=sound;
+
+    }
+
 
     public Item ( String title, String image, String userId) {
         this.title = title;
