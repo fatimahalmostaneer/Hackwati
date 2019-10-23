@@ -309,6 +309,7 @@ public class MainActivity extends AppCompatActivity {
                                 for (DocumentSnapshot document : task.getResult()) {
 
 
+
                                     document.getData();
 
                                     String title = (String) document.get("title");
