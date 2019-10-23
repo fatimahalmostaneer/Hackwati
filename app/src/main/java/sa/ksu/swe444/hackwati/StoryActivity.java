@@ -42,6 +42,7 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
     String storyDuration;
     String storyUri;
     String storyCover;
+    private String storyTitle;
 
 
 
@@ -153,6 +154,8 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
                         storyDuration = (String) document.get("duration");
                         storyUri = (String) document.get("sound");
                         storyCover = (String)document.get("pic");
+                        storyTitle = (String)document.get("title");
+
 
                         bookName.setText(title);
                         duration.setText(description);
@@ -191,6 +194,9 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
                 Intent intent = new Intent(StoryActivity.this, InnerStoryActivity.class);
                 intent.putExtra(Constants.Keys.STORY_AUDIO,storyUri );
                 intent.putExtra(Constants.Keys.STORY_COVER ,storyCover);
+                intent.putExtra(Constants.Keys.STORY_ID ,storyId);
+                intent.putExtra(Constants.Keys.STORY_TITLE , storyTitle);
+
                 startActivity(intent);
 
 

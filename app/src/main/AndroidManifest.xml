@@ -31,21 +31,21 @@
 
             android:screenOrientation="portrait">
 
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
 
 
         </activity>
 
 
-        <activity android:name=".Recording.RecordingActivity" />
+        <activity android:name=".Recording.RecordingActivity" >
+
+        </activity>
         <activity android:name=".explor.ExploreActivity" />
 <activity android:name=".exploreActivity"></activity>
 
-        <activity android:name=".MainActivity"/>
+        <activity android:name=".MainActivity">
+
+        </activity>
         <activity android:name=".AdminActivity">
 
         </activity>
@@ -66,7 +66,11 @@
 
         <activity android:name=".Login">
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
 
         </activity>
 

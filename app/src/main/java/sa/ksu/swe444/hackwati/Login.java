@@ -241,8 +241,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                                 if (mAuth.getCurrentUser().isEmailVerified()) {
 
-
-                                   // startActivity(new Intent(Login.this, MainActivity.class));
+                                    startActivity(new Intent(Login.this, MainActivity.class));
                                 } else {
                                     showDialogWithOkButton("تحقق من الرابط المرسل على بريدك لإكمال عملية تسجيل الدخول ");
                                 }

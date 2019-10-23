@@ -16,6 +16,8 @@ public class Constants {
         String STORY_AUDIO = "story_audio";
         String STORY_ID = "story_id";
         String STORY_USER_ID = "story_user_id";
+        String STORY_TITLE= "story_title";
+
 
 
 

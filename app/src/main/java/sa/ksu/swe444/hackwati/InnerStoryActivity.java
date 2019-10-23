@@ -30,6 +30,9 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -66,6 +69,8 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
     Uri audio_url;
     Uri uri;
     Uri img;
+    private String title;
+    private String storyID;
 
     ImageView storyCover;
 
@@ -132,6 +137,10 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
             public void onClick(DialogInterface dialogInterface, int i) {
                 Toast.makeText(getApplicationContext(), "تقييمك هو " + ratingBar.getRating(), Toast.LENGTH_SHORT).show();
                 float rate =ratingBar.getRating();
+                DocumentReference storyRef = firebaseFirestore.collection("stories").document(storyID);
+                storyRef.update("rate", FieldValue.increment(rate));
+                storyRef.update("rateCounter", FieldValue.increment(1));
+
             }
         });
         builder.setNegativeButton("إلغاء", new DialogInterface.OnClickListener() {
@@ -385,9 +394,11 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
 
         Intent intent = getIntent();
         if (intent.getExtras() != null) {
+
             uri = Uri.parse(intent.getExtras().getString(Constants.Keys.STORY_AUDIO));
             img = Uri.parse(intent.getExtras().getString(Constants.Keys.STORY_COVER));
-
+            storyID = intent.getExtras().getString(Constants.Keys.STORY_ID);
+            title = intent.getExtras().getString(Constants.Keys.STORY_TITLE);
 
         }
 
