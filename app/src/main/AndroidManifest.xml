@@ -23,6 +23,7 @@
         <activity android:name=".MainActivity" />
         <activity android:name=".AdminActivity" />
         <activity android:name=".AdminStoryActivity" />
+        <activity android:name=".ConcatUsActivity" />
         <activity
             android:name=".ui.profileActivity.ProfileActivity"
             android:label="@string/app_name"

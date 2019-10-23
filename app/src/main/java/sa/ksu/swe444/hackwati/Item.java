@@ -60,6 +60,16 @@ public class Item {
 
     }
 
+    public Item(boolean x,String storyId, String title, String image,String sound,String userId, String userName,String userImg) {
+        this.title = title;
+        this.image = image;
+        this.userId=userId;
+        this.channelName=userName;
+        this.channelImage=userImg;
+        this.storyId=storyId;
+        this.sound=sound;
+
+    }
 
 
     public Item ( String title, String image, String userId) {

@@ -80,6 +80,8 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
         if (intent.getExtras() != null) {
             storyId = intent.getExtras().getString(Constants.Keys.STORY_ID);
             userStoryId = intent.getExtras().getString(Constants.Keys.STORY_USER_ID);
+            storyUri = intent.getExtras().getString(Constants.Keys.STORY_AUDIO);
+            storyCover = intent.getExtras().getString(Constants.Keys.STORY_COVER);
         }
 
     }
@@ -141,7 +143,7 @@ public class StoryActivity extends AppCompatActivity implements View.OnClickList
 
     public void retriveStory() {
 
-        DocumentReference docRef = firebaseFirestore.collection("stories").document(storyId);
+        DocumentReference docRef = firebaseFirestore.collection("publishedStories").document(storyId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {

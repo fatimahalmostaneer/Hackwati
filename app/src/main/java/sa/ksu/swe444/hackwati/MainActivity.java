@@ -298,7 +298,7 @@ public class MainActivity extends AppCompatActivity {
             Log.d("TAG", "list: " + list.get(i));
 
 
-            firebaseFirestore.collection("stories")
+            firebaseFirestore.collection("publishedStories")
                     .whereEqualTo("userId", list.get(i) + "")// <-- This line
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -320,6 +320,7 @@ public class MainActivity extends AppCompatActivity {
                                     String storyId = (String) document.getId();
                                     String userName = "";
                                     String pic = (String) document.get("pic");
+                                    String sound = (String) document.get("sound");
 
                                     String thumbnail = "";
 
@@ -333,8 +334,7 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                     }
 
-
-                                    Item item = new Item(storyId, title, pic, userId, userName, thumbnail);
+                                    Item item = new Item(true,storyId, title, pic,sound, userId, userName, thumbnail);
                                     itemList.add(item);
                                     adapter.notifyDataSetChanged();
 

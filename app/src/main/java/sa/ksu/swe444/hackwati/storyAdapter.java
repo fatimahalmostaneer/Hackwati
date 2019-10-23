@@ -74,8 +74,11 @@ public class storyAdapter extends RecyclerView.Adapter<storyAdapter.MyViewHolder
                         context.startActivity(intent);}
                         else{
                             Intent intent = new Intent(context, StoryActivity.class);
-                            intent.putExtra(Constants.Keys.STORY_ID, storyId);
+                            intent.putExtra(Constants.Keys.STORY_ID, clickedStory.getStoryId());
                             intent.putExtra(Constants.Keys.STORY_USER_ID, clickedStory.getUserId());
+                            intent.putExtra(Constants.Keys.STORY_AUDIO, clickedStory.getSound());
+                            intent.putExtra(Constants.Keys.STORY_COVER, clickedStory.getImage());
+                           // intent.putExtra(Constants.Keys.STORY_USER_ID, clickedStory.getUserId());
                             context.startActivity(intent);
                         }
 
