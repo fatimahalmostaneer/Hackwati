@@ -73,11 +73,12 @@ public class MainActivity extends AppCompatActivity {
 
 
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_explore, R.id.navigation_record, R.id.navigation_subscription)
+                R.id.navigation_subscription,  R.id.navigation_explore, R.id.navigation_record)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
 
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
@@ -124,7 +125,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 
     private void installButton110to250() {
 
@@ -246,7 +246,6 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent); // to start another activity
     }
 
-
     public void retrieveSubscribedUsers() {
 
         DocumentReference docRef = firebaseFirestore.collection("users").document(userUid);
@@ -289,7 +288,6 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
-
 
     public void retriveSubscribedUserStories(List<String> list, final ArrayList<User> usersDataList) {
 
@@ -382,11 +380,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
     public interface MyCallback {
         void onCallback(ArrayList<User> arrayList);
     }
-
 
     private void showDialogWithOkButton(String msg) {
         AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);

@@ -31,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -357,6 +358,8 @@ public class AdminStoryActivity extends AppCompatActivity implements View.OnClic
                         String sound = (String) document.get("sound");
                         String title = (String) document.get("title");
                         String userId = (String) document.get("userId");
+                        String timestamp = (String) document.get("timestamp").toString();
+
 
                         // new doc
                         Map<String, Object> publishedStories = new HashMap<>();
@@ -366,6 +369,7 @@ public class AdminStoryActivity extends AppCompatActivity implements View.OnClic
                         publishedStories.put("pic", pic);
                         publishedStories.put("userId", userId);
                         publishedStories.put("sound", sound);
+                        publishedStories.put("timestamp", FieldValue.serverTimestamp());
 
                         firebaseFirestore.collection("publishedStories").document().set(publishedStories)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {

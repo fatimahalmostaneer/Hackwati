@@ -52,7 +52,7 @@ import java.util.concurrent.TimeUnit;
 
 
 public class InnerStoryActivity extends AppCompatActivity implements View.OnClickListener {
-    private ImageView share;
+    private ImageView share,backwardCover;
     private ImageView close;
     private SeekBar seekBar;
     private ImageView pause;
@@ -128,6 +128,10 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
                 .load(img + "")
                 .into(storyCover);
 
+        Glide.with(InnerStoryActivity.this)
+                .load(img + "")
+                .into(backwardCover);
+
 
 
     }//end onCreate
@@ -147,7 +151,8 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
                 DocumentReference storyRef = firebaseFirestore.collection("stories").document(storyID);
                // storyRef.update("rate", FieldValue.increment(rate));
               //  storyRef.update("rateCounter", FieldValue.increment(1));
-                updateStoryRate(rate);
+                String Rate = String.valueOf(rate);
+                updateStoryRate(Rate);
 
 
             }
@@ -162,7 +167,7 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
 
     }
 
-    private void updateStoryRate(float rate) {
+    private void updateStoryRate(String rate) {
 
         Map<String, Object> story = new HashMap<>();
         //todo: delete rate
@@ -183,6 +188,8 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
         backward = findViewById(R.id.back);
         forward = findViewById(R.id.forward);
         nightMood = findViewById(R.id.night_mood);
+        backwardCover = findViewById(R.id.story_cover2);
+
         speed = findViewById(R.id.speed);
         remainingTime = findViewById(R.id.remaining_time);
         currentTime = findViewById(R.id.currentTime);

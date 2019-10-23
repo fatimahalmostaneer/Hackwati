@@ -2,9 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/navigation_explore"
-        android:icon="@drawable/ic_compass"
-        android:title="اكتشف" />
+        android:id="@+id/navigation_subscription"
+        android:icon="@drawable/ic_home"
+        android:title="الإشتراكات"
+        android:state_checked="true"
+        />
 
     <item
         android:id="@+id/navigation_record"
@@ -12,8 +14,9 @@
         android:title="سجل" />
 
     <item
-        android:id="@+id/navigation_subscription"
-        android:icon="@drawable/ic_home"
-        android:title="الإشتراكات" />
+
+        android:id="@+id/navigation_explore"
+        android:icon="@drawable/ic_compass"
+        android:title="اكتشف" />
 
 </menu>

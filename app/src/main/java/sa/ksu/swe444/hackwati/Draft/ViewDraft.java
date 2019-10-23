@@ -239,9 +239,9 @@ public class ViewDraft extends AppCompatActivity {
                                 String storyId = (String) document.getId();
                                 userName = "";
                                 userTumbnail = "";
-                                Item item = new Item(storyId, title, pic,userId, sound);
+                               /* Item item = new Item(storyId, title, pic,userId, sound);
                                 itemList.add(item);
-                                adapter.notifyDataSetChanged();
+                                adapter.notifyDataSetChanged();*/
 
 
                             }

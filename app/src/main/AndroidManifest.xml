@@ -21,6 +21,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Recording.RecordingActivity" />
         <activity android:name=".explor.ExploreActivity" />
+        <activity android:name=".ConcatUsActivity" />
         <activity android:name=".exploreActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".AdminActivity" />
