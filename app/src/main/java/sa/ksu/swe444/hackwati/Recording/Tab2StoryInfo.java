@@ -231,7 +231,7 @@ public class Tab2StoryInfo extends Fragment {
     }//end of openCameraChooser()
 
     private void showPhotoOptionsDialog() {
-        final CharSequence[] items = {"Camera", "Gallery"};
+        final CharSequence[] items = {"Camera"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override

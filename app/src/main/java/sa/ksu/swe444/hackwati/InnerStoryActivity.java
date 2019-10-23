@@ -2,6 +2,7 @@ package sa.ksu.swe444.hackwati;
 
 
 import android.app.DownloadManager;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -9,8 +10,10 @@ import android.os.Build;
 import android.os.Bundle;
 
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -18,6 +21,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
@@ -26,8 +30,6 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -36,7 +38,6 @@ import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 
@@ -88,7 +89,7 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
 
 
         getExtras();
-        mediaPlayer = MediaPlayer.create(getBaseContext(), uri);
+        mediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.child_story);
         seekBar.setMax(mediaPlayer.getDuration());
 
 
@@ -103,6 +104,8 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
                 currentTime.setText(milliSecondsToTimer(mediaPlayer.getCurrentPosition()));
                 remainingTime.setText(milliSecondsToTimer(mediaPlayer.getDuration() - mediaPlayer.getCurrentPosition()));
                 SeekBar();
+
+                Log.e("LOG", "Current position:"+mediaPlayer.getCurrentPosition()+"Duration:"+mediaPlayer.getDuration());
             }// run
 
         };
@@ -113,8 +116,34 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
                 .load(img + "")
                 .into(storyCover);
 
+
+
     }//end onCreate
 
+    private void viewRateDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(InnerStoryActivity.this);
+        LayoutInflater inflater = getLayoutInflater();
+        builder.setTitle("قيم قصتي");
+        View dialogLayout = inflater.inflate(R.layout.alert_dialog_with_ratingbar, null);
+        final RatingBar ratingBar = dialogLayout.findViewById(R.id.ratingBar);
+        builder.setView(dialogLayout);
+        builder.setPositiveButton("حسنا", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(getApplicationContext(), "تقييمك هو " + ratingBar.getRating(), Toast.LENGTH_SHORT).show();
+                float rate =ratingBar.getRating();
+            }
+        });
+        builder.setNegativeButton("إلغاء", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+            }
+        });
+        builder.show();
+
+    }
+// end of viewRateDialog
     private void init() {
         share = findViewById(R.id.share);
         close = findViewById(R.id.close);
@@ -158,6 +187,7 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
 
             @Override
             public void onCompletion(MediaPlayer mp) {
+                viewRateDialog();
                 mediaPlayer.start();
                 mediaPlayer.pause();
                 defaultTimer();
