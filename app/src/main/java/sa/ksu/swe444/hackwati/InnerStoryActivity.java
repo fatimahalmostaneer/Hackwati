@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import android.provider.Telephony;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,16 +32,22 @@ import com.google.android.gms.tasks.OnSuccessListener;
 
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.core.operation.Merge;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.SetOptions;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageMetadata;
 import com.google.firebase.storage.StorageReference;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 
@@ -138,8 +145,10 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
                 Toast.makeText(getApplicationContext(), "تقييمك هو " + ratingBar.getRating(), Toast.LENGTH_SHORT).show();
                 float rate =ratingBar.getRating();
                 DocumentReference storyRef = firebaseFirestore.collection("stories").document(storyID);
-                storyRef.update("rate", FieldValue.increment(rate));
-                storyRef.update("rateCounter", FieldValue.increment(1));
+               // storyRef.update("rate", FieldValue.increment(rate));
+              //  storyRef.update("rateCounter", FieldValue.increment(1));
+                updateStoryRate(rate);
+
 
             }
         });
@@ -152,7 +161,20 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
         builder.show();
 
     }
-// end of viewRateDialog
+
+    private void updateStoryRate(float rate) {
+
+        Map<String, Object> story = new HashMap<>();
+        //todo: delete rate
+        story.put("rate", rate);
+
+        story.put("rateCounter", FieldValue.increment(1));
+
+        firebaseFirestore.collection("publishedStories").document(storyID).set(story, SetOptions.merge());
+    }
+
+
+    // end of viewRateDialog
     private void init() {
         share = findViewById(R.id.share);
         close = findViewById(R.id.close);
