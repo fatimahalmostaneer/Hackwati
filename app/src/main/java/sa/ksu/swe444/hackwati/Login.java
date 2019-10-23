@@ -70,7 +70,6 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
             userID = mFirebaseUser.getUid(); //Do what you need to do with the id
         }
 
-       // userID=FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -78,10 +77,8 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 if (firebaseAuth.getCurrentUser() != null) {
                     if (verify) {
 
-
                         startActivity(new Intent(Login.this, MainActivity.class));
 
-                        // startActivity(new Intent(Login.this, MainActivity.class));
                     }
 
                 }
@@ -241,7 +238,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                                 if (mAuth.getCurrentUser().isEmailVerified()) {
 
-                                    //startActivity(new Intent(Login.this, MainActivity.class));
+                                    startActivity(new Intent(Login.this, MainActivity.class));
                                 } else {
                                     showDialogWithOkButton("تحقق من الرابط المرسل على بريدك لإكمال عملية تسجيل الدخول ");
                                 }
@@ -250,7 +247,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
 
                                 if (mAuth.getCurrentUser().getUid().equalsIgnoreCase("DUbp3gH497gydI7fJodUfRz9A2K3")
                                         || mAuth.getCurrentUser().getUid() == "DUbp3gH497gydI7fJodUfRz9A2K3") {
-                                    Log.d(TAG, "addmin"+userID);
+                                    Log.d(TAG, "admin"+userID);
                                     startActivity(new Intent(Login.this, AdminActivity.class));
                                 }
                                 else

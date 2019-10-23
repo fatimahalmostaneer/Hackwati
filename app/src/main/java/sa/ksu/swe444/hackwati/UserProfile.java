@@ -51,6 +51,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import sa.ksu.swe444.hackwati.Draft.ViewDraft;
+
 
 public class UserProfile extends BaseActivity {
     Button log_out;
@@ -63,6 +65,7 @@ public class UserProfile extends BaseActivity {
     private Button uploadImg;
     private String imgPath;
     private ImageView edit1, img, edit2;
+    private Button draft;
 
 
     private static final String TAG = "UserProfile";
@@ -85,6 +88,15 @@ public class UserProfile extends BaseActivity {
         img = findViewById(R.id.userImg);
         userNameText = findViewById(R.id.nameSignUpHin);
         emailText = findViewById(R.id.emailSignUpHin);
+        draft = findViewById(R.id.draft_page);
+        draft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(UserProfile.this, ViewDraft.class);
+                intent.putExtra(Constants.Keys.DRAFT ,true);
+                startActivity(intent);
+            }
+        });
 
 
         userUid = FirebaseAuth.getInstance().getCurrentUser().getUid();

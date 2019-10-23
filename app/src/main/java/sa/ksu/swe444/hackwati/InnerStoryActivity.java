@@ -94,7 +94,7 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
 
 
         getExtras();
-        mediaPlayer = MediaPlayer.create(getBaseContext(), R.raw.child_story);
+        mediaPlayer = MediaPlayer.create(getBaseContext(), audio_url);
         seekBar.setMax(mediaPlayer.getDuration());
 
 

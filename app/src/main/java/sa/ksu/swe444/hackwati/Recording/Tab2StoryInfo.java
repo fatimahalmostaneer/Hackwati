@@ -92,6 +92,7 @@ public class Tab2StoryInfo extends Fragment {
     String storyId;
     private Button saveToDraft;
 
+// should be removed
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,11 +100,12 @@ public class Tab2StoryInfo extends Fragment {
         storyDiscription = view.findViewById(R.id.pp);
         storyTitle = view.findViewById(R.id.name);
         saveToDraft = view.findViewById(R.id.draft);
+
         saveToDraft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 verificationBeforeUploadingStory();
+                storyId = storyTitleToStoryId();
                 uploadAudioToDraft();
                 uploadImageWithUriToDraft();
             }
@@ -122,9 +124,8 @@ public class Tab2StoryInfo extends Fragment {
         publishStory.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                storyId = storyTitleToStoryId();
-
                 verificationBeforeUploadingStory();
+                storyId = storyTitleToStoryId();
                 uploadAudio();
                 uploadImageWithUri();
 
@@ -142,7 +143,6 @@ public class Tab2StoryInfo extends Fragment {
             }
         });
 
-
         return view;
     }//end of onCreate()
 
@@ -150,7 +150,6 @@ public class Tab2StoryInfo extends Fragment {
         if (imgPath != null) {
 
             String userId = mAuth.getCurrentUser().getUid();
-            String storyId = storyTitleToStoryId();
             final StorageReference filepathImg = storageRef.child(userId).child(storyId).child("img.jpeg");
 
             final UploadTask uploadTask = filepathImg.putFile(contentURI);
@@ -303,7 +302,7 @@ public class Tab2StoryInfo extends Fragment {
     }//end of openCameraChooser()
 
     private void showPhotoOptionsDialog() {
-        final CharSequence[] items = {"Camera"};
+        final CharSequence[] items = {"Gallery"};
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
@@ -440,7 +439,6 @@ public class Tab2StoryInfo extends Fragment {
         int Max = 999999;
         random = Min + (int) (Math.random() * ((Max - Min) + 1));
         return title.concat(random + "");
-
     }
 
     //٠١١٨٠٥٠٠٠٠
@@ -448,7 +446,6 @@ public class Tab2StoryInfo extends Fragment {
         if (imgPath != null) {
 
             String userId = mAuth.getCurrentUser().getUid();
-            String storyId = storyTitleToStoryId();
             final StorageReference filepathImg = storageRef.child(userId).child(storyId).child("img.jpeg");
 
             //uploading the image
