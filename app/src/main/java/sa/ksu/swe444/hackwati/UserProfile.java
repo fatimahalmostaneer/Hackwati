@@ -1,6 +1,7 @@
 package sa.ksu.swe444.hackwati;
 
 import android.Manifest;
+import android.animation.ObjectAnimator;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,6 +14,8 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewTreeObserver;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -46,19 +49,19 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import at.blogc.android.views.ExpandableTextView;
+
 public class UserProfile extends BaseActivity {
     Button log_out;
-    Button record;
-    private TextView relImg;
+    private TextView relImg,info;
     private static int INTENT_GALLERY = 301;
     private boolean isSelectImage;
     Uri contentURI;
-    public static String downloadURLA;
     private File imgFile;
     public FirebaseAuth mAuth;
     private Button uploadImg;
     private String imgPath;
-    private ImageView edit1,img;
+    private ImageView edit1, img, edit2;
 
 
     private static final String TAG = "UserProfile";
@@ -69,7 +72,6 @@ public class UserProfile extends BaseActivity {
 
 
     private TextView userNameText, emailText, subscribedno;
-
 
 
     @Override
@@ -99,7 +101,7 @@ public class UserProfile extends BaseActivity {
             }
         });
 
-        subscribedno =findViewById(R.id.subscribedno);
+        subscribedno = findViewById(R.id.subscribedno);
 
         relImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -113,12 +115,21 @@ public class UserProfile extends BaseActivity {
 
         edit1 = findViewById(R.id.edit1);
         edit1.setOnClickListener(new View.OnClickListener() {
-                                     @Override
-                                     public void onClick(View view) {
-                                         showDialogWithTextInput("تعديل اسم المستخدم");
-                                     }
+            @Override
+            public void onClick(View view) {
+                showDialogWithTextInput("تعديل اسم المستخدم");
+            }
         });
 
+        info=findViewById(R.id.infoUpHin);
+
+        edit2 = findViewById(R.id.edit2);
+        edit2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                edituserInfo("تعديل النبذة");
+            }
+        });
 
         log_out = findViewById(R.id.logout_profile);
         log_out.setOnClickListener(new View.OnClickListener() {
@@ -129,6 +140,19 @@ public class UserProfile extends BaseActivity {
         });
 
         retriveUserData();
+
+
+        //////////
+
+
+
+
+
+
+
+
+
+
 
     }// end onCreate()
 
@@ -159,6 +183,9 @@ public class UserProfile extends BaseActivity {
                             Glide.with(UserProfile.this)
                                     .load(thumbnail + "")
                                     .into(img);
+
+
+
 
 
                         }
@@ -233,12 +260,12 @@ public class UserProfile extends BaseActivity {
     }//end of openCameraChooser()
 
     private void showPhotoOptionsDialog() {
-        final CharSequence[] items = { "Gallery"};
+        final CharSequence[] items = {"Gallery"};
         AlertDialog.Builder builder = new AlertDialog.Builder(UserProfile.this);
         builder.setItems(items, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int item) {
-            if (items[item].equals("Gallery")) {
+                if (items[item].equals("Gallery")) {
                     galleryIntent();
                 }//end if else
             }//end onClick()
@@ -331,7 +358,6 @@ public class UserProfile extends BaseActivity {
     }
 
 
-
     public void showDialogWithTextInput(String title) {
 
         LayoutInflater layoutInflaterAndroid = LayoutInflater.from(UserProfile.this);
@@ -380,6 +406,57 @@ public class UserProfile extends BaseActivity {
         androidx.appcompat.app.AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
     }
+
+
+    public void edituserInfo(String title) {
+
+        LayoutInflater layoutInflaterAndroid = LayoutInflater.from(UserProfile.this);
+        View mView = layoutInflaterAndroid.inflate(R.layout.user_input_dialog_box, null);
+        final androidx.appcompat.app.AlertDialog.Builder alertDialogBuilderUserInput = new androidx.appcompat.app
+                .AlertDialog.Builder(UserProfile.this);
+
+        alertDialogBuilderUserInput.setView(mView)
+                .setTitle(title + "");
+
+        final EditText userInputDialogEditText = (EditText) mView.findViewById(R.id.userInputDialog);
+        alertDialogBuilderUserInput
+                .setCancelable(false)
+                .setPositiveButton("send", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialogBox, int id) {
+                        // ToDo get user input here
+
+
+                        DocumentReference washingtonRef = firebaseFirestore.collection("users").document(userUid);
+                        washingtonRef
+                                .update("info", userInputDialogEditText.getText().toString() + "")
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+                                        Log.d(TAG, "تم تعديل النبذة");
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error updating document", e);
+                                    }
+                                });
+
+
+                    }
+                })
+
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialogBox, int id) {
+                                dialogBox.cancel();
+                            }
+                        });
+
+        androidx.appcompat.app.AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
+        alertDialogAndroid.show();
+    }
+
 
 
 }
