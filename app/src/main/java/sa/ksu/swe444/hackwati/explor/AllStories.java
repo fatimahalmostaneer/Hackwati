@@ -63,7 +63,7 @@ public class AllStories extends Fragment {
        Log.d(TAG,"All stories time"+Timestamp.now().toDate().toString()) ;
 
 
-        firebaseFirestore.collection("stories")
+        firebaseFirestore.collection("publishedStories")
         .orderBy("timestamp")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -73,10 +73,14 @@ public class AllStories extends Fragment {
                             for (QueryDocumentSnapshot document : task.getResult()) {
 
                                 String title = (String) document.get("title");
+                                String userId = (String) document.get("userId");
+                                String storyId = (String) document.getId();
+                                String userName = "";
                                 String pic = (String) document.get("pic");
+                                String sound = (String) document.get("sound");
 
                                 Log.d(TAG, document.getId() + " => " + document.getData());
-                                Item item = new Item( title, pic);
+                                Item item = new Item(true,storyId, title, pic,sound, userId, "", "");
                                 itemList.add(item);
                                 adapter.notifyDataSetChanged();
                             }

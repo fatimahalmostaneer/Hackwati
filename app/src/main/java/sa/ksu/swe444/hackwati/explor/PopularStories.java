@@ -66,7 +66,7 @@ public class PopularStories extends Fragment {
     }
 
     private void retrieveSubscribedUsers() {
-        firebaseFirestore.collection("stories")
+        firebaseFirestore.collection("publishedStories")
                 .orderBy("rate")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -76,11 +76,14 @@ public class PopularStories extends Fragment {
                                 for (QueryDocumentSnapshot document : task.getResult()) {
 
                                     String title = (String) document.get("title");
+                                    String userId = (String) document.get("userId");
+                                    String storyId = (String) document.getId();
+                                    String userName = "";
                                     String pic = (String) document.get("pic");
+                                    String sound = (String) document.get("sound");
 
-                                    Log.d(TAG, document.getId() + "test rate" + document.get("rate"));
-                                    Item item = new Item( title, pic);
-                                    if(itemList.size()!=10)
+                                    Log.d(TAG, document.getId() + " => " + document.getData());
+                                    Item item = new Item(true,storyId, title, pic,sound, userId, "", "");
                                     itemList.add(item);
                                     adapter.notifyDataSetChanged();
                                 }
