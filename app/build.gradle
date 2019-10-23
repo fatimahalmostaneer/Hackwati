@@ -60,8 +60,7 @@ dependencies {
 
     //expand text
 
-    implementation 'at.blogc:expandabletextview:1.0.5'
-
+    implementation 'com.ms-square:expandableTextView:0.1.4'
 
 
 }

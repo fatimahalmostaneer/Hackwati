@@ -37,10 +37,12 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.kinda.alert.KAlertDialog;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -49,11 +51,10 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import at.blogc.android.views.ExpandableTextView;
 
 public class UserProfile extends BaseActivity {
     Button log_out;
-    private TextView relImg,info;
+    private TextView relImg,info, storyno;
     private static int INTENT_GALLERY = 301;
     private boolean isSelectImage;
     Uri contentURI;
@@ -102,6 +103,7 @@ public class UserProfile extends BaseActivity {
         });
 
         subscribedno = findViewById(R.id.subscribedno);
+        storyno = findViewById(R.id.storyno);
 
         relImg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,7 +123,7 @@ public class UserProfile extends BaseActivity {
             }
         });
 
-        info=findViewById(R.id.infoUpHin);
+        info=findViewById(R.id.infotext);
 
         edit2 = findViewById(R.id.edit2);
         edit2.setOnClickListener(new View.OnClickListener() {
@@ -140,13 +142,10 @@ public class UserProfile extends BaseActivity {
         });
 
         retriveUserData();
+        countStories();
 
 
         //////////
-
-
-
-
 
 
 
@@ -176,6 +175,7 @@ public class UserProfile extends BaseActivity {
                         String userName = document.get("username").toString();
                         String email = document.get("email").toString();
                         String thumbnail = document.get("thumbnail").toString();
+                        String infoU = document.get("info").toString();
                         if (userName != null && email != null) {
                             userNameText.setText(userName);
                             emailText.setText(email);
@@ -184,6 +184,8 @@ public class UserProfile extends BaseActivity {
                                     .load(thumbnail + "")
                                     .into(img);
 
+
+                            info.setText(infoU);
 
 
 
@@ -456,7 +458,25 @@ public class UserProfile extends BaseActivity {
         androidx.appcompat.app.AlertDialog alertDialogAndroid = alertDialogBuilderUserInput.create();
         alertDialogAndroid.show();
     }
+    public void countStories() {
+        firebaseFirestore.collection("stories")
+                .whereEqualTo("userId", userUid)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            int counter =0;
+                            for (DocumentSnapshot document : task.getResult()) {
+                               counter++;
+                            }
+                            storyno.setText(counter+"");
 
+                        }
+                    }
+                });
+
+    }
 
 
 }
