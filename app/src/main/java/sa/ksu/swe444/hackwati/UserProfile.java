@@ -490,7 +490,13 @@ public class UserProfile extends BaseActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        Intent intent = new Intent(UserProfile.this, MainActivity.class); // from where? and to the distanation
+        startActivity(intent); // to start another activity
 
+
+    }
 }
 
 

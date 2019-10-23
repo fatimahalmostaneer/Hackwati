@@ -36,8 +36,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import sa.ksu.swe444.hackwati.AdminActivity;
-import sa.ksu.swe444.hackwati.AdminStoryActivity;
 import sa.ksu.swe444.hackwati.Constants;
 import sa.ksu.swe444.hackwati.R;
 
@@ -46,7 +44,7 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class ListenToStoryDraft extends AppCompatActivity implements View.OnClickListener {
 
 
-    private Button aprove;
+    private Button approve;
     private Button reject;
     private ImageView close;
     private SeekBar seekBar;
@@ -66,6 +64,8 @@ public class ListenToStoryDraft extends AppCompatActivity implements View.OnClic
     StorageReference storageReference;
     StorageReference ref;
     public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+    private String storyTitle;
+
 
 
     Uri audio_url;
@@ -84,9 +84,7 @@ public class ListenToStoryDraft extends AppCompatActivity implements View.OnClic
         close.setOnClickListener(this);
         backward.setOnClickListener(this);
         forward.setOnClickListener(this);
-        aprove.setOnClickListener(this);
-        reject.setOnClickListener(this);
-        aprove.setOnClickListener(this);
+        approve.setOnClickListener(this);
         reject.setOnClickListener(this);
         seekBar = findViewById(R.id.seekBar);
 
@@ -133,7 +131,7 @@ public class ListenToStoryDraft extends AppCompatActivity implements View.OnClic
         close = findViewById(R.id.close);
         seekBar = findViewById(R.id.seekBar);
         pause = findViewById(R.id.pause);
-        aprove = findViewById(R.id.approve);
+        approve = findViewById(R.id.approve);
         reject = findViewById(R.id.reject);
         backward = findViewById(R.id.back);
         forward = findViewById(R.id.forward);
@@ -224,7 +222,7 @@ public class ListenToStoryDraft extends AppCompatActivity implements View.OnClic
             case R.id.approve:
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(ListenToStoryDraft.this);
-                builder.setMessage("هل أنت متأكد من قبول القصة")
+                builder.setMessage("هل أنت متأكد من نشر القصة")
                         .setCancelable(false)
                         .setPositiveButton("أنا متأكد", new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
@@ -331,6 +329,9 @@ public class ListenToStoryDraft extends AppCompatActivity implements View.OnClic
             img = Uri.parse(intent.getExtras().getString(Constants.Keys.STORY_COVER));
             storyId = intent.getExtras().getString(Constants.Keys.STORY_ID);
             userStoryId = intent.getExtras().getString(Constants.Keys.STORY_USER_ID);
+            storyTitle = intent.getExtras().getString(Constants.Keys.STORY_TITLE);
+            story_name.setText(storyTitle);
+
 
         }
     }
@@ -338,7 +339,7 @@ public class ListenToStoryDraft extends AppCompatActivity implements View.OnClic
 
     public void approveStory(){
 
-        DocumentReference docRef = firebaseFirestore.collection("stories").document(storyId);
+        DocumentReference docRef = firebaseFirestore.collection("draft").document(storyId);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -356,21 +357,19 @@ public class ListenToStoryDraft extends AppCompatActivity implements View.OnClic
                         String userId = (String) document.get("userId");
 
                         // new doc
-                        Map<String, Object> publishedStories = new HashMap<>();
-                        publishedStories.put("description", description);
-                        publishedStories.put("rate", rate);
-                        publishedStories.put("title", title);
-                        publishedStories.put("pic", pic);
-                        publishedStories.put("userId", userId);
-                        publishedStories.put("sound", sound);
+                        Map<String, Object> story = new HashMap<>();
+                        story.put("description", description);
+                        story.put("rate", rate);
+                        story.put("title", title);
+                        story.put("pic", pic);
+                        story.put("userId", userId);
+                        story.put("sound", sound);
 
-                        firebaseFirestore.collection("publishedStories").document().set(publishedStories)
+                        firebaseFirestore.collection("stories").document().set(story)
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-
-
-                                        firebaseFirestore.collection("stories").document(storyId)
+                                        firebaseFirestore.collection("draft").document(storyId)
                                                 .delete()
                                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                     @Override
@@ -384,7 +383,6 @@ public class ListenToStoryDraft extends AppCompatActivity implements View.OnClic
                                                         Log.w(TAG, "Error deleting document", e);
                                                     }
                                                 });
-
 
                                         Toast.makeText(ListenToStoryDraft.this, "story publish", Toast.LENGTH_SHORT).show();
                                         startActivity(new Intent(ListenToStoryDraft.this, ViewDraft.class));
@@ -414,7 +412,7 @@ public class ListenToStoryDraft extends AppCompatActivity implements View.OnClic
 
     public void rejectStory(){
 
-        firebaseFirestore.collection("stories").document(storyId)
+        firebaseFirestore.collection("draft").document(storyId)
                 .delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override

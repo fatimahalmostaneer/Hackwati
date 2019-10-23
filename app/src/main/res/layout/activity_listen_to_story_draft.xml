@@ -70,7 +70,7 @@
             app:srcCompat="@drawable/ic_fast_forward"
             tools:ignore="VectorDrawableCompat" />
 
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/pause"
@@ -95,7 +95,7 @@
                 android:background="@drawable/shape"
                 android:text="رفض"
                 android:textStyle="bold" />
-        </RelativeLayout>
+        </LinearLayout>
 
 
     </RelativeLayout>

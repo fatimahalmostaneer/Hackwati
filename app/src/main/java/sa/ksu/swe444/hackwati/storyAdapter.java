@@ -64,10 +64,13 @@ public class storyAdapter extends RecyclerView.Adapter<storyAdapter.MyViewHolder
 
                         storyId = clickedStory.getStoryId();
 
-
+                        boolean draft = false;
                         Context context = view.getContext();
                         Intent draftIntent = ((Activity)mContext).getIntent();
-                        boolean draft=  draftIntent.getExtras().getBoolean(Constants.Keys.DRAFT);
+                        if(draftIntent != null) {
+                            if(draftIntent.getExtras()!= null)
+                             draft=  draftIntent.getExtras().getBoolean(Constants.Keys.DRAFT, false);
+                        }
 
 
                         if(userUid.equals("DUbp3gH497gydI7fJodUfRz9A2K3")){
@@ -77,12 +80,14 @@ public class storyAdapter extends RecyclerView.Adapter<storyAdapter.MyViewHolder
                             intent.putExtra(Constants.Keys.STORY_AUDIO,clickedStory.getSound() );
                             intent.putExtra(Constants.Keys.STORY_COVER ,clickedStory.getImage());
                         context.startActivity(intent);
-                        }else if(draft == true){
+                        }else if(draft){
                             Intent intent = new Intent(context, ListenToStoryDraft.class);
                             intent.putExtra(Constants.Keys.STORY_ID, storyId);
                             intent.putExtra(Constants.Keys.STORY_USER_ID, clickedStory.getUserId());
                             intent.putExtra(Constants.Keys.STORY_AUDIO,clickedStory.getSound() );
                             intent.putExtra(Constants.Keys.STORY_COVER ,clickedStory.getImage());
+                            intent.putExtra(Constants.Keys.STORY_TITLE ,clickedStory.getTitle());
+
                             context.startActivity(intent);
                         }
                         else{
@@ -91,7 +96,8 @@ public class storyAdapter extends RecyclerView.Adapter<storyAdapter.MyViewHolder
                             intent.putExtra(Constants.Keys.STORY_USER_ID, clickedStory.getUserId());
                             intent.putExtra(Constants.Keys.STORY_AUDIO, clickedStory.getSound());
                             intent.putExtra(Constants.Keys.STORY_COVER, clickedStory.getImage());
-                           // intent.putExtra(Constants.Keys.STORY_USER_ID, clickedStory.getUserId());
+                            intent.putExtra(Constants.Keys.STORY_TITLE ,clickedStory.getTitle());
+                            // intent.putExtra(Constants.Keys.STORY_USER_ID, clickedStory.getUserId());
                             context.startActivity(intent);
                         }
 

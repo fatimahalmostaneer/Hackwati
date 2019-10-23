@@ -43,6 +43,7 @@ android:layout_marginTop="2.5dp"
 
             <com.fangxu.allangleexpandablebutton.AllAngleExpandableButton
                 android:id="@+id/button_expandable_110_250"
+                android:layout_marginLeft="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:aebAnimDurationMillis="175"

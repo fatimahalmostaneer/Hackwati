@@ -49,7 +49,21 @@ public class Item {
         this.channelImage=channelImage;
         this.storyId=storyId;
 
-    }   public Item(String storyId, String title, String image,String userId,String sound, boolean x) {
+    }
+
+
+
+    public Item(String storyId, String title, String image,String userId,String sound, boolean x) {
+        this.title = title;
+        this.image = image;
+        this.userId=userId;
+        this.channelName=channelName;
+        this.channelImage=channelImage;
+        this.storyId=storyId;
+        this.sound=sound;
+
+    }
+    public Item(String storyId, String title, String image,String userId,String sound) {
         this.title = title;
         this.image = image;
         this.userId=userId;

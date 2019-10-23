@@ -66,13 +66,13 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
     public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
 
-    Uri audio_url;
     Uri uri;
     Uri img;
     private String title;
     private String storyID;
 
     ImageView storyCover;
+    private TextView titleView;
 
 
     @Override
@@ -94,7 +94,7 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
 
 
         getExtras();
-        mediaPlayer = MediaPlayer.create(getBaseContext(), audio_url);
+        mediaPlayer = MediaPlayer.create(getBaseContext(), uri);
         seekBar.setMax(mediaPlayer.getDuration());
 
 
@@ -168,6 +168,7 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
         //  myService = new MyService();
         RL = findViewById(R.id.Dialog);
         storage = FirebaseStorage.getInstance();
+        titleView = findViewById(R.id.story_name);
 
 
     }//end init
@@ -311,33 +312,6 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
     }// end shareStory()
 
 
-    private void download() {
-        storageReference = storage.getReference();
-        ref = storageReference.child("YEWKT0YD92bY2bGsG4evggu5X8t1").child("rere").child("audio.3gp");
-        String fileName = ref.getPath();
-        // Uri uri = Uri.fromFile(new File(fileName));
-        // File localFile = File.createTempFile("audio", "3gp");
-
-        StorageMetadata metadata = new StorageMetadata.Builder()
-                .setContentType("audio/3gp")
-                .build();
-
-        ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                audio_url = uri;
-                Toast.makeText(getBaseContext(), "Success audio", Toast.LENGTH_SHORT).show();
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getBaseContext(), "failed audio", Toast.LENGTH_SHORT).show();
-
-
-            }
-        });
-    }
 
     private void downloadFile(InnerStoryActivity context, String fileName, String fileExtention, String destinationDir, String url) {
         DownloadManager downloadManager =
@@ -369,26 +343,7 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
         // StorageReference httpsReference = storage.getReferenceFromUrl("https://firebasestorage.googleapis.com/b/bucket/o/images%20stars.jpg");
     }
 
-    private void story() {
-        Query subscribedStories = firebaseFirestore.collection("stories").whereEqualTo("userId", "7o2gIudtyqhIqej2n7TsvHrcATV2");
-        subscribedStories.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-
-            }
-        }).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                audio_url = Uri.parse(task.toString());
-
-            }
-        });
-    }
 
     private void getExtras() {
 
@@ -399,6 +354,7 @@ public class InnerStoryActivity extends AppCompatActivity implements View.OnClic
             img = Uri.parse(intent.getExtras().getString(Constants.Keys.STORY_COVER));
             storyID = intent.getExtras().getString(Constants.Keys.STORY_ID);
             title = intent.getExtras().getString(Constants.Keys.STORY_TITLE);
+            titleView.setText(title);
 
         }
 

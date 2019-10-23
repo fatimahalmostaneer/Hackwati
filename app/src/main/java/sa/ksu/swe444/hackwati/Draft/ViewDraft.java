@@ -52,6 +52,7 @@ public class ViewDraft extends AppCompatActivity {
     private Button goToStory;
     public FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
     private static final String TAG = "AdminActivity";
+    private FirebaseAuth auth;
 
     public String userName, userTumbnail;
 
@@ -63,6 +64,8 @@ public class ViewDraft extends AppCompatActivity {
         emptyStories =findViewById(R.id.emptyStories);
         navView = findViewById(R.id.nav_view);
         toolbarMain = (Toolbar) findViewById(R.id.toolbarMain);
+        auth = FirebaseAuth.getInstance();
+
         setSupportActionBar(toolbarMain);
 
         installButton110to250();
@@ -81,7 +84,7 @@ public class ViewDraft extends AppCompatActivity {
         recyclerView.addItemDecoration(new AdminActivity.GridSpacingItemDecoration(2, dpToPx(10), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-        retrieveSubscribedUsers();
+        retrieveUserDraft();
 
     }
 
@@ -211,10 +214,11 @@ public class ViewDraft extends AppCompatActivity {
     }
 
 
-    public void retrieveSubscribedUsers() {
+    public void retrieveUserDraft() {
 
 
         firebaseFirestore.collection("draft")
+                .whereEqualTo("userId", auth.getUid())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
