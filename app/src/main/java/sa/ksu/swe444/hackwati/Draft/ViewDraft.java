@@ -118,7 +118,6 @@ public class ViewDraft extends AppCompatActivity {
                 switch (index) {
                     case 1:
 
-
                         AlertDialog.Builder builder = new AlertDialog.Builder(ViewDraft.this);
                         builder.setMessage("هل أنت متأكد من أنك تريد تسجيل الخروج؟")
                                 .setCancelable(false)
@@ -239,9 +238,9 @@ public class ViewDraft extends AppCompatActivity {
                                 String storyId = (String) document.getId();
                                 userName = "";
                                 userTumbnail = "";
-                               /* Item item = new Item(storyId, title, pic,userId, sound);
+                                Item item = new Item(storyId, title, pic,userId, sound);
                                 itemList.add(item);
-                                adapter.notifyDataSetChanged();*/
+                                adapter.notifyDataSetChanged();
 
 
                             }
